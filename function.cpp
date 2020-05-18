@@ -295,3 +295,8 @@ void view_student_info(student* p, int i) {
 	}
 	delete_class_data(p_class, n_student_class);
 }
+void view_staff_info(staff* p, int i) {
+	std::cout << " Full name: " << p[i].name << std::endl;
+	if (strcmp(p[i].sex, "1") == 0) std::cout << " Sex: Female" << std::endl;
+	else std::cout << " Sex: Male" << std::endl;
+}
