@@ -277,3 +277,21 @@ void delete_class_data(student*& p, int n) {
 	}
 	delete[]p;
 }
+void view_student_info(student* p, int i) {
+	char filename[20];
+	strcpy_s(filename, strlen(p[i].classname) + 1, p[i].classname);
+	strcat_s(filename, 20, ".txt");
+	student* p_class = nullptr;
+	int n_student_class = 0;
+	class_data(filename, p_class, n_student_class);
+	for (int j = 0; j < n_student_class; ++j) {
+		if (strcmp(p_class[j].id, p[i].id) == 0) {
+			std::cout << "Student ID: " << p_class[j].id << std::endl;
+			std::cout << "Full name: " << p_class[j].name << std::endl;
+			std::cout << "Date of birth(year, month, day): " << p_class[j].date.year << " " << p_class[j].date.month << " " << p_class[j].date.day << std::endl;
+			std::cout << "Class: " << p_class[j].classname << std::endl;
+			break;
+		}
+	}
+	delete_class_data(p_class, n_student_class);
+}
