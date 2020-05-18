@@ -227,3 +227,53 @@ int student_menu() {
 	std::cin >> choice;
 	return choice;
 }
+void class_data(char filename[], student*& p, int& n) {
+	std::ifstream fi(filename);
+	fi >> n;
+	p = new student[n];
+	char tempt[50];
+	if (!fi.is_open()) std::cout << " Can not open " << filename << " file " << std::endl;
+	else {
+		for (int i = 0; i < n; ++i) {
+			fi >> tempt;
+			p[i].id = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].id, strlen(tempt) + 1, tempt);
+			fi >> tempt;
+			p[i].pass = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].pass, strlen(tempt) + 1, tempt);
+			fi.getline(tempt, 50);
+			fi.getline(tempt, 50);
+			p[i].name = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].name, strlen(tempt) + 1, tempt);
+			fi >> tempt;
+			p[i].date.year = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].date.year, strlen(tempt) + 1, tempt);
+			fi >> tempt;
+			p[i].date.month = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].date.month, strlen(tempt) + 1, tempt);
+			fi >> tempt;
+			p[i].date.day = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].date.day, strlen(tempt) + 1, tempt);
+			fi >> tempt;
+			p[i].classname = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].classname, strlen(tempt) + 1, tempt);
+			fi >> tempt;
+			p[i].status = new char[strlen(tempt) + 1];
+			strcpy_s(p[i].status, strlen(tempt) + 1, tempt);
+		}
+		fi.close();
+	}
+}
+void delete_class_data(student*& p, int n) {
+	for (int i = 0; i < n; ++i) {
+		delete[]p[i].id;
+		delete[]p[i].pass;
+		delete[]p[i].name;
+		delete[]p[i].date.year;
+		delete[]p[i].date.month;
+		delete[]p[i].date.day;
+		delete[]p[i].classname;
+		delete[]p[i].status;
+	}
+	delete[]p;
+}
