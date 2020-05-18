@@ -109,3 +109,26 @@ void delete_lecturer_data(lecturer*& p, int n) {
 	}
 	delete[]p;
 }
+bool login(char username[], char pass[], student* p_student, staff* p_staff, lecturer* p_lecturer, int n_student, int n_staff, int n_lecturer, int& type, int& user) {
+	for (int i = 0; i < n_student; ++i) {
+		if (strcmp(p_student[i].id, username) == 0 && strcmp(p_student[i].pass, pass) == 0 && strcmp(p_student[i].status, "1") == 0) {
+			user = i;
+			type = 1;
+			return true;
+		}
+	}
+	for (int i = 0; i < n_staff; ++i) {
+		if (strcmp(p_staff[i].username, username) == 0 && strcmp(p_staff[i].pass, pass) == 0) {
+			user = i;
+			type = 2;
+			return true;
+		}
+	}
+	for (int i = 0; i < n_lecturer; ++i) {
+		if (strcmp(p_lecturer[i].username, username) == 0 && strcmp(p_lecturer[i].pass, pass) == 0) {
+			user = i;
+			type = 3;
+			return true;
+		}
+	}
+}
