@@ -300,3 +300,9 @@ void view_staff_info(staff* p, int i) {
 	if (strcmp(p[i].sex, "1") == 0) std::cout << " Sex: Female" << std::endl;
 	else std::cout << " Sex: Male" << std::endl;
 }
+void view_lecturer_info(lecturer* p, int i) {
+	std::cout << " Full name: " << p[i].name << std::endl;
+	std::cout << " Degree: " << p[i].degree << std::endl;
+	if (strcmp(p[i].sex, "1") == 1)std::cout << " Sex: Female " << std::endl;
+	else std::cout << " Sex: Male " << std::endl;
+}
