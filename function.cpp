@@ -132,3 +132,98 @@ bool login(char username[], char pass[], student* p_student, staff* p_staff, lec
 		}
 	}
 }
+int staff_menu() {
+	int choice;
+	std::cout << "Menu for staff:" << std::endl;
+	std::cout << "1.Class" << std::endl;
+	std::cout << "2.Course" << std::endl;
+	std::cout << "3.Score board" << std::endl;
+	std::cout << "4.Attendance list" << std::endl;
+	std::cout << "5.View profile info:" << std::endl;
+	std::cout << "6.Change password" << std::endl;
+	std::cout << "7.Log out" << std::endl;
+	std::cout << "Please choose a section(1-7): " << std::endl;
+	std::cin >> choice;
+	return choice;
+}
+int staff_class() {
+	int choice;
+	std::cout << "Academic staff- class menu: " << std::endl;
+	std::cout << "1. Import students of a class such as 18CLC6 from a csv file. " << std::endl;
+	std::cout << "2.Manually add a new student to a class. " << std::endl;
+	std::cout << "3.Edit an existing student." << std::endl;
+	std::cout << "4.Remove a student." << std::endl;
+	std::cout << "5.Change students from class A to class B" << std::endl;
+	std::cout << "6.View list of classes." << std::endl;
+	std::cout << "7.View list of students in a class." << std::endl;
+	std::cout << "Please choose a task(1-7): " << std::endl;
+	std::cin >> choice;
+	return choice;
+}
+int staff_course() {
+	int choice;
+	std::cout << "Academic staff- course menu: " << std::endl;
+	std::cout << "1.Create / update / delete / view academic years (2018-2019), and semesters (Fall)." << std::endl;
+	std::cout << "2.From a semester, import courses such as CTT008, CTT010 from a csv file." << std::endl;
+	std::cout << "3.Manually add a new course." << std::endl;
+	std::cout << "4.Edit an existing course." << std::endl;
+	std::cout << "5.Remove a course." << std::endl;
+	std::cout << "6.Remove a specific student from a course." << std::endl;
+	std::cout << "7.Add a specific student to a course." << std::endl;
+	std::cout << "8.View list of courses in the current semester." << std::endl;
+	std::cout << "9.View list of students of a course." << std::endl;
+	std::cout << "10.View attendance list of a course." << std::endl;
+	std::cout << "11.Create / update / delete / view all lecturers." << std::endl;
+	std::cout << "Please choose a task(1-11): " << std::endl;
+	std::cin >> choice;
+	return choice;
+}
+int staff_scoreboard() {
+	int choice;
+	std::cout << "Academic staff- scoreboard menu: " << std::endl;
+	std::cout << "1.Search and view the scoreboard of a course." << std::endl;
+	std::cout << "2.Export a scoreboard to a csv file." << std::endl;
+	std::cout << "Please choose a task(1-2): " << std::endl;
+	std::cin >> choice;
+	return choice;
+}
+int staff_attendance() {
+	int choice;
+	std::cout << "Academic staff- attendance list menu: " << std::endl;
+	std::cout << "1.Search and view attendance list of a course." << std::endl;
+	std::cout << "2.Export a attendance list to a csv file." << std::endl;
+	std::cout << "Please choose a task(1-2): " << std::endl;
+	std::cin >> choice;
+	return choice;
+}
+int lecturer_menu() {
+	int choice;
+	std::cout << "Menu for lecturer:" << std::endl;
+	std::cout << "1.View list of courses in the current semester." << std::endl;
+	std::cout << "2.View list of students of a course." << std::endl;
+	std::cout << "3.View attendance list of a course." << std::endl;
+	std::cout << "4.Edit an attendance." << std::endl;
+	std::cout << "5.Import scoreboard of a course (midterm, final, lab, bonus) from a csv file." << std::endl;
+	std::cout << "6.Edit grade of a student" << std::endl;
+	std::cout << "7.View a scoreboard" << std::endl;
+	std::cout << "8.View profile info:" << std::endl;
+	std::cout << "9.Change password" << std::endl;
+	std::cout << "10.Log out" << std::endl;
+	std::cout << "Please choose a task (1-10): " << std::endl;
+	std::cin >> choice;
+	return choice;
+}
+int student_menu() {
+	int choice;
+	std::cout << "Menu for student:" << std::endl;
+	std::cout << "1.Check-in (1 check-in/week) in 11 weeks" << std::endl;
+	std::cout << "2.View check-in result." << std::endl;
+	std::cout << "3.View schedules." << std::endl;
+	std::cout << "4.View his/her scores of a course." << std::endl;
+	std::cout << "5.View profile info:" << std::endl;
+	std::cout << "6.Change password" << std::endl;
+	std::cout << "7.Log out" << std::endl;
+	std::cout << "Please choose a task (1-7): " << std::endl;
+	std::cin >> choice;
+	return choice;
+}
