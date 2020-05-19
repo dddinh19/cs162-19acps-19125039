@@ -338,3 +338,17 @@ void change_student_password(student*& p, int n, int i) {
 	strcpy_s(p[i].pass, strlen(tempt) + 1, tempt);
 	write_student_data(p, n);
 }
+void write_staff_data(staff* p, int n) {
+	std::ofstream fo("staff.txt");
+	if (!fo.is_open()) std::cout << " Can not open staff data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].username << std::endl;
+			fo << p[i].pass << std::endl;
+			fo << p[i].name << std::endl;
+			fo << p[i].sex << std::endl;
+		}
+		fo.close();
+	}
+}
