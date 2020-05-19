@@ -352,3 +352,20 @@ void write_staff_data(staff* p, int n) {
 		fo.close();
 	}
 }
+void change_staff_password(staff*& p, int n, int i) {
+	char tempt[20];
+	do {
+		std::cout << " Enter your current password " << std::endl;
+		std::cin >> tempt;
+	} while (strcmp(tempt, p[i].pass) != 0);
+	char tempt_2[20];
+	std::cout << " Enter new password " << std::endl;
+	std::cin >> tempt;
+	do {
+		std::cout << " Enter new password again " << std::endl;
+		std::cin >> tempt_2;
+	} while (strcmp(tempt, tempt_2) != 0);
+	p[i].pass = new char[strlen(tempt) + 1];
+	strcpy_s(p[i].pass, strlen(tempt) + 1, tempt);
+	write_staff_data(p, n);
+}
