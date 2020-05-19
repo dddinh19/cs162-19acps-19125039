@@ -145,3 +145,29 @@ void viewys( int& n, yearsem*& a) {
 	}
 	delete[]a;
 }
+
+void addacourse(yearsem*& a, course*& c, int& na, int& nc) {
+	ifstream fin;
+	ofstream fout;
+	fin.open("D:/TXT/semester.txt");
+	if (!fin.is_open())
+		cout << "Can not open file" << endl;
+	else {
+		fin >> na;
+		fin.ignore(1);
+		a = new yearsem[na];
+		char temp1[15];
+		char temp[10];
+		for (int i = 0; i < na; i++) {
+			fin.getline(temp1, 15);
+			a[i].year = new char[strlen(temp1) + 1];
+			strcpy_s(a[i].year, strlen(temp1) + 1, temp1);
+			fin.getline(temp, 10);
+			a[i].sem = new char[strlen(temp) + 1];
+			strcpy_s(a[i].sem, strlen(temp) + 1, temp);
+			fin >> a[i].status;
+			fin.ignore(1);
+		}
+		fin.close();
+	}
+}
