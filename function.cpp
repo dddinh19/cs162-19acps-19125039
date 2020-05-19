@@ -306,3 +306,18 @@ void view_lecturer_info(lecturer* p, int i) {
 	if (strcmp(p[i].sex, "1") == 1)std::cout << " Sex: Female " << std::endl;
 	else std::cout << " Sex: Male " << std::endl;
 }
+void write_student_data(student* p, int n) {
+	std::ofstream fo("student.txt");
+	if (!fo.is_open()) std::cout << " Can not open student data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].id << std::endl;
+			fo << p[i].pass << std::endl;
+			fo << p[i].name << std::endl;
+			fo << p[i].classname << std::endl;
+			fo << p[i].status << std::endl;
+		}
+		fo.close();
+	}
+}
