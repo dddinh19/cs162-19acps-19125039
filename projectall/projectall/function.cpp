@@ -24,7 +24,7 @@ void load_data_student(std::ifstream& fi, student*& stu, int& num)
 	enterfilename(fi);
 	char ch[100];
 	fi.getline(ch, 100);
-	int data = -1, capacity = 15;
+	int data = -1, capacity = 10;
 	int j;
 	stu = new student[capacity];
 	char str[100], str1[100];
@@ -92,16 +92,16 @@ void load_data_student(std::ifstream& fi, student*& stu, int& num)
 				strcpy_s(stu[num].classname, strlen(str) + 1, str);
 			}
 		}
-		if (num == capacity)
+		if (num == capacity - 1)
 		{
-			student* tmpstu = new student[capacity + 5];
-			for (int i = 0; i < num; i++)
+			student* tmpstu = new student[capacity + 10];
+			for (int i = 0; i <= num; i++)
 			{
 				tmpstu[i] = stu[i];
 			}
 			delete[] stu;
 			stu = tmpstu;
-			capacity = capacity + 5;
+			capacity = capacity + 10;
 		}
 		num++; data = -1; 
 	}
