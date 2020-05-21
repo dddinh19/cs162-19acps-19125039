@@ -472,3 +472,50 @@ void create_password(char* year, char* month, char* day, char*& pass) {
 	}
 	pass[i] = '\0';
 }
+void add_a_student(student*& p, int& n) {
+	student* a = new student;
+	char tempt[20];
+	std::cout << " Enter student class " << std::endl;
+	std::cin >> tempt;
+	a->classname = new char[strlen(tempt) + 1];
+	strcpy_s(a->classname, strlen(tempt) + 1, tempt);
+	std::cout << " Enter student id " << std::endl;
+	std::cin >> tempt;
+	a->id = new char[strlen(tempt) + 1];
+	strcpy_s(a->id, strlen(tempt) + 1, tempt);
+	char filename[20];
+	strcpy_s(filename, strlen(a->classname) + 1, a->classname);
+	strcat_s(filename, 20, ".txt");
+	student* p_class = nullptr;
+	int n_student = 0;
+	class_data(filename, p_class, n_student);
+	for (int i = 0; i < n_student; ++i) {
+		if (strcmp(p_class[i].id, a->id) == 0) {
+			std::cout << " Fail add a student " << std::endl;
+			delete_class_data(p_class, n_student);
+			delete[]a->classname;
+			delete[]a->id;
+			delete a;
+			return;
+		}
+	}
+	student* p_student_2 = nullptr;
+	create_new_student_data(p_class, n_student, a, p_student_2);
+	std::cout << " Sucessfully add a new student " << std::endl;
+	write_class_data(filename, p_student_2, n_student);
+	delete_student_data(p, n);
+	++n;
+	write_student_data(p_student_2, n);
+	student_data(p, n);
+	delete_class_data(p_class, n_student - 1);
+	delete[]a->classname;
+	delete[]a->id;
+	delete a;
+	delete[]p_student_2[n_student - 1].name;
+	delete[]p_student_2[n_student - 1].status;
+	delete[]p_student_2[n_student - 1].date.year;
+	delete[]p_student_2[n_student - 1].date.month;
+	delete[]p_student_2[n_student - 1].date.day;
+	delete[]p_student_2[n_student - 1].pass;
+	delete[]p_student_2;
+}
