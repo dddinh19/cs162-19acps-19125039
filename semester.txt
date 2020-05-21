@@ -1,0 +1,70 @@
+3
+2019-2020
+2
+HK1
+1
+CS161
+Introduction to Computer Science
+19APCS1
+dbtien
+Dinh Ba Tien
+TS
+0
+2019 06 01
+2020 01 14
+2
+7
+30
+11
+30
+I42
+0
+0
+HK2
+2
+CS162
+Introduction to Computer Science
+19APCS1
+dbtien
+Dinh Ba Tien
+TS
+0
+2020 04 01
+2020 06 15
+2
+7
+30
+11
+30
+I42
+1
+PH121
+General Physics
+APCS1
+nhnha
+Nguyen Huu Nha
+TS
+0
+2019 07 20
+2020 02 30
+3
+7
+30
+11
+30
+I35
+1
+1
+1
+2018-2019
+1
+HK1
+0
+0
+0
+2018-2019
+1
+HK2
+0
+0
+0

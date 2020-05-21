@@ -4,15 +4,14 @@
 #include <fstream>
 
 struct dob {
-	char day[10], month[10], year[10];
+	char* day, * month, * year;
 };
 struct student {
-	char id[20];
-	int status;
-	char pass[20], name[50], classname[20];
+	char* id, * pass, * name, * classname, * status;
 	dob date;
 };
 
 void enterfilename(std::ifstream& fi);
-void load_data_student(std::ifstream& fi, student* stu);
+void load_data_student(std::ifstream& fi, student*& stu, int& num);
+void delete_data_student(student*& stu, int num);
 #endif
