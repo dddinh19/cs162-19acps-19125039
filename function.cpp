@@ -401,3 +401,42 @@ void change_lecturer_password(lecturer*& p, int n, int i) {
 	strcpy_s(p[i].pass, strlen(tempt) + 1, tempt);
 	write_lecturer_data(p, n);
 }
+void create_new_student_data(student* p_student, int& n_student, student* a, student*& p_student_2) {
+	++n_student;
+	p_student_2 = new student[n_student];
+	for (int i = 0; i < n_student; ++i) {
+		if (i == n_student - 1) {
+			char tempt[20];
+			p_student_2[n_student - 1].classname = a->classname;
+			p_student_2[n_student - 1].id = a->id;
+			std::cout << " Enter full name " << std::endl;
+			std::cin.getline(tempt, 20);
+			std::cin.getline(tempt, 20);
+			p_student_2[n_student - 1].name = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].name, strlen(tempt) + 1, tempt);
+			p_student_2[n_student - 1].status = new char[2];
+			strcpy_s(p_student_2[n_student - 1].status, 2, "1");
+			std::cout << " Enter date of birth (year, month, day) " << std::endl;
+			std::cin >> tempt;
+			p_student_2[n_student - 1].date.year = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].date.year, strlen(tempt) + 1, tempt);
+			std::cin >> tempt;
+			p_student_2[n_student - 1].date.month = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].date.month, strlen(tempt) + 1, tempt);
+			std::cin >> tempt;
+			p_student_2[n_student - 1].date.day = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].date.day, strlen(tempt) + 1, tempt);
+			create_password(p_student_2[n_student - 1].date.year, p_student_2[n_student - 1].date.month, p_student_2[n_student - 1].date.day, p_student_2[n_student - 1].pass);
+		}
+		else {
+			p_student_2[i].id = p_student[i].id;
+			p_student_2[i].pass = p_student[i].pass;
+			p_student_2[i].name = p_student[i].name;
+			p_student_2[i].date.year = p_student[i].date.year;
+			p_student_2[i].date.month = p_student[i].date.month;
+			p_student_2[i].date.day = p_student[i].date.day;
+			p_student_2[i].classname = p_student[i].classname;
+			p_student_2[i].status = p_student[i].status;
+		}
+	}
+}
