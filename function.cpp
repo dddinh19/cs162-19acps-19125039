@@ -440,3 +440,19 @@ void create_new_student_data(student* p_student, int& n_student, student* a, stu
 		}
 	}
 }
+void write_class_data(char filename[], student* p, int n) {
+	std::ofstream fo(filename);
+	if (!fo.is_open()) std::cout << " Can not open class data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].id << std::endl;
+			fo << p[i].pass << std::endl;
+			fo << p[i].name << std::endl;
+			fo << p[i].date.year << " " << p[i].date.month << " " << p[i].date.day << std::endl;
+			fo << p[i].classname << std::endl;
+			fo << p[i].status << std::endl;
+		}
+		fo.close();
+	}
+}
