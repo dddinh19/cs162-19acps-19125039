@@ -456,3 +456,19 @@ void write_class_data(char filename[], student* p, int n) {
 		fo.close();
 	}
 }
+void create_password(char* year, char* month, char* day, char*& pass) {
+	pass = new char[strlen(year) + strlen(month) + strlen(day) + 1];
+	int i;
+	for (i = 0; i < strlen(year) + strlen(month) + strlen(day); ++i) {
+		if (i < strlen(year)) {
+			pass[i] = year[i];
+		}
+		else if ((i + 1 - strlen(year)) <= strlen(month)) {
+			pass[i] = month[i - strlen(year)];
+		}
+		else {
+			pass[i] = day[i - strlen(year) - strlen(month)];
+		}
+	}
+	pass[i] = '\0';
+}
