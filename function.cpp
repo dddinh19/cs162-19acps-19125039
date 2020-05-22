@@ -624,3 +624,22 @@ void change_class(student*& p, student*& p_class, int n, int n_class, char* id, 
 	delete[]p_class_2[n_class_2 - 1].status;
 	delete[]p_class_2;
 }
+void view_student_class() {
+	int n;
+	student* p = nullptr;
+	char tempt[20], filename[20];
+	view_list_class();
+	std::cout << " Enter classname to view student " << std::endl;
+	std::cin >> tempt;
+	strcpy_s(filename, strlen(tempt) + 1, tempt);
+	strcat_s(filename, 20, ".txt");
+	class_data(filename, p, n);
+	if (n != 0) {
+		for (int i = 0; i < n; ++i) {
+			if (strcmp(p[i].status, "1") == 0) {
+				std::cout << p[i].id << " " << p[i].name << std::endl;
+			}
+		}
+		delete_class_data(p, n);
+	}
+}
