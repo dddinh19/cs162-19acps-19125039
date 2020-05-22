@@ -519,3 +519,18 @@ void add_a_student(student*& p, int& n) {
 	delete[]p_student_2[n_student - 1].pass;
 	delete[]p_student_2;
 }
+void edit_student_name(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	char tempt[50];
+	std::cout << " Enter new student name " << std::endl;
+	std::cin.getline(tempt, 50);
+	std::cin.getline(tempt, 50);
+	strcpy_s(p_class[i].name, strlen(tempt) + 1, tempt);
+	std::cout << " Edit student name successfully " << std::endl;
+	for (int i = 0; i < n; ++i) {
+		if (strcmp(p[i].id, id) == 0) {
+			strcpy_s(p[i].name, strlen(tempt) + 1, tempt);
+			break;
+		}
+	}
+	write_student_data(p, n);
+}
