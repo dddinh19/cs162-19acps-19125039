@@ -565,3 +565,14 @@ void edit_student_dob(student*& p, student*& p_class, int n, int n_class, char* 
 	delete[]date->day;
 	delete date;
 }
+void remove_a_student(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	strcpy_s(p_class[i].status, 2, "0");
+	for (int i = 0; i < n; ++i) {
+		if (strcmp(p[i].id, id) == 0) {
+			strcpy_s(p[i].status, 2, "0");
+			break;
+		}
+	}
+	std::cout << " Remove student " << id << " completely " << std::endl;
+	write_student_data(p, n);
+}
