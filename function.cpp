@@ -534,3 +534,34 @@ void edit_student_name(student*& p, student*& p_class, int n, int n_class, char*
 	}
 	write_student_data(p, n);
 }
+void edit_student_dob(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	dob* date = new dob;
+	char tempt[20];
+	std::cout << " Enter new date of birth of student (year, month, day) " << std::endl;
+	std::cin >> tempt;
+	date->year = new char[strlen(tempt) + 1];
+	strcpy_s(date->year, strlen(tempt) + 1, tempt);
+	std::cin >> tempt;
+	date->month = new char[strlen(tempt) + 1];
+	strcpy_s(date->month, strlen(tempt) + 1, tempt);
+	std::cin >> tempt;
+	date->day = new char[strlen(tempt) + 1];
+	strcpy_s(date->day, strlen(tempt) + 1, tempt);
+	strcpy_s(p_class[i].date.year, strlen(date->year) + 1, date->year);
+	strcpy_s(p_class[i].date.month, strlen(date->month) + 1, date->month);
+	strcpy_s(p_class[i].date.day, strlen(date->day) + 1, date->day);
+	std::cout << " Change date of birth successfully " << std::endl;
+	for (int j = 0; j < n; ++j) {
+		if (strcmp(p[j].id, id) == 0) {
+			create_password(p_class[i].date.year, p_class[i].date.month, p_class[i].date.day, p[j].pass);
+			strcpy_s(p_class[i].pass, strlen(p[j].pass) + 1, p[j].pass);
+			std::cout << " Reset password successfully " << std::endl;
+			break;
+		}
+	}
+	write_student_data(p, n);
+	delete[]date->year;
+	delete[]date->month;
+	delete[]date->day;
+	delete date;
+}
