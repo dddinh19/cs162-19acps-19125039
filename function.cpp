@@ -656,3 +656,56 @@ void view_list_class() {
 		}
 	}
 }
+void edit_existing_student(student*& p, int n) {
+	char tempt[20], filename[20];
+	char* id;
+	std::cout << " Enter student's class " << std::endl;
+	std::cin >> tempt;
+	strcpy_s(filename, strlen(tempt) + 1, tempt);
+	strcat_s(filename, 20, ".txt");
+	std::cout << " Enter student's id " << std::endl;
+	std::cin >> tempt;
+	id = new char[strlen(tempt) + 1];
+	strcpy_s(id, strlen(tempt) + 1, tempt);
+	student* p_class = nullptr;
+	int n_class = 0;
+	class_data(filename, p_class, n_class);
+	for (int i = 0; i < n_class; ++i) {
+		if (strcmp(p_class[i].id, id) == 0 && strcmp(p_class[i].status, "1") == 0) {
+			int choice;
+			std::cout << " Enter 1: Edit student's name " << std::endl;
+			std::cout << " Enter 2: Edit student's date of birth " << std::endl;
+			std::cout << " Enter 3: Change student's class " << std::endl;
+			std::cout << " Enter 4: Remove a student " << std::endl;
+			std::cout << " Enter 0: Exit " << std::endl;
+			std::cin >> choice;
+			if (choice != 0) {
+				switch (choice) {
+				case 1: {
+					edit_student_name(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				case 2: {
+					edit_student_dob(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				case 3: {
+					change_class(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				case 4: {
+					remove_a_student(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				}
+			}
+			delete[]id;
+			delete_class_data(p_class, n_class);
+			break;
+		}
+	}
+}
