@@ -576,3 +576,51 @@ void remove_a_student(student*& p, student*& p_class, int n, int n_class, char* 
 	std::cout << " Remove student " << id << " completely " << std::endl;
 	write_student_data(p, n);
 }
+void change_class(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	strcpy_s(p_class[i].status, 2, "0");
+	char tempt[20], filename[20];
+	view_list_class();
+	std::cout << " Enter class you want to change " << std::endl;
+	std::cin >> tempt;
+	for (int j = 0; j < n; ++j) {
+		if (strcmp(p[j].id, id) == 0) {
+			strcpy_s(p[j].classname, strlen(tempt) + 1, tempt);
+			break;
+		}
+	}
+	write_student_data(p, n);
+	strcpy_s(filename, strlen(tempt) + 1, tempt);
+	strcat_s(filename, 20, ".txt");
+	student* p_tempt = nullptr;
+	int n_tempt = 0;
+	class_data(filename, p_tempt, n_tempt);
+	student* p_class_2 = new student[n_tempt + 1];
+	int n_class_2 = n_tempt + 1;
+	for (int j = 0; j < n_class_2; ++j) {
+		if (j == n_class_2 - 1) {
+			p_class_2[j].id = p_class[i].id;
+			p_class_2[j].name = p_class[i].name;
+			p_class_2[j].pass = p_class[i].pass;
+			p_class_2[j].date.year = p_class[i].date.year;
+			p_class_2[j].date.month = p_class[i].date.month;
+			p_class_2[j].date.day = p_class[i].date.day;
+			p_class_2[j].classname = p_class[i].classname;
+			p_class_2[j].status = new char[2];
+			strcpy_s(p_class_2[j].status, 2, "1");
+		}
+		else {
+			p_class_2[j].id = p_tempt[j].id;
+			p_class_2[j].name = p_tempt[j].name;
+			p_class_2[j].pass = p_tempt[j].pass;
+			p_class_2[j].date.year = p_tempt[j].date.year;
+			p_class_2[j].date.month = p_tempt[j].date.month;
+			p_class_2[j].date.day = p_tempt[j].date.day;
+			p_class_2[j].classname = p_tempt[j].classname;
+			p_class_2[j].status = p_tempt[j].status;
+		}
+	}
+	write_class_data(filename, p_class_2, n_class_2);
+	if (n_tempt > 1) delete_class_data(p_tempt, n_tempt);
+	delete[]p_class_2[n_class_2 - 1].status;
+	delete[]p_class_2;
+}
