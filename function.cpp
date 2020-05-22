@@ -643,3 +643,16 @@ void view_student_class() {
 		delete_class_data(p, n);
 	}
 }
+void view_list_class() {
+	std::ifstream fi("class.txt");
+	if (!fi.is_open()) std::cout << " Can not open class data file " << std::endl;
+	else {
+		int n;
+		char tempt[10];
+		fi >> n;
+		for (int i = 0; i < n; ++i) {
+			fi >> tempt;
+			std::cout << tempt << std::endl;
+		}
+	}
+}
