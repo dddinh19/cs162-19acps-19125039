@@ -401,3 +401,311 @@ void change_lecturer_password(lecturer*& p, int n, int i) {
 	strcpy_s(p[i].pass, strlen(tempt) + 1, tempt);
 	write_lecturer_data(p, n);
 }
+void create_new_student_data(student* p_student, int& n_student, student* a, student*& p_student_2) {
+	++n_student;
+	p_student_2 = new student[n_student];
+	for (int i = 0; i < n_student; ++i) {
+		if (i == n_student - 1) {
+			char tempt[20];
+			p_student_2[n_student - 1].classname = a->classname;
+			p_student_2[n_student - 1].id = a->id;
+			std::cout << " Enter full name " << std::endl;
+			std::cin.getline(tempt, 20);
+			std::cin.getline(tempt, 20);
+			p_student_2[n_student - 1].name = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].name, strlen(tempt) + 1, tempt);
+			p_student_2[n_student - 1].status = new char[2];
+			strcpy_s(p_student_2[n_student - 1].status, 2, "1");
+			std::cout << " Enter date of birth (year, month, day) " << std::endl;
+			std::cin >> tempt;
+			p_student_2[n_student - 1].date.year = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].date.year, strlen(tempt) + 1, tempt);
+			std::cin >> tempt;
+			p_student_2[n_student - 1].date.month = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].date.month, strlen(tempt) + 1, tempt);
+			std::cin >> tempt;
+			p_student_2[n_student - 1].date.day = new char[strlen(tempt) + 1];
+			strcpy_s(p_student_2[n_student - 1].date.day, strlen(tempt) + 1, tempt);
+			create_password(p_student_2[n_student - 1].date.year, p_student_2[n_student - 1].date.month, p_student_2[n_student - 1].date.day, p_student_2[n_student - 1].pass);
+		}
+		else {
+			p_student_2[i].id = p_student[i].id;
+			p_student_2[i].pass = p_student[i].pass;
+			p_student_2[i].name = p_student[i].name;
+			p_student_2[i].date.year = p_student[i].date.year;
+			p_student_2[i].date.month = p_student[i].date.month;
+			p_student_2[i].date.day = p_student[i].date.day;
+			p_student_2[i].classname = p_student[i].classname;
+			p_student_2[i].status = p_student[i].status;
+		}
+	}
+}
+void write_class_data(char filename[], student* p, int n) {
+	std::ofstream fo(filename);
+	if (!fo.is_open()) std::cout << " Can not open class data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].id << std::endl;
+			fo << p[i].pass << std::endl;
+			fo << p[i].name << std::endl;
+			fo << p[i].date.year << " " << p[i].date.month << " " << p[i].date.day << std::endl;
+			fo << p[i].classname << std::endl;
+			fo << p[i].status << std::endl;
+		}
+		fo.close();
+	}
+}
+void create_password(char* year, char* month, char* day, char*& pass) {
+	pass = new char[strlen(year) + strlen(month) + strlen(day) + 1];
+	int i;
+	for (i = 0; i < strlen(year) + strlen(month) + strlen(day); ++i) {
+		if (i < strlen(year)) {
+			pass[i] = year[i];
+		}
+		else if ((i + 1 - strlen(year)) <= strlen(month)) {
+			pass[i] = month[i - strlen(year)];
+		}
+		else {
+			pass[i] = day[i - strlen(year) - strlen(month)];
+		}
+	}
+	pass[i] = '\0';
+}
+void add_a_student(student*& p, int& n) {
+	student* a = new student;
+	char tempt[20];
+	std::cout << " Enter student class " << std::endl;
+	std::cin >> tempt;
+	a->classname = new char[strlen(tempt) + 1];
+	strcpy_s(a->classname, strlen(tempt) + 1, tempt);
+	std::cout << " Enter student id " << std::endl;
+	std::cin >> tempt;
+	a->id = new char[strlen(tempt) + 1];
+	strcpy_s(a->id, strlen(tempt) + 1, tempt);
+	char filename[20];
+	strcpy_s(filename, strlen(a->classname) + 1, a->classname);
+	strcat_s(filename, 20, ".txt");
+	student* p_class = nullptr;
+	int n_student = 0;
+	class_data(filename, p_class, n_student);
+	for (int i = 0; i < n_student; ++i) {
+		if (strcmp(p_class[i].id, a->id) == 0) {
+			std::cout << " Fail add a student " << std::endl;
+			delete_class_data(p_class, n_student);
+			delete[]a->classname;
+			delete[]a->id;
+			delete a;
+			return;
+		}
+	}
+	student* p_student_2 = nullptr;
+	create_new_student_data(p_class, n_student, a, p_student_2);
+	std::cout << " Sucessfully add a new student " << std::endl;
+	write_class_data(filename, p_student_2, n_student);
+	delete_student_data(p, n);
+	++n;
+	write_student_data(p_student_2, n);
+	student_data(p, n);
+	delete_class_data(p_class, n_student - 1);
+	delete[]a->classname;
+	delete[]a->id;
+	delete a;
+	delete[]p_student_2[n_student - 1].name;
+	delete[]p_student_2[n_student - 1].status;
+	delete[]p_student_2[n_student - 1].date.year;
+	delete[]p_student_2[n_student - 1].date.month;
+	delete[]p_student_2[n_student - 1].date.day;
+	delete[]p_student_2[n_student - 1].pass;
+	delete[]p_student_2;
+}
+void edit_student_name(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	char tempt[50];
+	std::cout << " Enter new student name " << std::endl;
+	std::cin.getline(tempt, 50);
+	std::cin.getline(tempt, 50);
+	strcpy_s(p_class[i].name, strlen(tempt) + 1, tempt);
+	std::cout << " Edit student name successfully " << std::endl;
+	for (int i = 0; i < n; ++i) {
+		if (strcmp(p[i].id, id) == 0) {
+			strcpy_s(p[i].name, strlen(tempt) + 1, tempt);
+			break;
+		}
+	}
+	write_student_data(p, n);
+}
+void edit_student_dob(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	dob* date = new dob;
+	char tempt[20];
+	std::cout << " Enter new date of birth of student (year, month, day) " << std::endl;
+	std::cin >> tempt;
+	date->year = new char[strlen(tempt) + 1];
+	strcpy_s(date->year, strlen(tempt) + 1, tempt);
+	std::cin >> tempt;
+	date->month = new char[strlen(tempt) + 1];
+	strcpy_s(date->month, strlen(tempt) + 1, tempt);
+	std::cin >> tempt;
+	date->day = new char[strlen(tempt) + 1];
+	strcpy_s(date->day, strlen(tempt) + 1, tempt);
+	strcpy_s(p_class[i].date.year, strlen(date->year) + 1, date->year);
+	strcpy_s(p_class[i].date.month, strlen(date->month) + 1, date->month);
+	strcpy_s(p_class[i].date.day, strlen(date->day) + 1, date->day);
+	std::cout << " Change date of birth successfully " << std::endl;
+	for (int j = 0; j < n; ++j) {
+		if (strcmp(p[j].id, id) == 0) {
+			create_password(p_class[i].date.year, p_class[i].date.month, p_class[i].date.day, p[j].pass);
+			strcpy_s(p_class[i].pass, strlen(p[j].pass) + 1, p[j].pass);
+			std::cout << " Reset password successfully " << std::endl;
+			break;
+		}
+	}
+	write_student_data(p, n);
+	delete[]date->year;
+	delete[]date->month;
+	delete[]date->day;
+	delete date;
+}
+void remove_a_student(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	strcpy_s(p_class[i].status, 2, "0");
+	for (int i = 0; i < n; ++i) {
+		if (strcmp(p[i].id, id) == 0) {
+			strcpy_s(p[i].status, 2, "0");
+			break;
+		}
+	}
+	std::cout << " Remove student " << id << " completely " << std::endl;
+	write_student_data(p, n);
+}
+void change_class(student*& p, student*& p_class, int n, int n_class, char* id, int i) {
+	strcpy_s(p_class[i].status, 2, "0");
+	char tempt[20], filename[20];
+	view_list_class();
+	std::cout << " Enter class you want to change " << std::endl;
+	std::cin >> tempt;
+	for (int j = 0; j < n; ++j) {
+		if (strcmp(p[j].id, id) == 0) {
+			strcpy_s(p[j].classname, strlen(tempt) + 1, tempt);
+			break;
+		}
+	}
+	write_student_data(p, n);
+	strcpy_s(filename, strlen(tempt) + 1, tempt);
+	strcat_s(filename, 20, ".txt");
+	student* p_tempt = nullptr;
+	int n_tempt = 0;
+	class_data(filename, p_tempt, n_tempt);
+	student* p_class_2 = new student[n_tempt + 1];
+	int n_class_2 = n_tempt + 1;
+	for (int j = 0; j < n_class_2; ++j) {
+		if (j == n_class_2 - 1) {
+			p_class_2[j].id = p_class[i].id;
+			p_class_2[j].name = p_class[i].name;
+			p_class_2[j].pass = p_class[i].pass;
+			p_class_2[j].date.year = p_class[i].date.year;
+			p_class_2[j].date.month = p_class[i].date.month;
+			p_class_2[j].date.day = p_class[i].date.day;
+			p_class_2[j].classname = p_class[i].classname;
+			p_class_2[j].status = new char[2];
+			strcpy_s(p_class_2[j].status, 2, "1");
+		}
+		else {
+			p_class_2[j].id = p_tempt[j].id;
+			p_class_2[j].name = p_tempt[j].name;
+			p_class_2[j].pass = p_tempt[j].pass;
+			p_class_2[j].date.year = p_tempt[j].date.year;
+			p_class_2[j].date.month = p_tempt[j].date.month;
+			p_class_2[j].date.day = p_tempt[j].date.day;
+			p_class_2[j].classname = p_tempt[j].classname;
+			p_class_2[j].status = p_tempt[j].status;
+		}
+	}
+	write_class_data(filename, p_class_2, n_class_2);
+	if (n_tempt > 1) delete_class_data(p_tempt, n_tempt);
+	delete[]p_class_2[n_class_2 - 1].status;
+	delete[]p_class_2;
+}
+void view_student_class() {
+	int n;
+	student* p = nullptr;
+	char tempt[20], filename[20];
+	view_list_class();
+	std::cout << " Enter classname to view student " << std::endl;
+	std::cin >> tempt;
+	strcpy_s(filename, strlen(tempt) + 1, tempt);
+	strcat_s(filename, 20, ".txt");
+	class_data(filename, p, n);
+	if (n != 0) {
+		for (int i = 0; i < n; ++i) {
+			if (strcmp(p[i].status, "1") == 0) {
+				std::cout << p[i].id << " " << p[i].name << std::endl;
+			}
+		}
+		delete_class_data(p, n);
+	}
+}
+void view_list_class() {
+	std::ifstream fi("class.txt");
+	if (!fi.is_open()) std::cout << " Can not open class data file " << std::endl;
+	else {
+		int n;
+		char tempt[10];
+		fi >> n;
+		for (int i = 0; i < n; ++i) {
+			fi >> tempt;
+			std::cout << tempt << std::endl;
+		}
+	}
+}
+void edit_existing_student(student*& p, int n) {
+	char tempt[20], filename[20];
+	char* id;
+	std::cout << " Enter student's class " << std::endl;
+	std::cin >> tempt;
+	strcpy_s(filename, strlen(tempt) + 1, tempt);
+	strcat_s(filename, 20, ".txt");
+	std::cout << " Enter student's id " << std::endl;
+	std::cin >> tempt;
+	id = new char[strlen(tempt) + 1];
+	strcpy_s(id, strlen(tempt) + 1, tempt);
+	student* p_class = nullptr;
+	int n_class = 0;
+	class_data(filename, p_class, n_class);
+	for (int i = 0; i < n_class; ++i) {
+		if (strcmp(p_class[i].id, id) == 0 && strcmp(p_class[i].status, "1") == 0) {
+			int choice;
+			std::cout << " Enter 1: Edit student's name " << std::endl;
+			std::cout << " Enter 2: Edit student's date of birth " << std::endl;
+			std::cout << " Enter 3: Change student's class " << std::endl;
+			std::cout << " Enter 4: Remove a student " << std::endl;
+			std::cout << " Enter 0: Exit " << std::endl;
+			std::cin >> choice;
+			if (choice != 0) {
+				switch (choice) {
+				case 1: {
+					edit_student_name(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				case 2: {
+					edit_student_dob(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				case 3: {
+					change_class(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				case 4: {
+					remove_a_student(p, p_class, n, n_class, id, i);
+					write_class_data(filename, p_class, n_class);
+					break;
+				}
+				}
+			}
+			delete[]id;
+			delete_class_data(p_class, n_class);
+			break;
+		}
+	}
+}
