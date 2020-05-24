@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{EDEBD64C-04D2-4C7D-9726-51C3DC9E24F6}</ProjectGuid>
-    <RootNamespace>P01</RootNamespace>
+    <ProjectGuid>{9E270813-A324-479B-BD64-8D6094DA2C2D}</ProjectGuid>
+    <RootNamespace>CS16219APCS1Group16</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -138,7 +138,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="P01.cpp" />
+    <ClCompile Include="allrole.cpp" />
+    <ClCompile Include="attendance.cpp" />
+    <ClCompile Include="class.cpp" />
+    <ClCompile Include="course.cpp" />
+    <ClCompile Include="lecturer.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="scoreboard.cpp" />
+    <ClCompile Include="student.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="function.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
