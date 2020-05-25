@@ -23,9 +23,11 @@ struct course {
 	char* id, * name, * classname, * dayofweek, * room;
 	int starthour, startminute, endhour, endminute;
 	dob startdate, enddate;
+	lecturer lec;
 };
 
-void enterinfor(std::ifstream& fi);
+void enterinfo(std::ifstream& fi);
 void load_data_course(std::ifstream& fi, course*& cou, int& num);
+void delete_data_course(course*& cou, int num);
 
 #endif
