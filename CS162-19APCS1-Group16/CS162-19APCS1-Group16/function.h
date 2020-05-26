@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
+
 
 // STRUCT
 //ALLROLE
@@ -24,47 +24,50 @@ struct time {
 
 //COURSE
 struct course {
-	string courseID;
-	string courseName;
+	std::string courseID;
+	std::string courseName;
 	lecturer lecturer_couse;
-	attendance attendance_course;
-	string dayofweek;
-	string room;
+	dob start_day, end_day;
+	time start_time, end_time;
+	std::string dayofweek;
+	std::string room;
 	int status;
 };
 //SCOREBOARD
-struct scoreboad {
+struct scoreboard {
 	double midterm, lab, final, bonus;
 };
 //ATTENDANCE
 struct attendance {
-	dob startdate, enddate;
+	dob date;
 	time start, end, checkin;
 };
 //LECTURER
 struct lecturer {
-	string username;
-	string password;
-	string name;
-	string degree;
+	std::string username;
+	std::string password;
+	std::string name;
+	std::string degree;
 	int gender;// 0 male 1 female
 };
 
 //STUDENT
 struct student {
-	string id;
-	string pass;
-	string name;
+	std::string id;
+	std::string pass;
+	std::string name;
 	dob date;
-	string classname;
+	std::string classname;
+	attendance* list_attend;
+	scoreboard* score;
 	int status;
 };
 
 //STAFF
 struct staff {
-	string username;
-	string pass;
-	string name;
+	std::string username;
+	std::string pass;
+	std::string name;
 	int gender;
 };
 
@@ -83,6 +86,7 @@ struct staff {
 //ATTENDANCE
 
 //LECTURER
+
 
 //STUDENT
 
