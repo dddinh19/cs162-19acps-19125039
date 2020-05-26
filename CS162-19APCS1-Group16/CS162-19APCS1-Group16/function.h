@@ -18,11 +18,42 @@ struct dob {
 struct time {
 	int hour, minute;
 };
+//STAFF
+struct staff {
+	std::string username;
+	std::string pass;
+	std::string name;
+	int gender;
+};
+//LECTURER
+struct lecturer {
+	std::string username;
+	std::string password;
+	std::string name;
+	std::string degree;
+	int gender;// 0 male 1 female
+};
+//STUDENT
+struct student {
+	std::string id;
+	std::string pass;
+	std::string name;
+	dob date;
+	std::string classname;
+	attendance* list_attend;
+	scoreboard* score;
+	int status;
+};
 
 //CLASS
 
-
 //COURSE
+struct semester {
+	std::string year;
+	int status;
+	std::string seme1, seme2, seme3;
+	int status1, status2, status3;
+};
 struct course {
 	std::string courseID;
 	std::string courseName;
@@ -42,37 +73,6 @@ struct attendance {
 	dob date;
 	time start, end, checkin;
 };
-//LECTURER
-struct lecturer {
-	std::string username;
-	std::string password;
-	std::string name;
-	std::string degree;
-	int gender;// 0 male 1 female
-};
-
-//STUDENT
-struct student {
-	std::string id;
-	std::string pass;
-	std::string name;
-	dob date;
-	std::string classname;
-	attendance* list_attend;
-	scoreboard* score;
-	int status;
-};
-
-//STAFF
-struct staff {
-	std::string username;
-	std::string pass;
-	std::string name;
-	int gender;
-};
-
-
-
 
 //FUNCTION 
 //ALLROLE
