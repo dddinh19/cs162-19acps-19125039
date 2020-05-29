@@ -13,7 +13,7 @@ void create_year_semester(ifstream& fi,ofstream& fo)
 	string seme;
 	cout << "Please input the semester you want to create: ";
 	getline(cin, seme);
-	fi.open("D:/Data/Course/semester.txt");
+	fi.open("Data/Course/semester.txt");
 	if (!fi)
 	{
 		std::cout << "Can't open this file! Please enter it again! " << std::endl;
@@ -65,7 +65,7 @@ void create_year_semester(ifstream& fi,ofstream& fo)
 		cin >> check_3;
 		if (check_3 == 'y')
 		{
-			cout << "-----------------------------------------------";
+			cout << "-----------------------------------------------" << endl;
 			fi.close();
 			create_year_semester(fi, fo);
 		}
@@ -78,33 +78,65 @@ void create_year_semester(ifstream& fi,ofstream& fo)
 	}
 	else
 	{
-		fo.open("D:/Data/Course/semester.txt");
+		fo.open("Data/Course/semester.txt");
 		fo << num + 1;
 		for (int j = 0; j < i; j++)
 		{
-			fo << avai_semester[j].year;
+			fo << avai_semester[j].year << endl;
 			if (compare(avai_semester[j].year, academic_year))
 			{
-				fo << 1;
+				fo << 1 << endl;
 				check_2 = 1;
+				if (avai_semester[j].status == 0)
+				{
+					string str = "Data/Course/" + avai_semester[j].year;
+					const char* str1 = str.c_str();
+					_mkdir(str1);
+				}
 			}
-			fo << avai_semester[j].seme1;
-			if (compare(avai_semester[j].seme1, seme)) fo << 1;
-			fo << avai_semester[j].seme2;
-			if (compare(avai_semester[j].seme2, seme)) fo << 1;
-			fo << avai_semester[j].seme3;
-			if (compare(avai_semester[j].seme3, seme)) fo << 1;
+			else fo << avai_semester[j].status << endl;
+			fo << avai_semester[j].seme1 << endl;
+			if (compare(avai_semester[j].seme1, seme))
+			{
+				fo << 1 << endl;
+				string str = "Data/Course/" + avai_semester[j].year + "/" + seme;
+				fo.open(str);
+				fo.close();
+			}
+			else fo << avai_semester[j].status1 << endl;
+			if (compare(avai_semester[j].seme2, seme))
+			{
+				fo << 1 << endl;
+				string str = "Data/Course/" + avai_semester[j].year + "/" + seme;
+				fo.open(str);
+				fo.close();
+			}
+			else fo << avai_semester[j].status2 << endl;
+			if (compare(avai_semester[j].seme3, seme))
+			{
+				fo << 1 << endl;
+				string str = "Data/Course/" + avai_semester[j].year + "/" + seme;
+				fo.open(str);
+				fo.close();
+			}
+			else fo << avai_semester[j].status3 << endl;
 		}
 		if (check_2 == 0)
 		{
-			fo << academic_year;
-			fo << 1;
-			fo << "HK1";
-			if (compare("HK1", seme)) fo << 1; else fo << 0;
-			fo << "HK2";
-			if (compare("HK2", seme)) fo << 1; else fo << 0;
-			fo << "HK3";
-			if (compare("HK3", seme)) fo << 1; else fo << 0;
+			fo << academic_year << endl;
+			fo << 1 << endl;
+			fo << "HK1" << endl;
+			if (compare("HK1", seme)) fo << 1 << endl; else fo << 0 << endl;
+			fo << "HK2" << endl;
+			if (compare("HK2", seme)) fo << 1 << endl; else fo << 0 << endl;
+			fo << "HK3" << endl;
+			if (compare("HK3", seme)) fo << 1 << endl; else fo << 0 << endl;
+			string str = "Data/Course/" + academic_year;
+			const char* str1 = str.c_str();
+			_mkdir(str1);
+			str = str + "/" + seme;
+			fo.open(str);
+			fo.close();
 		}
 		cout << "Create successfully!!";
 	}
