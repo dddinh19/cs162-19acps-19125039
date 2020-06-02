@@ -12,7 +12,7 @@ void view_scoreboard(){
 	std::cout << "This course is of the class: ";
 	std::cin >> tclassname;
 	std::ifstream fin;
-	std::string* stu;
+	std::string* stu=NULL;
 	std::string trash;
 	int n;
 	fin.open("Data/Courses/" + tyears + "/" + tseme + "/" + tcourseID + "/" + tclassname + "/" + "student.txt");
@@ -84,6 +84,5 @@ void view_scoreboard(){
 			std::cout << std::setfill(' ');
 		}
 	}
-
-
+	delete[]stu;
 }
