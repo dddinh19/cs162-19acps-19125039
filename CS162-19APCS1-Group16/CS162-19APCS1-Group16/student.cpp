@@ -281,3 +281,50 @@ void view_schedule(student stu) {
 	std::cout << "Print schedule successfully. " << std::endl;
 	delete[]sch;
 }
+
+void read_scoreboard(std::string tseme, std::string tyear, course cou, std::string tID, scoreboard& sco) {
+	std::ifstream fin;
+	fin.open("Data/Courses/" + tyear + "/" + tseme + "/" + cou.courseID + "/" + cou.classname + "/" + tID + "/scoreboard.txt");
+	if (!fin.is_open())
+		std::cout << "Can not open file." << std::endl;
+	else {
+		fin >> sco.lab;
+		fin >> sco.midterm;
+		fin >> sco.final;
+		fin >> sco.bonus;
+		fin.close();
+	}
+}
+
+void view_score(student stu){
+	std::string tseme;
+	std::string tyear;
+	std::cout << "Please enter the academic years: ";
+	getline(std::cin, tyear);
+	std::cout << "Please enter the semester: ";
+	getline(std::cin, tseme);
+	//check nam voi hoc ki co active khong
+	course* sch = NULL;
+	int n, option;
+	read_courses_student(stu.id, stu.classname, tseme, tyear, sch, n);
+	read_coursename(tseme, tyear, sch, n);
+	system("CLS");
+	std::cout << "Courses for you in " << tyear << " of " << tseme << std::endl;
+	for (int i = 0; i < n; i++)
+		std::cout << i + 1 << ". " << sch[i].courseID << " - " << sch[i].courseName << std::endl;
+	std::cout << "Please enter a course you want to view the scores of: ";
+	std::cin >> option;
+	system("CLS");
+	if (option > n || option <= 0)
+		std::cout << "Invalid choice!!!" << std::endl;
+	else {
+		scoreboard sco;
+		read_scoreboard(tseme, tyear, sch[option - 1], stu.id, sco);
+		std::cout << "All your scores of the course " << sch[option - 1].courseID << " are: " << std::endl;
+		std::cout << "Lab score: " << sco.lab << std::endl;
+		std::cout << "Midterm score: " << sco.midterm << std::endl;
+		std::cout << "Finalterm score: " << sco.final << std::endl;
+		std::cout << "Bonus score: " << sco.bonus << std::endl;
+	}
+	delete[]sch;
+}
