@@ -1,4 +1,5 @@
 #include "function.h"
+
 void read_courses_student(std::string tID, std::string tclass, std::string tseme, std::string tyear, course*& sch, int& n){
 	std::ifstream fin;
 	fin.open("Data/Class/" + tclass + "/" + tID + "/" + tyear + "/" + tseme + "/course.txt");
@@ -148,6 +149,60 @@ void checkin(student stu) {
 			write_studentattendance(tseme, tyear, sch[option - 1], stu.id, att);
 			std::cout << "Checkin successfully! Please view checkin result to ensure if everything is alright." << std::endl;
 		}
+		delete[]att;
+	}
+	delete[]sch;
+}
+
+void print_checkinboard(attendance* att, course cou) {
+	std::cout << std::setw(36) << "YOUR ATTENDANCE LIST OF " << cou.courseID << " IN CLASS " << cou.classname << std::endl;
+	std::cout << std::setfill('=');
+	std::cout << std::setw(69) << "=" << std::endl;
+	std::cout << std::setfill(' ');
+	// Width of board: Date-20, Time-15
+	std::cout << std::setw(8) << " " << "Date" << std::setw(8) << " " << "|";
+	std::cout << std::setw(2) << " " << "Start time" << std::setw(3) << " " << "|";
+	std::cout << std::setw(3) << " " << "End time" << std::setw(4) << " " << "|";
+	std::cout << " Checkin time  " << "|" << std::endl;
+	std::cout << std::setfill('-');
+	std::cout << std::setw(69) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+	for (int i = 0; i < 10; i++) {
+		std::cout << std::setw(5) << " " << FormatDate(att[i].date) << std::setw(5) << " " << "|";
+		std::cout << std::setw(5) << " " << FormatTime(att[i].start) << std::setw(5) << " " << "|";
+		std::cout << std::setw(5) << " " << FormatTime(att[i].end) << std::setw(5) << " " << "|";
+		std::cout << std::setw(5) << " " << FormatTime(att[i].checkin) << std::setw(5) << " " << "|" << std::endl;
+	}
+	std::cout << std::setfill('-');
+	std::cout << std::setw(69) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+}
+void view_checkin(student stu) {
+	std::string tseme;
+	std::string tyear;
+	std::cout << "Please enter the academic years: ";
+	getline(std::cin, tyear);
+	std::cout << "Please enter the semester: ";
+	getline(std::cin, tseme);
+	//check nam voi hoc ki co active khong
+	course* sch = NULL;
+	int n, option;
+	read_courses_student(stu.id, stu.classname, tseme, tyear, sch, n);
+	read_coursename(tseme, tyear, sch, n);
+	system("CLS");
+	std::cout << "Courses for you in " << tyear << " of " << tseme << std::endl;
+	for (int i = 0; i < n; i++)
+		std::cout << i + 1 << ". " << sch[i].courseID << " - " << sch[i].courseName << std::endl;
+	std::cout << "Please enter a course you want to view the checkin result: ";
+	std::cin >> option;
+	system("CLS");
+	if (option > n || option <= 0)
+		std::cout << "Invalid choice!!!" << std::endl;
+	else {
+		attendance* att = NULL;
+		read_studentattendance(tseme, tyear, sch[option - 1], stu.id, att);
+		print_checkinboard(att, sch[option - 1]);
+		std::cout << "Print the checkin result successfully!" << std::endl;
 		delete[]att;
 	}
 	delete[]sch;
