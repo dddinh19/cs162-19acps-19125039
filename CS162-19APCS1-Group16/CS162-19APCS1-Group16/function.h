@@ -1,11 +1,13 @@
 #ifndef _FUNCTION_H_
 #define _FUNCTION_H_
-
+#pragma warning(disable : 4996)
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <iomanip>
 #include <direct.h>
 #include <sys/stat.h>
+#include <ctime>
 
 
 
@@ -17,7 +19,7 @@ struct dob {
 	int year, day, month;
 };
 
-struct time {
+struct ttime {
 	int hour, minute;
 };
 //STAFF
@@ -35,20 +37,15 @@ struct lecturer {
 	std::string degree;
 	int gender;// 0 male 1 female
 };
-//STUDENT
-struct student {
-	std::string id;
-	std::string pass;
-	std::string name;
-	dob date;
-	std::string classname;
-	attendance* list_attend;
-	scoreboard* score;
-	int status;
+//SCOREBOARD
+struct scoreboard {
+	double midterm, lab, final, bonus;
 };
-
-//CLASS
-
+//ATTENDANCE
+struct attendance {
+	dob date;
+	ttime start, end, checkin;
+};
 //COURSE
 struct semester {
 	std::string year;
@@ -59,21 +56,24 @@ struct semester {
 struct course {
 	std::string courseID;
 	std::string courseName;
+	std::string classname;
 	lecturer lecturer_couse;
 	dob start_day, end_day;
-	time start_time, end_time;
+	ttime start_time, end_time;
 	std::string dayofweek;
 	std::string room;
 	int status;
 };
-//SCOREBOARD
-struct scoreboard {
-	double midterm, lab, final, bonus;
-};
-//ATTENDANCE
-struct attendance {
+//STUDENT
+struct student {
+	std::string id;
+	std::string pass;
+	std::string name;
 	dob date;
-	time start, end, checkin;
+	std::string classname;
+	attendance* list_attend;
+	scoreboard* score; // co can dau *?
+	int status;
 };
 
 //FUNCTION 
@@ -86,11 +86,18 @@ struct attendance {
 //SCOREBOARD
 
 //ATTENDANCE
+std::string center_align(std::string str, int width);
+std::string FormatDate(dob date);
+std::string FormatTime(ttime t);
 
 //LECTURER
 
 
 //STUDENT
+void checkin(student stu);
+void view_checkin(student stu);
+void view_schedule(student stu);
+void view_score(student stu);
 
 #endif
 
