@@ -1,4 +1,7 @@
 #include "function.h"
+
+//LOGIN
+
 void student_data(student*& p, int& n) {
 	std::ifstream fi("Data/Login/student.txt");
 	if (!fi.is_open()) std::cout << "Can not open student data file " << std::endl;
@@ -64,6 +67,9 @@ void login(student*& p_student, int& n_student, staff*& p_staff, int& n_staff, l
 		}
 	}
 }
+
+//VIEW PROFILE
+
 void student_info_data(std::string filename, student*& a) {
 	std::ifstream fi(filename);
 	if (!fi.is_open()) std::cout << "Can not open file " << std::endl;
@@ -121,4 +127,97 @@ void view_lecturer_profile(lecturer* p, int k) {
 	if (a->gender == 0) std::cout << "Gender: Male" << std::endl;
 	else std::cout << "Gender: Female" << std::endl;
 	delete a;
+}
+
+//CHANGE PASSWORD
+
+void write_student_data(student* p, int n) {
+	std::ofstream fo("Data/Login/student.txt");
+	if (!fo.is_open()) std::cout << "Can not open student data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].id << std::endl;
+			fo << p[i].pass << std::endl;
+			fo << p[i].classname << std::endl;
+			fo << p[i].status << std::endl;
+		}
+		fo.close();
+	}
+}
+void change_student_password(student*& p, int n, int k) {
+	std::string tempt;
+	std::string cur;
+	do {
+		std::cout << "Enter your current password " << std::endl;
+		std::cin >> tempt;
+	} while (tempt != p[k].pass);
+	std::cout << "Enter your new password(no space) " << std::endl;
+	std::cin >> tempt;
+	do {
+		std::cout << "Enter your new password again " << std::endl;
+		std::cin >> cur;
+	} while (cur != tempt);
+	std::cout << "Password has been changed successfully !!!" << std::endl;
+	p[k].pass = tempt;
+	write_student_data(p, n);
+}
+void write_staff_data(staff* p, int n) {
+	std::ofstream fo("Data/Login/staff.txt");
+	if (!fo.is_open()) std::cout << "Can not open staff data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].username << std::endl;
+			fo << p[i].pass << std::endl;
+			fo << p[i].name << std::endl;
+			fo << p[i].gender << std::endl;
+		}
+		fo.close();
+	}
+}
+void change_staff_password(staff*& p, int n, int k) {
+	std::string tempt;
+	std::string cur;
+	do {
+		std::cout << "Enter your current password " << std::endl;
+		std::cin >> tempt;
+	} while (tempt != p[k].pass);
+	std::cout << "Enter your new password(no space) " << std::endl;
+	std::cin >> tempt;
+	do {
+		std::cout << "Enter your new password again " << std::endl;
+		std::cin >> cur;
+	} while (cur != tempt);
+	p[k].pass = tempt;
+	write_staff_data(p, n);
+}
+void write_lecturer_data(lecturer* p, int n) {
+	std::ofstream fo("Data/Login/lecturer.txt");
+	if (!fo.is_open()) std::cout << "Can not open lecturer data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].username << std::endl;
+			fo << p[i].password << std::endl;
+		}
+		fo.close();
+	}
+}
+void change_lecturer_password(lecturer*& p, int n, int k) {
+	std::string tempt;
+	std::string cur;
+	do {
+		std::cout << "Enter your current password " << std::endl;
+		std::cin >> tempt;
+	} while (tempt != p[k].password);
+	std::cout << "Enter your new password(no space) " << std::endl;
+	std::cin >> tempt;
+	do {
+		std::cout << "Enter your new password again " << std::endl;
+		std::cin >> cur;
+	} while (cur != tempt);
+	std::cout << "Password has been changed successfully !!!" << std::endl;
+	p[k].password = tempt;
+	write_lecturer_data(p, n);
 }
