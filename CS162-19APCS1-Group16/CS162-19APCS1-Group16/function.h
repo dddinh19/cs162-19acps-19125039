@@ -81,9 +81,31 @@ struct student {
 
 //FUNCTION 
 //ALLROLE
+void student_data(student*& p, int& n);
+void staff_data(staff*& p, int& n);
+void lecturer_data(lecturer*& p, int& n);
+void login(student*& p_student, int& n_student, staff*& p_staff, int& n_staff, lecturer*& p_lecturer, int& n_lecturer, std::string username, std::string pass);
 
+void student_info_data(std::string filename, student*& a);
+void view_student_profile(student* p, int k);
+void view_staff_profile(staff* p, int k);
+void lecturer_info_data(std::string filename, lecturer*& a);
+void view_lecturer_profile(lecturer* p, int k);
+
+void write_student_data(student* p, int n);
+void change_student_password(student*& p, int n, int k);
+void write_staff_data(staff* p, int n);
+void change_staff_password(staff*& p, int n, int k);
+void write_lecturer_data(lecturer* p, int n);
+void change_lecturer_password(lecturer*& p, int n, int k);
 //CLASS
+void student_class_data(std::string filename, student*& p, int& n);
+void write_student_class_data(std::string filename, student* p, int n);
+void input_new_student(student*& a);
+void write_student_info(std::string filename, student* a);
+int add_a_student(student*& p, int& n, student* a);
 
+void view_list_class();
 //COURSE
 
 //SCOREBOARD
