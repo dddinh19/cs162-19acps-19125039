@@ -13,7 +13,10 @@
 
 // STRUCT
 //ALLROLE
-
+struct class_name {
+	std::string classname;
+	int status;
+};
 //DATE
 struct dob {
 	int year, day, month;
