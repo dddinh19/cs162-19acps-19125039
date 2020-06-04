@@ -222,26 +222,3 @@ void change_lecturer_password(lecturer*& p, int n, int k) {
 	write_lecturer_data(p, n);
 }
 
-//VIEW LIST OF CLASS
-
-void view_list_class() {
-	std::ifstream fi("Data/Class/class.txt");
-	if (!fi.is_open()) std::cout << "Can not open class data file " << std::endl;
-	else {
-		int n;
-		class_name* p;
-		fi >> n;
-		p = new class_name[n];
-		for (int i = 0; i < n; ++i) {
-			fi >> p[i].classname;
-			fi >> p[i].status;
-			if (p[i].status == 0) --i;
-		}
-		fi.close();
-		std::cout << "LIST OF CLASS: " << std::endl;
-		for (int i = 0; i < n; ++i) {
-			std::cout << p[i].classname << std::endl;
-		}
-		delete[]p;
-	}
-}
