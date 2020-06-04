@@ -64,3 +64,61 @@ void login(student*& p_student, int& n_student, staff*& p_staff, int& n_staff, l
 		}
 	}
 }
+void student_info_data(std::string filename, student*& a) {
+	std::ifstream fi(filename);
+	if (!fi.is_open()) std::cout << "Can not open file " << std::endl;
+	else {
+		a = new student;
+		fi >> a->id;
+		getline(fi, a->name);
+		getline(fi, a->name);
+		//fi >> a->gender;
+		fi >> a->date.year;
+		fi >> a->date.month;
+		fi >> a->date.day;
+		fi >> a->classname;
+		fi.close();
+	}
+}
+void view_student_profile(student* p, int k) {
+	student* a = nullptr;
+	std::string filename = "Data/Class/" + p[k].classname + "/" + p[k].id + "/info.txt";
+	student_info_data(filename, a);
+	std::cout << "Id: " << a->id << std::endl;
+	std::cout << "Name: " << a->name << std::endl;
+	//if (a->gender == 1) std::cout << "Gender: Female" << std::endl;
+	//else std::cout << "Gender: Male " << std::endl;
+	std::cout << "Date of birth(year/month/day): " << a->date.year << "/";
+	if (a->date.month < 10) std::cout << "0" << a->date.month << "/";
+	else std::cout << a->date.month << "/";
+	if (a->date.day < 10) std::cout << "0" << a->date.day << std::endl;
+	else std::cout << a->date.day << std::endl;
+	std::cout << "Class: " << a->classname << std::endl;
+	delete a;
+}
+void view_staff_profile(staff* p, int k) {
+	std::cout << "Name: " << p[k].name << std::endl;
+	if (p[k].gender == 1) std::cout << "Gender: Female " << std::endl;
+	else std::cout << "Gender: Male " << std::endl;
+}
+void lecturer_info_data(std::string filename, lecturer*& a) {
+	std::ifstream fi(filename);
+	if (!fi.is_open()) std::cout << "Can not open file " << std::endl;
+	else {
+		a = new lecturer;
+		getline(fi, a->name);
+		getline(fi, a->degree);
+		fi >> a->gender;
+		fi.close();
+	}
+}
+void view_lecturer_profile(lecturer* p, int k) {
+	lecturer* a = nullptr;
+	std::string filename = "Data/Login/Lecturer/" + p[k].username + "/info.txt";
+	lecturer_info_data(filename, a);
+	std::cout << "Name: " << a->name << std::endl;
+	std::cout << "Degree: " << a->degree << std::endl;
+	if (a->gender == 0) std::cout << "Gender: Male" << std::endl;
+	else std::cout << "Gender: Female" << std::endl;
+	delete a;
+}
