@@ -230,7 +230,7 @@ void read_scoreboard(std::string filename, scoreboard a) {
 void view_scoreboard(scoreboard a) {
 	std::cout << "Lab: " << a.lab << " Midterm: " << a.midterm << " Final: " << a.final << " Bonus: " << a.bonus << std::endl;
 }
-void lecturer_view_list_attendance_course(lecturer* p, int k) {
+void lecturer_view_scoreboard(lecturer* p, int k) {
 	semester* p_year = nullptr;
 	int n_year = 0;
 	std::string year, sem;
