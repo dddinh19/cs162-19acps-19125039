@@ -53,7 +53,7 @@ struct attendance {
 struct semester {
 	std::string year;
 	int status;
-	std::string seme1, seme2, seme3;
+	std::string sem1, sem2, sem3;
 	int status1, status2, status3;
 };
 struct course {
@@ -66,15 +66,8 @@ struct course {
 	std::string dayofweek;
 	std::string room;
 	int status;
-};
-struct semester {
-	std::string sem_name;
-	int status;
-};
-struct academic_year {
-	std::string year;
-	semester sem[3];
-	int status;
+	int numclass;
+	class_name* p_class;
 };
 //STUDENT
 struct student {
@@ -83,8 +76,8 @@ struct student {
 	std::string name;
 	dob date;
 	std::string classname;
-	attendance* list_attend;
-	scoreboard* score; // co can dau *?
+	attendance list_attend[10];
+	scoreboard score;
 	int status;
 };
 
@@ -125,12 +118,15 @@ void change_class(student*& p, int n);
 void remove_student(student*& p, int& n);
 void edit_student(student*& p, int& n);
 //COURSE
-void semester_data(academic_year*& p, int& n);
-void view_academic_year(academic_year* p, int n);
-int view_semester(academic_year* p, int n, std::string year);
+void semester_data(semester*& p, int& n);
+void view_academic_year(semester* p, int n);
+int view_semester(semester* p, int n, std::string year);
 
-void write_semester_data(academic_year* p, int n);
-int check_semester(academic_year* p, int n, int& k);
+void write_semester_data(semester* p, int n);
+int check_semester(semester* p, int n, int& k);
+
+void course_info_data(std::string filename, course*& a);
+void view_course_info_data(course* a);
 
 //SCOREBOARD
 
@@ -140,7 +136,8 @@ std::string FormatDate(dob date);
 std::string FormatTime(ttime t);
 
 //LECTURER
-
+void lecturer_course_data(std::string filename, course*& p, int& n);
+void lecturer_view_list_course(lecturer* p, int k);
 
 //STUDENT
 void checkin(student stu);
