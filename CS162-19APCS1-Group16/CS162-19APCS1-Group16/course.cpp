@@ -532,26 +532,13 @@ void write_semester_data(semester* p, int n) {
 
 //CHECK ACADEMIC YEAR, SEMESTER EXISTING OR NOT
 
-int check_semester(semester* p, int n, int& k) {
-	std::string year, sem;
-	semester_data(p, n);
-	view_academic_year(p, n);
-	std::cout << "Enter academic year " << std::endl;
-	std::cin >> year;
-	k = view_semester(p, n, year);
-	int i;
-	if (k != -1) {
-		std::cout << "Enter semester " << std::endl;
-		std::cin >> sem;
-		if (p[k].sem1 == sem && p[k].status1 == 1) i = 1;
-		else if (p[k].sem2 == sem && p[k].status2 == 1) i = 2;
-		else if (p[k].sem3 == sem && p[k].status3 == 1) i = 3;
-		else i = -1;
+bool check_semester(semester* p_year, int n_year, std::string year, std::string sem) {
+	semester_data(p_year, n_year);
+	for (int i = 0; i < n_year; ++i) {
+		if (year == p_year[i].year && ((sem == p_year[i].sem1 && p_year[i].status1 == 1) || (sem == p_year[i].sem2 && p_year[i].status2 == 1) || (sem == p_year[i].sem3 && p_year[i].status3 == 1)))
+			return true;
 	}
-	else i = -1;
-	if (i == -1) std::cout << "Semester does not exist " << std::endl;
-	delete[]p;
-	return i;
+	return false;
 }
 
 //VIEW LIST OF COURSE
@@ -564,8 +551,7 @@ void course_info_data(std::string filename, course*& a) {
 		fi >> a->courseID;
 		getline(fi, a->courseName);
 		getline(fi, a->courseName);
-		a->p_class = new class_name;
-		fi >> a->p_class->classname;
+		fi >> a->classname;
 		fi >> a->lecturer_couse.username;
 		fi >> a->start_day.year >> a->start_day.month >> a->start_day.day;
 		fi >> a->end_day.year >> a->end_day.month >> a->end_day.day;
@@ -578,7 +564,7 @@ void course_info_data(std::string filename, course*& a) {
 void view_course_info_data(course* a) {
 	std::cout << "Course ID: " << a->courseID << std::endl;
 	std::cout << "Course name: " << a->courseName << std::endl;
-	std::cout << "Class: " << a->p_class->classname << std::endl;
+	std::cout << "Class: " << a->classname << std::endl;
 	std::cout << "Start date: " << a->start_day.year << "/";
 	if (a->start_day.month < 10) std::cout << "0" << a->start_day.month << "/";
 	else std::cout << a->start_day.month << "/";
