@@ -152,7 +152,7 @@ void lecturer_view_list_attendance_course(lecturer* p, int k);
 
 void read_scoreboard(std::string filename, scoreboard a);
 void view_scoreboard(scoreboard a);
-void lecturer_view_list_attendance_course(lecturer* p, int k);
+void lecturer_view_scoreboard(lecturer* p, int k);
 
 //STUDENT
 void read_courses_student(std::string tID, std::string tclass, std::string tseme, std::string tyear, course*& sch, int& n);
