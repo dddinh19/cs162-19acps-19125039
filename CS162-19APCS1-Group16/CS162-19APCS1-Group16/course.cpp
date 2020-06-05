@@ -1,7 +1,7 @@
 #include "function.h"
-#include <iostream>
+//#include <iostream>
 
-void loadLecturerfile(ifstream& fin, lecturer*& all, int& n) {
+/*void loadLecturerfile(ifstream& fin, lecturer*& all, int& n) {
 	char temp1[50];
 	fin >> n;
 	fin.ignore(1);
@@ -376,15 +376,15 @@ void addacourse1(academicyear*& a, int& n)
 	cout << "Delete successfully." << std::endl;
 }
 */
-void createNewCourse(course x, string academicyear, string semester) {
-	string* Student = NULL;
+void createNewCourse(course x, std::string academicyear, std::string semester) {
+	std::string* Student = NULL;
 	int n = 0;
-	string trash;
-	ifstream in;
+	std::string trash;
+	std::ifstream in;
 	in.open("Data/Class/" + x.classname + ".txt");
 	while (in) {
 		in >> n;
-		Student = new string[n];
+		Student = new std::string[n];
 		for (int i = 0; i < n; i++) {
 			getline(in, trash);
 			if (trash == "1") {
@@ -397,13 +397,14 @@ void createNewCourse(course x, string academicyear, string semester) {
 		}
 	}
 	in.close();
-	ofstream out;
+	std::ofstream out;
 	out.open("Data/Course/" + academicyear + "/" + x.courseID + "-"+x.classname+"-"+semester + ".txt");
 	for (int j = 0; j < n; j++) {
-		out << Student[j] << endl;
-		out << "0 0 0 0" << endl;
+		out << Student[j] << std::endl;
+		out << "0 0 0 0" << std::endl;
 
 	}
+	out.close();
 	delete[]Student;
 }
 
@@ -430,7 +431,7 @@ int dayofmonth(dob date) {
 		return 30;
 }
 
-void saveaDateAttendance(ofstream& fout, dob date, course c){
+void saveaDateAttendance(std::ofstream& fout, dob date, course c){
 	if (date.day < 10)
 		fout << "0" << date.day << " ";
 	else
@@ -439,11 +440,11 @@ void saveaDateAttendance(ofstream& fout, dob date, course c){
 		fout << "0" << date.month << " ";
 	else
 		fout << date.month << " ";
-	fout << date.year << endl;
+	fout << date.year << std::endl;
 
 }
 
-void DateAttendance(ofstream& fout, course c){
+void DateAttendance(std::ofstream& fout, course c){
 	saveaDateAttendance(fout, c.start, c);
 	dob tdate = c.start;
 	for (int i = 0; i < 9; i++) {
@@ -462,4 +463,88 @@ void DateAttendance(ofstream& fout, course c){
 			saveaDateAttendance(fout, tdate, c);
 		}
 	}
+}
+
+//VIEW ACADEMIC YEAR, SEMESTER
+
+void semester_data(academic_year*& p, int& n) {
+	std::string filename = "Data/Courses/semester.txt";
+	std::ifstream fi(filename);
+	if (!fi.is_open()) std::cout << "Can not open semester data file " << std::endl;
+	else {
+		fi >> n;
+		for (int i = 0; i < n; ++i) {
+			fi >> p[i].year;
+			fi >> p[i].status;
+			for (int j = 0; j < 3; ++j) {
+				fi >> p[i].sem[j].sem_name;
+				fi >> p[i].sem[j].status;
+			}
+			if (p[i].status == 0) --i;
+		}
+		fi.close();
+	}
+}
+void view_academic_year(academic_year* p, int n) {
+	for (int i = 0; i < n; ++i) {
+		std::cout << p[i].year << std::endl;
+	}
+}
+int view_semester(academic_year* p, int n, std::string year) {
+	int i;
+	for (i = 0; i < n; ++i) {
+		if (p[i].year == year && p[i].status == 1) {
+			for (int j = 0; j < 3; ++j) {
+				if (p[i].sem[j].status == 1) std::cout << p[i].sem[j].sem_name << std::endl;
+			}
+			return i;
+		}
+	}
+	if (i == n) std::cout << "Academic year does not exist " << std::endl;
+	return -1;
+}
+
+//WRITE SEMRSTER DATA
+
+void write_semester_data(academic_year* p, int n) {
+	std::string filename = "Data/Courses/semester.txt";
+	std::ofstream fo(filename);
+	if (!fo.is_open()) std::cout << "Can not open semester data file " << std::endl;
+	else {
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].year << std::endl;
+			fo << p[i].status << std::endl;
+			for (int j = 0; j < 3; ++j) {
+				fo << p[i].sem[j].sem_name << std::endl;
+				fo << p[i].sem[j].status << std::endl;
+			}
+		}
+		fo.close();
+	}
+}
+
+//CHECK ACADEMIC YEAR, SEMESTER EXISTING OR NOT
+
+int check_semester(academic_year* p, int n, int& k) {
+	std::string year, sem;
+	semester_data(p, n);
+	view_academic_year(p, n);
+	std::cout << "Enter academic year " << std::endl;
+	std::cin >> year;
+	k = view_semester(p, n, year);
+	int i;
+	if (k != -1) {
+		std::cout << "Enter semester " << std::endl;
+		std::cin >> sem;
+		for (i = 0; i < 3; ++i) {
+			if (p[k].sem[i].sem_name == sem && p[k].sem[i].status == 1) break;
+
+		}
+		if (i == 3) i = -1;
+	}
+	else i = -1;
+	if (i == -1) std::cout << "Semester does not exist " << std::endl;
+	delete[]p;
+	return i;
 }
