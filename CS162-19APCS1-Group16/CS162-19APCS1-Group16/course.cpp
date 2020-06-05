@@ -467,7 +467,7 @@ void DateAttendance(std::ofstream& fout, course c){
 
 //VIEW ACADEMIC YEAR, SEMESTER
 
-void semester_data(academic_year*& p, int& n) {
+void semester_data(semester*& p, int& n) {
 	std::string filename = "Data/Courses/semester.txt";
 	std::ifstream fi(filename);
 	if (!fi.is_open()) std::cout << "Can not open semester data file " << std::endl;
@@ -476,27 +476,31 @@ void semester_data(academic_year*& p, int& n) {
 		for (int i = 0; i < n; ++i) {
 			fi >> p[i].year;
 			fi >> p[i].status;
-			for (int j = 0; j < 3; ++j) {
-				fi >> p[i].sem[j].sem_name;
-				fi >> p[i].sem[j].status;
-			}
+			fi >> p[i].sem1;
+			fi >> p[i].status1;
+			fi >> p[i].sem2;
+			fi >> p[i].status2;
+			fi >> p[i].sem3;
+			fi >> p[i].status3;
 			if (p[i].status == 0) --i;
 		}
 		fi.close();
 	}
 }
-void view_academic_year(academic_year* p, int n) {
+void view_academic_year(semester* p, int n) {
+	std::cout << "LIST OF ACADEMIC YEARS: " << std::endl;
 	for (int i = 0; i < n; ++i) {
 		std::cout << p[i].year << std::endl;
 	}
 }
-int view_semester(academic_year* p, int n, std::string year) {
+int view_semester(semester* p, int n, std::string year) {
 	int i;
 	for (i = 0; i < n; ++i) {
 		if (p[i].year == year && p[i].status == 1) {
-			for (int j = 0; j < 3; ++j) {
-				if (p[i].sem[j].status == 1) std::cout << p[i].sem[j].sem_name << std::endl;
-			}
+			std::cout << "LIST OF SEMESTER IN THIS ACADEMIC YEAR: " << std::endl;
+			if (p[i].status1 == 1) std::cout << p[i].sem1 << std::endl;
+			if (p[i].status2 == 1) std::cout << p[i].sem2 << std::endl;
+			if (p[i].status3 == 1) std::cout << p[i].sem3 << std::endl;
 			return i;
 		}
 	}
@@ -504,9 +508,9 @@ int view_semester(academic_year* p, int n, std::string year) {
 	return -1;
 }
 
-//WRITE SEMRSTER DATA
+//WRITE SEMESTER DATA
 
-void write_semester_data(academic_year* p, int n) {
+void write_semester_data(semester* p, int n) {
 	std::string filename = "Data/Courses/semester.txt";
 	std::ofstream fo(filename);
 	if (!fo.is_open()) std::cout << "Can not open semester data file " << std::endl;
@@ -515,10 +519,12 @@ void write_semester_data(academic_year* p, int n) {
 		for (int i = 0; i < n; ++i) {
 			fo << p[i].year << std::endl;
 			fo << p[i].status << std::endl;
-			for (int j = 0; j < 3; ++j) {
-				fo << p[i].sem[j].sem_name << std::endl;
-				fo << p[i].sem[j].status << std::endl;
-			}
+			fo << p[i].sem1 << std::endl;
+			fo << p[i].status1 << std::endl;
+			fo << p[i].sem2 << std::endl;
+			fo << p[i].status2 << std::endl;
+			fo << p[i].sem3 << std::endl;
+			fo << p[i].status3 << std::endl;
 		}
 		fo.close();
 	}
@@ -526,7 +532,7 @@ void write_semester_data(academic_year* p, int n) {
 
 //CHECK ACADEMIC YEAR, SEMESTER EXISTING OR NOT
 
-int check_semester(academic_year* p, int n, int& k) {
+int check_semester(semester* p, int n, int& k) {
 	std::string year, sem;
 	semester_data(p, n);
 	view_academic_year(p, n);
@@ -537,14 +543,54 @@ int check_semester(academic_year* p, int n, int& k) {
 	if (k != -1) {
 		std::cout << "Enter semester " << std::endl;
 		std::cin >> sem;
-		for (i = 0; i < 3; ++i) {
-			if (p[k].sem[i].sem_name == sem && p[k].sem[i].status == 1) break;
-
-		}
-		if (i == 3) i = -1;
+		if (p[k].sem1 == sem && p[k].status1 == 1) i = 1;
+		else if (p[k].sem2 == sem && p[k].status2 == 1) i = 2;
+		else if (p[k].sem3 == sem && p[k].status3 == 1) i = 3;
+		else i = -1;
 	}
 	else i = -1;
 	if (i == -1) std::cout << "Semester does not exist " << std::endl;
 	delete[]p;
 	return i;
+}
+
+//VIEW LIST OF COURSE
+
+void course_info_data(std::string filename, course*& a) {
+	std::ifstream fi(filename);
+	if (!fi.is_open()) std::cout << "Can not open course info data file " << std::endl;
+	else {
+		a = new course;
+		fi >> a->courseID;
+		getline(fi, a->courseName);
+		getline(fi, a->courseName);
+		a->p_class = new class_name;
+		fi >> a->p_class->classname;
+		fi >> a->lecturer_couse.username;
+		fi >> a->start_day.year >> a->start_day.month >> a->start_day.day;
+		fi >> a->end_day.year >> a->end_day.month >> a->end_day.day;
+		fi >> a->dayofweek;
+		fi >> a->start_time.hour >> a->start_time.minute >> a->end_time.hour >> a->end_time.minute;
+		fi >> a->room;
+		fi.close();
+	}
+}
+void view_course_info_data(course* a) {
+	std::cout << "Course ID: " << a->courseID << std::endl;
+	std::cout << "Course name: " << a->courseName << std::endl;
+	std::cout << "Class: " << a->p_class->classname << std::endl;
+	std::cout << "Start date: " << a->start_day.year << "/";
+	if (a->start_day.month < 10) std::cout << "0" << a->start_day.month << "/";
+	else std::cout << a->start_day.month << "/";
+	if (a->start_day.day < 10) std::cout << "0" << a->start_day.day << std::endl;
+	else std::cout << a->start_day.day << std::endl;
+	std::cout << "End date: " << a->end_day.year << "/";
+	if (a->end_day.month < 10) std::cout << "0" << a->end_day.month << "/";
+	else std::cout << a->end_day.month << "/";
+	if (a->end_day.day < 10) std::cout << "0" << a->end_day.day << std::endl;
+	else std::cout << a->end_day.day << std::endl;
+	std::cout << "Day of week: " << a->dayofweek << std::endl;
+	std::cout << "Start time: " << a->start_time.hour << ":" << a->start_time.minute << std::endl;
+	std::cout << "End time: " << a->end_time.hour << ":" << a->end_time.minute << std::endl;
+	std::cout << "Room: " << a->room << std::endl;
 }
