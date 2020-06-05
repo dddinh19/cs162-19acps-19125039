@@ -140,7 +140,7 @@ void class_data(class_name*& p, int& n) {
 	else {
 		fi >> n;
 		p = new class_name[n];
-		for (int i = 0; i < n; +i) {
+		for (int i = 0; i < n; ++i) {
 			fi >> p[i].classname;
 			fi >> p[i].status;
 			if (p[i].status == 0) --i;
@@ -276,7 +276,7 @@ void change_class(student*& p, int n) {
 		student_info_data(filename, a);
 		student* p_student = nullptr;
 		int n_student = 0;
-		std::string filename = "Data/Class/" + p[k].classname + "/" + p[k].classname + ".txt";
+		filename = "Data/Class/" + p[k].classname + "/" + p[k].classname + "/.txt";
 		student_class_data(filename, p_student, n_student);
 		for (int i = 0; i < n_student; ++i) {
 			if (p_student[i].id == p[k].id) {
@@ -303,7 +303,7 @@ void change_class(student*& p, int n) {
 		else {
 			filename = "Data/Class/" + a->classname + "/" + a->id;
 			_mkdir(filename.c_str());
-			filename += "/info.txt";
+			filename = "Data/Class/" + a->classname + "/" + a->id + "/info.txt";
 			write_student_info(filename, a);
 			p[k].classname = a->classname;
 			write_student_data(p, n);
