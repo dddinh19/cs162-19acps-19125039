@@ -67,6 +67,15 @@ struct course {
 	std::string room;
 	int status;
 };
+struct semester {
+	std::string sem_name;
+	int status;
+};
+struct academic_year {
+	std::string year;
+	semester sem[3];
+	int status;
+};
 //STUDENT
 struct student {
 	std::string id;
@@ -106,7 +115,22 @@ void write_student_info(std::string filename, student* a);
 int add_a_student(student*& p, int& n, student* a);
 
 void view_list_class();
+void class_data(class_name*& p, int& n);
+void view_list_student_in_class(std::string tempt);
+
+int check_student(student* p, int n);
+void edit_student_name(student* p, int n);
+void edit_student_dob(student* p, int n);
+void change_class(student*& p, int n);
+void remove_student(student*& p, int& n);
+void edit_student(student*& p, int& n);
 //COURSE
+void semester_data(academic_year*& p, int& n);
+void view_academic_year(academic_year* p, int n);
+int view_semester(academic_year* p, int n, std::string year);
+
+void write_semester_data(academic_year* p, int n);
+int check_semester(academic_year* p, int n, int& k);
 
 //SCOREBOARD
 
