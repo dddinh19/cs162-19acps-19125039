@@ -99,6 +99,8 @@ void write_staff_data(staff* p, int n);
 void change_staff_password(staff*& p, int n, int k);
 void write_lecturer_data(lecturer* p, int n);
 void change_lecturer_password(lecturer*& p, int n, int k);
+
+int current_semester(int& year);
 //CLASS
 void student_class_data(std::string filename, student*& p, int& n);
 void write_student_class_data(std::string filename, student* p, int n);
