@@ -473,6 +473,7 @@ void semester_data(semester*& p, int& n) {
 	if (!fi.is_open()) std::cout << "Can not open semester data file " << std::endl;
 	else {
 		fi >> n;
+		p = new semester[n];
 		for (int i = 0; i < n; ++i) {
 			fi >> p[i].year;
 			fi >> p[i].status;
@@ -579,4 +580,126 @@ void view_course_info_data(course* a) {
 	std::cout << "Start time: " << a->start_time.hour << ":" << a->start_time.minute << std::endl;
 	std::cout << "End time: " << a->end_time.hour << ":" << a->end_time.minute << std::endl;
 	std::cout << "Room: " << a->room << std::endl;
+}
+
+void read_class_of_student(student& stu) {
+	std::ifstream fin;
+	std::string trash;
+	fin.open("Data/Login/student.txt");
+	if (!fin.is_open())
+		std::cout << "Can not open the file." << std::endl;
+	else
+	{
+		getline(fin, trash);
+		while (fin) {
+			getline(fin, trash);
+			if (trash == stu.id)
+			{
+				getline(fin, trash);
+				getline(fin, stu.classname);
+				break;
+			}
+			else
+			{
+				getline(fin, trash);
+				getline(fin, trash);
+				getline(fin, trash);
+			}
+		}
+		fin.close();
+	}
+}
+
+void read_student_info_in_class(student& stu) {
+	std::ifstream fin;
+	fin.open("Data/Class/" + stu.classname + "/" + stu.id + "/info.txt");
+	if (!fin.is_open())
+		std::cout << "Can not open file." << std::endl;
+	else {
+		getline(fin, stu.id);
+		getline(fin, stu.name);
+		fin >> stu.gender;
+		fin >> stu.date.year;
+		fin >> stu.date.month;
+		fin >> stu.date.day;
+		fin.ignore(1);
+		getline(fin, stu.classname);
+	}
+}
+
+void print_student_list_in_course(std::string tcourseID, std::string tclassname, student* stu, int n) {
+	std::cout << std::setw(50) << "STUDENTS LIST OF " << tcourseID << " OF CLASS " << tclassname << std::endl;
+	std::cout << std::setfill('=');
+	std::cout << std::setw(102) << "=" << std::endl;
+	std::cout << std::setfill(' ');
+	// Width of board: No-8, Student ID-20, Student name-30, Class-10, Gender-8, DOB-20
+	std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
+	std::cout << std::setw(5) << " " << "Student ID" << std::setw(5) << " " << "|";
+	std::cout << std::setw(9) << " " << "Student name" << std::setw(9) << " " << "|";
+	std::cout << std::setw(2) << " " << "Class" << std::setw(3) << " " << "|";
+	std::cout << " Gender " << "|";
+	std::cout << std::setw(3) << " " << "Date of birth" << std::setw(4) << " " << "|" << std::endl;
+	std::cout << std::setfill('-');
+	std::cout << std::setw(102) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+	for (int i = 0; i < n; i++) {
+		std::cout << center_align(std::to_string(i + 1), 8) << "|";
+		std::cout << center_align(stu[i].id, 20) << "|";
+		std::cout << center_align(stu[i].name, 30) << "|";
+		std::cout << center_align(stu[i].classname, 10) << "|";
+		if (stu[i].gender == 0) std::cout << "  Male  " << "|";
+		else std::cout << " Female " << "|";
+		std::cout << std::setw(5) << " " << FormatDate(stu[i].date) << std::setw(5) << " " << "|" << std::endl;
+		std::cout << std::setfill('-');
+		std::cout << std::setw(102) << "-" << std::endl;
+		std::cout << std::setfill(' ');
+	}
+}
+
+void view_list_student_in_course() {
+	std::string tyears, tseme, tclassname, tcourseID;
+	semester* p_year = NULL;
+	int n_year = 0;
+	std::cout << "Please enter some information of the course you want to view the students list: " << std::endl;
+	std::cout << "Academic years: ";
+	std::cin >> tyears;
+	std::cout << "Semester: ";
+	std::cin >> tseme;
+	if (check_semester(p_year, n_year, tyears, tseme))
+	{
+		std::cout << "Course ID: ";
+		std::cin >> tcourseID;
+		std::cout << "This course is of the class: ";
+		std::cin >> tclassname;
+		std::ifstream fin;
+		student* stu = NULL;
+		std::string trash;
+		int n;
+		fin.open("Data/Courses/" + tyears + "/" + tseme + "/" + tcourseID + "/" + tclassname + "/" + "student.txt");
+		if (!fin.is_open())
+			std::cout << "Can not open the file." << std::endl;
+		else {
+			fin >> n;
+			fin.ignore(1);
+			stu = new student[n];
+			for (int i = 0; i < n; i++) {
+				getline(fin, stu[i].id);
+				fin >> stu[i].status;
+				getline(fin, trash);
+				if (stu[i].status == 0)
+					--i;
+			}
+			fin.close();
+			for (int i = 0; i < n; i++) {
+				read_class_of_student(stu[i]);
+				read_student_info_in_class(stu[i]);
+			}
+			system("CLS");
+			print_student_list_in_course(tcourseID, tclassname, stu, n);
+			delete[]stu;
+		}
+		delete[]p_year;
+	}
+	else
+		std::cout << "The academic years or the semester of this academic years is no longer existing!!!" << std::endl;
 }

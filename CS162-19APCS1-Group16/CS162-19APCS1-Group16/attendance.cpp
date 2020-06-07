@@ -69,7 +69,7 @@ void printAttendance(attendance* a, std::string stuID, std::string stuName, int 
 void view_attendance() {
 	std::string tyears, tseme, tclassname, tcourseID;
 	semester* p_year = NULL;
-	int n_year;
+	int n_year = 0;
 	std::cout << "Please enter some information of the course you want to view the scoreboard: " << std::endl;
 	std::cout << "Academic years: ";
 	std::cin >> tyears;

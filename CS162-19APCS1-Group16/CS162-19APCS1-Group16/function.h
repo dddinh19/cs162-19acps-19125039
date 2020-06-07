@@ -127,6 +127,7 @@ bool check_semester(semester* p_year, int n_year, std::string year, std::string 
 void read_coursename(std::string tseme, std::string tyear, course*& sch, int n);
 void course_info_data(std::string filename, course*& a);
 void view_course_info_data(course* a);
+void view_list_student_in_course();
 
 //SCOREBOARD
 void view_scoreboard();
