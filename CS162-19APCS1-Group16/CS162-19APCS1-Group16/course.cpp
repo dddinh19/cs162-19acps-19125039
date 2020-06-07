@@ -830,3 +830,68 @@ void view_list_course_current_semester() {
 	print_course_current_semester_board(tyear, tseme, cou, y);
 	delete[]cou;
 }
+
+void read_lecturer_info(lecturer*& lec, int& n) {
+	std::ifstream fin;
+	fin.open("Data/Login/lecturer.txt");//take username and password
+	if (!fin.is_open())
+		std::cout << "Can not open file." << std::endl;
+	else {
+		fin >> n;
+		lec = new lecturer[n];
+		for (int i = 0; i < n; i++) {
+			fin >> lec[i].username;
+			fin >> lec[i].password;
+		}
+		fin.close();
+	}
+	for (int i = 0; i < n; i++) {
+		fin.open("Data/Login/lecturer/" + lec[i].username + "/info.txt");//other info
+		if (!fin.is_open())
+			std::cout << "Can not open file." << std::endl;
+		else {
+			getline(fin, lec[i].name);
+			getline(fin, lec[i].degree);
+			fin >> lec[i].gender;
+		}
+		fin.close();
+	}
+}
+
+void print_lecturers(lecturer* lec, int n) {
+	std::cout << std::setw(63) << "LIST OF LECTURERS " << std::endl;
+	std::cout << std::setfill('=');
+	std::cout << std::setw(102) << "=" << std::endl;
+	std::cout << std::setfill(' ');
+	// Width of board: No-8, Lecturer name-30, Lecturer username-20, Lecturer password- 20, Degree-10, Gender-8
+	std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
+	std::cout << std::setw(8) << " " << "Lecturer name" << std::setw(9) << " " << "|";
+	std::cout << std::setw(1) << " " << "Lecturer username" << std::setw(2) << " " << "|";
+	std::cout << std::setw(1) << " " << "Lecturer password" << std::setw(2) << " " << "|";
+	std::cout << std::setw(2) << " " << "Degree" << std::setw(2) << " " << "|";
+	std::cout << " Gender " << "|" << std::endl;
+	std::cout << std::setfill('-');
+	std::cout << std::setw(102) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+	for (int i = 0; i < n; i++) {
+		std::cout << center_align(std::to_string(i + 1), 8) << "|";
+		std::cout << center_align(lec[i].name, 30) << "|";
+		std::cout << center_align(lec[i].username, 20) << "|";
+		std::cout << center_align(lec[i].password, 20) << "|";
+		std::cout << center_align(lec[i].degree, 10) << "|";
+		if (lec[i].gender == 0) std::cout << "  Male  " << "|";
+		else std::cout << " Female " << "|";
+		std::cout << std::endl;
+		std::cout << std::setfill('-');
+		std::cout << std::setw(102) << "-" << std::endl;
+		std::cout << std::setfill(' ');
+	}
+}
+
+void view_all_lecturers() {
+	lecturer* lec = NULL;
+	int n = 0;
+	read_lecturer_info(lec, n);
+	print_lecturers(lec, n);
+	delete[]lec;
+}
