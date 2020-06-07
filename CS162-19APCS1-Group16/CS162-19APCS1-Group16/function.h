@@ -42,7 +42,7 @@ struct lecturer {
 };
 //SCOREBOARD
 struct scoreboard {
-	double midterm, lab, final, bonus;
+	double midterm, final, bonus, total;
 };
 //ATTENDANCE
 struct attendance {
