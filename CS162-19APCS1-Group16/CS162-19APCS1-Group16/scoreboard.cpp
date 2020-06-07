@@ -34,14 +34,20 @@ void view_scoreboard(){
 			}
 			fin.close();
 			system("CLS");
-			std::cout << std::setw(50) << "SCOREBOARD OF " << tcourseID << " IN CLASS " << tclassname << std::endl;
+			std::cout << std::setw(45) << "SCOREBOARD OF " << tcourseID << " IN CLASS " << tclassname << std::endl;
 			std::cout << std::setfill('=');
-			std::cout << std::setw(105) << "=" << std::endl;
+			std::cout << std::setw(97) << "=" << std::endl;
 			std::cout << std::setfill(' ');
-			std::cout << std::setw(10) << std::left << "No" << "|" << std::setw(20) << std::left << "Student ID" << "|" << std::setw(30) << std::left << "Student name" << "|";
-			std::cout << std::setw(10) << std::left << "LAB" << "|" << std::setw(13) << std::left << "MIDTERM" << "|" << std::setw(10) << std::left << "FINAL" << "|" << std::setw(10) << std::left << "BONUS" << std::endl;
+			// No-8, Student ID-20, Student name-30, Mark-8
+			std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
+			std::cout << std::setw(5) << " " << "Student ID" << std::setw(5) << " " << "|";
+			std::cout << std::setw(9) << " " << "Student name" << std::setw(9) << " " << "|";
+			std::cout << std::setw(2) << " " << "MID" << std::setw(3) << " " << "|";
+			std::cout << std::setw(1) << " " << "FINAL" << std::setw(2) << " " << "|";
+			std::cout << std::setw(1) << " " << "BONUS" << std::setw(2) << " " << "|";
+			std::cout << std::setw(1) << " " << "TOTAL" << std::setw(2) << " " << "|" << std::endl;
 			std::cout << std::setfill('-');
-			std::cout << std::setw(105) << "-" << std::endl;
+			std::cout << std::setw(97) << "-" << std::endl;
 			std::cout << std::setfill(' ');
 			for (int i = 0; i < 2 * n; i = i + 2) {
 				fin.open("Data/Login/student.txt");
@@ -72,19 +78,24 @@ void view_scoreboard(){
 					fin.close();
 				}
 			}
-			int tlab, tmid, tfin, tbon;
+			int tto, tmid, tfin, tbon;
 			for (int i = 0; i < 2 * n; i = i + 2) {
 				fin.open("Data/Courses/" + tyears + "/" + tseme + "/" + tcourseID + "/" + tclassname + "/" + stu[i] + "/scoreboard.txt");
 				if (!fin.is_open())
 					std::cout << "Can not open the file." << std::endl;
 				else {
-					fin >> tlab >> tmid >> tfin >> tbon;
+					fin >> tmid >> tfin >> tbon >> tto;
 					fin.close();
 				}
-				std::cout << std::setw(10) << std::left << (i + 1) / 2 + 1 << "|" << std::setw(20) << std::left << stu[i] << "|" << std::setw(30) << std::left << stu[i + 1] << "|";
-				std::cout << std::setw(10) << std::left << tlab << "|" << std::setw(13) << std::left << tmid << "|" << std::setw(10) << std::left << tfin << "|" << std::setw(10) << std::left << tbon << std::endl;
+				std::cout << center_align(std::to_string((i + 1) / 2 + 1), 8) << "|";
+				std::cout << center_align(stu[i], 20) << "|";
+				std::cout << center_align(stu[i + 1], 30) << "|";
+				std::cout << center_align(std::to_string(tmid), 8) << "|";
+				std::cout << center_align(std::to_string(tfin), 8) << "|";
+				std::cout << center_align(std::to_string(tbon), 8) << "|";
+				std::cout << center_align(std::to_string(tto), 8) << "|" << std::endl;
 				std::cout << std::setfill('-');
-				std::cout << std::setw(105) << "-" << std::endl;
+				std::cout << std::setw(97) << "-" << std::endl;
 				std::cout << std::setfill(' ');
 			}
 		}

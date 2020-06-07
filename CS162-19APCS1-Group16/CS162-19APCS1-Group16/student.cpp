@@ -250,7 +250,7 @@ void print_scheduleboard(std::string tseme, std::string tyear, course* sch, int 
 	std::cout << std::setfill('=');
 	std::cout << std::setw(135) << "=" << std::endl;
 	std::cout << std::setfill(' ');
-	// Width of board: No-8, Coruse ID-15, Course name-50, Course of class- 15, Time-15, Room-10
+	// Width of board: No-8, Course ID-15, Course name-50, Course of class- 15, Time-15, Room-10
 	std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
 	std::cout << std::setw(3) << " " << "Course ID" << std::setw(3) << " " << "|";
 	std::cout << std::setw(19) << " " << "Course name" << std::setw(20) << " " << "|";
