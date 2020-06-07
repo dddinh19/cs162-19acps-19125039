@@ -703,3 +703,130 @@ void view_list_student_in_course() {
 	else
 		std::cout << "The academic years or the semester of this academic years is no longer existing!!!" << std::endl;
 }
+int current_semester(int& year) {
+	semester* p = NULL;
+	int n = 0;
+	semester_data(p, n);
+	std::string y1 = std::to_string(year) + "-" + std::to_string(year + 1); // year - year+1
+	std::string y2 = std::to_string(year - 1) + "-" + std::to_string(year); //year-1 - year
+	for (int i = 0; i < n; i++) {
+		if (p[i].year == y2 && p[i].status == 1) {
+			if (p[i + 1].year == y1 && p[i + 1].status == 1) {
+				if (p[i + 1].status3 == 1)
+					return 3;
+				else if (p[i + 1].status2 == 1)
+					return 2;
+				else
+					return 1;
+			}
+			else {
+				--year;
+				if (p[i].status3 == 1)
+					return 3;
+				else if (p[i].status2 == 1)
+					return 2;
+				else
+					return 1;
+			}
+		}
+	}
+	delete[]p;
+}
+
+void read_course_in_semester(std::string filename, course*& cou, int& n) {
+	std::ifstream fin;
+	fin.open(filename);
+	if (!fin.is_open())
+		std::cout << "Can not open file." << std::endl;
+	else {
+		fin >> n;
+		fin.ignore(1);
+		cou = new course[n];
+		for (int i = 0; i < n; i++) {
+			getline(fin, cou[i].courseID);
+			getline(fin, cou[i].classname);
+			fin >> cou[i].status;
+			fin.ignore(1);
+			if (cou[i].status == 0)
+				--i;
+		}
+		fin.close();
+	}
+}
+
+void read_course_info(std::string filename, course& cou) {
+	std::ifstream fin;
+	fin.open(filename);
+	if (!fin.is_open())
+		std::cout << "Can not open file." << std::endl;
+	else {
+		fin >> cou.courseID;
+		getline(fin, cou.courseName);
+		getline(fin, cou.courseName);
+		fin >> cou.classname;
+		fin >> cou.lecturer_couse.username;
+		fin >> cou.start_day.year >> cou.start_day.month >> cou.start_day.day;
+		fin >> cou.end_day.year >> cou.end_day.month >> cou.end_day.day;
+		fin >> cou.dayofweek;
+		fin >> cou.start_time.hour >> cou.start_time.minute >> cou.end_time.hour >> cou.end_time.minute;
+		fin >> cou.room;
+		fin.close();
+	}
+}
+
+void print_course_current_semester_board(std::string tyear, std::string tseme, course* cou, int n) {
+	std::cout << std::setw(110) << "LIST OF COURSES IN " << tyear << " OF " << tseme << std::endl;
+	std::cout << std::setfill('=');
+	std::cout << std::setw(207) << "=" << std::endl;
+	std::cout << std::setfill(' ');
+	// Width of board: No-8, Coruse ID-15, Course name-50, Course of class- 15,Lecturer username-17, Day of week-11, Date-20, Time-15, Room-10
+	std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
+	std::cout << std::setw(3) << " " << "Course ID" << std::setw(3) << " " << "|";
+	std::cout << std::setw(19) << " " << "Course name" << std::setw(20) << " " << "|";
+	std::cout << "Course of class" << "|";
+	std::cout << "Lecturer username" << "|";
+	std::cout << "Day of week" << "|";
+	std::cout << std::setw(5) << " " << "Start date" << std::setw(5) << " " << "|";
+	std::cout << std::setw(6) << " " << "End date" << std::setw(6) << " " << "|";
+	std::cout << std::setw(2) << " " << "Start time" << std::setw(3) << " " << "|";
+	std::cout << std::setw(3) << " " << "End time" << std::setw(4) << " " << "|";
+	std::cout << std::setw(3) << " " << "Room" << std::setw(3) << " " << "|" << std::endl;
+	std::cout << std::setfill('-');
+	std::cout << std::setw(207) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+	for (int i = 0; i < n; i++) {
+		std::cout << center_align(std::to_string(i + 1), 8) << "|";
+		std::cout << center_align(cou[i].courseID, 15) << "|";
+		std::cout << center_align(cou[i].courseName, 50) << "|";
+		std::cout << center_align(cou[i].classname, 15) << "|";
+		std::cout << center_align(cou[i].lecturer_couse.username, 17) << "|";
+		std::cout << center_align(cou[i].dayofweek, 11) << "|";
+		std::cout << std::setw(5) << " " << FormatDate(cou[i].start_day) << std::setw(5) << " " << "|";
+		std::cout << std::setw(5) << " " << FormatDate(cou[i].end_day) << std::setw(5) << " " << "|";
+		std::cout << std::setw(5) << " " << FormatTime(cou[i].start_time) << std::setw(5) << " " << "|";
+		std::cout << std::setw(5) << " " << FormatTime(cou[i].end_time) << std::setw(5) << " " << "|";
+		std::cout << center_align(cou[i].room, 10) << "|" << std::endl;
+	}
+	std::cout << std::setfill('-');
+	std::cout << std::setw(207) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+}
+
+void view_list_course_current_semester() {
+	time_t t = time(0);
+	struct tm* now = localtime(&t);
+	std::string tyear, tseme;
+	int y = now->tm_year + 1900;
+	int sem = current_semester(y);
+	tyear = std::to_string(y) + "-" + std::to_string(y + 1);
+	tseme = "HK" + std::to_string(sem);
+	course* cou = NULL;
+	std::string filename = "Data/Courses/" + tyear + "/" + tseme + "/course.txt";
+	read_course_in_semester(filename, cou, y);
+	for (int i = 0; i < y; i++) {
+		filename = "Data/Courses/" + tyear + "/" + tseme + "/" + cou[i].courseID + "/" + cou[i].classname + "/info.txt";
+		read_course_info(filename, cou[i]);
+	}
+	print_course_current_semester_board(tyear, tseme, cou, y);
+	delete[]cou;
+}
