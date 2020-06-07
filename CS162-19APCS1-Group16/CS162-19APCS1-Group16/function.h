@@ -76,6 +76,7 @@ struct student {
 	std::string classname;
 	attendance list_attend[10];
 	scoreboard score;
+	int gender;
 	int status;
 };
 

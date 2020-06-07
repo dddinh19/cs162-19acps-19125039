@@ -124,15 +124,26 @@ void view_list_class() {
 			if (p[i].status == 0) --i;
 		}
 		fi.close();
-		std::cout << "LIST OF CLASS: " << std::endl;
+		system("color 03");
+		std::cout << "LIST OF CLASSES: " << std::endl;
 		for (int i = 0; i < n; ++i) {
-			std::cout << p[i].classname << std::endl;
+			std::cout << "  " << i + 1 << "." << p[i].classname << std::endl;
 		}
 		delete[]p;
 	}
 }
 
 //VIEW LIST STUDENT IN CLASS
+void student_class_board(student* a) {
+	std::cout << center_align(a->id, 20) << "|"; 
+	std::cout<< center_align(a->name, 30) << "|";
+	if (a->gender == 0) std::cout << "  Male  " << "|";
+	else std::cout << " Female " << "|";
+	std::cout << std::setw(5) << " " << FormatDate(a->date) << std::setw(5) << " " << "|" << std::endl;
+	std::cout << std::setfill('-');
+	std::cout << std::setw(91) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+} 
 
 void class_data(class_name*& p, int& n) {
 	std::ifstream fi("Data/Class/class.txt");
@@ -163,21 +174,25 @@ void view_list_student_in_class(std::string tempt) {
 			student* p = nullptr;
 			int n = 0;
 			student_class_data(filename, p, n);
-			std::cout << "There are " << n << " students in " << tempt << " class" << std::endl;
+			std::cout << std::setw(55) << "LIST OF STUDENTS IN CLASS " << tempt << std::endl;
+			std::cout << std::setfill('=');
+			std::cout << std::setw(91) << "=" << std::endl;
+			std::cout << std::setfill(' ');
+			// Width of board: No-8, Student ID-20, Student name-30, Gender-8, DOB-20
+			std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
+			std::cout << std::setw(5) << " " << "Student ID" << std::setw(5) << " " << "|";
+			std::cout << std::setw(9) << " " << "Student name" << std::setw(9) << " " << "|";
+			std::cout << " Gender " << "|";
+			std::cout << std::setw(3) << " " << "Date of birth" << std::setw(4) << " " << "|" << std::endl;
+			std::cout << std::setfill('-');
+			std::cout << std::setw(91) << "-" << std::endl;
+			std::cout << std::setfill(' ');
 			for (int j = 0; j < n; ++j) {
 				student* a = nullptr;
 				std::string filename = "Data/Class/" + tempt + "/" + p[j].id + "/info.txt";
 				student_info_data(filename, a);
-				std::cout << "Id: " << a->id << std::endl;
-				std::cout << "Name: " << a->name << std::endl;
-				//if (a->gender == 1) std::cout << "Gender: Female" << std::endl;
-				//else std::cout << "Gender: Male " << std::endl;
-				std::cout << "Date of birth(year/month/day): " << a->date.year << "/";
-				if (a->date.month < 10) std::cout << "0" << a->date.month << "/";
-				else std::cout << a->date.month << "/";
-				if (a->date.day < 10) std::cout << "0" << a->date.day << std::endl;
-				else std::cout << a->date.day << std::endl;
-				std::cout << "Class: " << a->classname << std::endl;
+				std::cout << center_align(std::to_string(j+1), 8) << "|";
+				student_class_board(a);
 				delete a;
 			}
 			delete[]p;

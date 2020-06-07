@@ -78,7 +78,7 @@ void student_info_data(std::string filename, student*& a) {
 		fi >> a->id;
 		getline(fi, a->name);
 		getline(fi, a->name);
-		//fi >> a->gender;
+		fi >> a->gender;
 		fi >> a->date.year;
 		fi >> a->date.month;
 		fi >> a->date.day;

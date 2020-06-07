@@ -445,8 +445,8 @@ void saveaDateAttendance(std::ofstream& fout, dob date, course c){
 }
 
 void DateAttendance(std::ofstream& fout, course c){
-	saveaDateAttendance(fout, c.start, c);
-	dob tdate = c.start;
+	saveaDateAttendance(fout, c.start_day, c);
+	dob tdate = c.start_day;
 	for (int i = 0; i < 9; i++) {
 		tdate.day += 7;
 		if (tdate.day <= dayofmonth(tdate))
