@@ -563,7 +563,7 @@ void course_info_data(std::string filename, course*& a) {
 	}
 }
 void view_course_info_data(course* a) {
-	std::cout << "Course ID: " << a->courseID << std::endl;
+	/*std::cout << "Course ID: " << a->courseID << std::endl;
 	std::cout << "Course name: " << a->courseName << std::endl;
 	std::cout << "Class: " << a->classname << std::endl;
 	std::cout << "Start date: " << a->start_day.year << "/";
@@ -579,7 +579,17 @@ void view_course_info_data(course* a) {
 	std::cout << "Day of week: " << a->dayofweek << std::endl;
 	std::cout << "Start time: " << a->start_time.hour << ":" << a->start_time.minute << std::endl;
 	std::cout << "End time: " << a->end_time.hour << ":" << a->end_time.minute << std::endl;
-	std::cout << "Room: " << a->room << std::endl;
+	std::cout << "Room: " << a->room << std::endl;*/
+	std::cout << center_align(a->courseID, 15) << "|";
+	std::cout << center_align(a->courseName, 50) << "|";
+	std::cout << center_align(a->classname, 15) << "|";
+	std::cout << center_align(a->lecturer_couse.username, 17) << "|";
+	std::cout << center_align(a->dayofweek, 11) << "|";
+	std::cout << std::setw(5) << " " << FormatDate(a->start_day) << std::setw(5) << " " << "|";
+	std::cout << std::setw(5) << " " << FormatDate(a->end_day) << std::setw(5) << " " << "|";
+	std::cout << std::setw(5) << " " << FormatTime(a->start_time) << std::setw(5) << " " << "|";
+	std::cout << std::setw(5) << " " << FormatTime(a->end_time) << std::setw(5) << " " << "|";
+	std::cout << center_align(a->room, 10) << "|" << std::endl;
 }
 
 void read_class_of_student(student& stu) {
@@ -706,31 +716,50 @@ void view_list_student_in_course() {
 int current_semester(int& year) {
 	semester* p = NULL;
 	int n = 0;
+	int sem = -1;
 	semester_data(p, n);
 	std::string y1 = std::to_string(year) + "-" + std::to_string(year + 1); // year - year+1
 	std::string y2 = std::to_string(year - 1) + "-" + std::to_string(year); //year-1 - year
 	for (int i = 0; i < n; i++) {
 		if (p[i].year == y2 && p[i].status == 1) {
-			if (p[i + 1].year == y1 && p[i + 1].status == 1) {
+			if (i + 1 < n && p[i + 1].year == y1 && p[i + 1].status == 1) {
 				if (p[i + 1].status3 == 1)
-					return 3;
+					sem = 3;
 				else if (p[i + 1].status2 == 1)
-					return 2;
+					sem = 2;
+				else if (p[i + 1].status1 == 1)
+					sem = 1;
 				else
-					return 1;
+					sem = 0;
 			}
 			else {
 				--year;
 				if (p[i].status3 == 1)
-					return 3;
+					sem = 3;
 				else if (p[i].status2 == 1)
-					return 2;
+					sem = 2;
+				else if (p[i].status1 == 1)
+					sem = 1;
 				else
-					return 1;
+					sem = 0;
 			}
+			break;
+		}
+		else if (p[i].year == y1 && p[i].status == 1)
+		{
+			if (p[i].status3 == 1)
+				sem = 3;
+			else if (p[i].status2 == 1)
+				sem = 2;
+			else if (p[i].status1 == 1)
+				sem = 1;
+			else
+				sem = 0;
+			break;
 		}
 	}
 	delete[]p;
+	return sem;
 }
 
 void read_course_in_semester(std::string filename, course*& cou, int& n) {
@@ -818,17 +847,23 @@ void view_list_course_current_semester() {
 	std::string tyear, tseme;
 	int y = now->tm_year + 1900;
 	int sem = current_semester(y);
-	tyear = std::to_string(y) + "-" + std::to_string(y + 1);
-	tseme = "HK" + std::to_string(sem);
-	course* cou = NULL;
-	std::string filename = "Data/Courses/" + tyear + "/" + tseme + "/course.txt";
-	read_course_in_semester(filename, cou, y);
-	for (int i = 0; i < y; i++) {
-		filename = "Data/Courses/" + tyear + "/" + tseme + "/" + cou[i].courseID + "/" + cou[i].classname + "/info.txt";
-		read_course_info(filename, cou[i]);
+	if (sem != -1 && sem != 0) {
+		tyear = std::to_string(y) + "-" + std::to_string(y + 1);
+		tseme = "HK" + std::to_string(sem);
+		course* cou = NULL;
+		std::string filename = "Data/Courses/" + tyear + "/" + tseme + "/course.txt";
+		read_course_in_semester(filename, cou, y);
+		for (int i = 0; i < y; i++) {
+			filename = "Data/Courses/" + tyear + "/" + tseme + "/" + cou[i].courseID + "/" + cou[i].classname + "/info.txt";
+			read_course_info(filename, cou[i]);
+		}
+		print_course_current_semester_board(tyear, tseme, cou, y);
+		delete[]cou;
 	}
-	print_course_current_semester_board(tyear, tseme, cou, y);
-	delete[]cou;
+	else if (sem == 0)
+		std::cout << "There is no semester in the academic years " << y - 1 << "-" << y << std::endl;
+	else
+		std::cout << "The academic years " << y - 1 << "-" << y << " does not exist." << std::endl;
 }
 
 void read_lecturer_info(lecturer*& lec, int& n) {
