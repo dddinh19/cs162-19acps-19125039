@@ -124,7 +124,6 @@ void view_list_class() {
 			if (p[i].status == 0) --i;
 		}
 		fi.close();
-		system("color 03");
 		std::cout << "LIST OF CLASSES: " << std::endl;
 		for (int i = 0; i < n; ++i) {
 			std::cout << "  " << i + 1 << "." << p[i].classname << std::endl;
