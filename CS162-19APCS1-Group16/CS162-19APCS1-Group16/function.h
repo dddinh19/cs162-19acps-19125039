@@ -100,7 +100,6 @@ void change_staff_password(staff*& p, int n, int k);
 void write_lecturer_data(lecturer* p, int n);
 void change_lecturer_password(lecturer*& p, int n, int k);
 
-int current_semester(int& year);
 //CLASS
 void student_class_data(std::string filename, student*& p, int& n);
 void write_student_class_data(std::string filename, student* p, int n);
@@ -126,6 +125,10 @@ int view_semester(semester* p, int n, std::string year);
 void write_semester_data(semester* p, int n);
 bool check_semester(semester* p_year, int n_year, std::string year, std::string sem);
 
+void read_class_of_student(student& stu);
+void read_student_info_in_class(student& stu);
+void print_student_list_in_course(std::string tcourseID, std::string tclassname, student* stu, int n);
+
 void read_coursename(std::string tseme, std::string tyear, course*& sch, int n);
 void course_info_data(std::string filename, course*& a);
 void view_course_info_data(course* a);
@@ -136,7 +139,6 @@ void view_all_lecturers();
 void read_course_info(std::string filename, course& cou);
 void print_course_current_semester_board(std::string tyear, std::string tseme, course* cou, int n);
 std::string current_sem(semester* p, int n);
-void view_list_course_current_semester();
 
 //SCOREBOARD
 void view_scoreboard();
