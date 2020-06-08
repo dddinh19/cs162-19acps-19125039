@@ -16,7 +16,7 @@ void lecturer_course_data(std::string filename, course*& p, int& n) {
 		fi.close();
 	}
 }
-void lecturer_view_list_course(lecturer* p, int k) {
+/*void lecturer_view_list_course(lecturer* p, int k) {
 	time_t t = time(0);
 	struct tm* now = localtime(&t);
 	int y = now->tm_year + 1900;
@@ -70,6 +70,22 @@ void lecturer_view_list_course(lecturer* p, int k) {
 		std::cout << "There is no semester in the academic years " << y - 1 << "-" << y << std::endl;
 	else
 		std::cout << "The academic years " << y - 1 << "-" << y << " does not exist." << std::endl;
+}*/
+void lecturer_view_list_course(lecturer* p, int k) {
+	semester* p_year = nullptr;
+	int n_year = 0;
+	semester_data(p_year, n_year);
+	std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + p_year[n_year - 1].year + "/" + current_sem(p_year, n_year) + "/course.txt";
+	course* p_course = nullptr;
+	int n_course = 0;
+	lecturer_course_data(filename, p_course, n_course);
+	for (int i = 0; i < n_course; i++) {
+		filename = "Data/Courses/" + p_year[n_year - 1].year + "/" + current_sem(p_year, n_year) + "/" + p_course[i].courseID + "/" + p_course[i].classname + "/info.txt";
+		read_course_info(filename, p_course[i]);
+	}
+	print_course_current_semester_board(p_year[n_year - 1].year, current_sem(p_year, n_year), p_course, n_course);
+	delete[]p_year;
+	delete[]p_course;
 }
 
 //VIEW_LIST_STUDENT_COURSE
@@ -245,7 +261,7 @@ void read_scoreboard(std::string filename, scoreboard a) {
 	std::ifstream fi(filename);
 	if (!fi.is_open()) std::cout << "Can not open scoreboard data file " << std::endl;
 	else {
-		fi >> a.lab;
+		fi >> a.total;
 		fi >> a.midterm;
 		fi >> a.final;
 		fi >> a.bonus;
@@ -253,7 +269,7 @@ void read_scoreboard(std::string filename, scoreboard a) {
 	}
 }
 void view_scoreboard(scoreboard a) {
-	std::cout << "Lab: " << a.lab << " Midterm: " << a.midterm << " Final: " << a.final << " Bonus: " << a.bonus << std::endl;
+	std::cout << "Total: " << a.total << " Midterm: " << a.midterm << " Final: " << a.final << " Bonus: " << a.bonus << std::endl;
 }
 void lecturer_view_scoreboard(lecturer* p, int k) {
 	semester* p_year = nullptr;
