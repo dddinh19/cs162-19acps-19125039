@@ -278,3 +278,97 @@ void lecturer_view_scoreboard(lecturer* p, int k) {
 	else std::cout << "Academic year does not exist " << std::endl;
 	delete[]p_year;
 }
+
+//EDIT ATTENDANCE
+
+bool check_student(student* p,int n, std::string student) {
+	for (int i = 0; i < n; ++i) {
+		if (student == p[i].id) return true;
+	}
+	return false;
+}
+int check_date(attendance a[], dob b) {
+	for (int i = 0; i < 10; ++i) {
+		if (a[i].date.year == b.year && a[i].date.month == b.month && a[i].date.day == b.day) return i;
+	}
+	return -1;
+}
+void write_attendance(std::string filename, attendance a[]) {
+	std::ofstream fo(filename);
+	if (!fo.is_open()) std::cout << "Can not read attendance data file " << std::endl;
+	else {
+		for (int i = 0; i < 10; ++i) {
+			fo << a[i].date.year << " ";
+			if (a[i].date.month < 10) fo << "0" << a[i].date.month << " ";
+			else fo << a[i].date.month << " ";
+			if (a[i].date.day < 10) fo << " 0" << a[i].date.day << std::endl;
+			else fo << a[i].date.day << std::endl;
+			fo << a[i].start.hour << " " << a[i].start.minute << " " << a[i].end.hour << a[i].end.minute << " " << a[i].checkin.hour << a[i].checkin.minute << std::endl;
+		}
+		fo.close();
+	}
+}
+void edit_attendance(lecturer* p, int k) {
+	semester* p_year = nullptr;
+	int n_year = 0;
+	std::string year, sem;
+	semester_data(p_year, n_year);
+	view_academic_year(p_year, n_year);
+	std::cout << "Enter academic year " << std::endl;
+	std::cin >> year;
+	if (view_semester(p_year, n_year, year) != -1) {
+		std::cout << "Enter semester " << std::endl;
+		std::cin >> sem;
+		if (check_semester(p_year, n_year, year, sem)) {
+			course* p_course;
+			int n_course = 0;
+			std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
+			lecturer_course_data(filename, p_course, n_course);
+			read_coursename(sem, year, p_course, n_course);
+			std::cout << "List of courses for you in " << year << " of " << sem << std::endl;
+			for (int i = 0; i < n_course; ++i) {
+				std::cout << p_course[i].courseID << ": " << p_course[i].courseName << std::endl;
+				std::cout << "Class: " << p_course[i].classname << std::endl;
+			}
+			std::string courseid, classname;
+			std::cout << "Enter course ID and class you want to edit attendance " << std::endl;
+			std::cin >> courseid >> classname;
+			if (check_course(p_course, n_course, courseid, classname)) {
+				student* p_student = nullptr;
+				int n_student = 0;
+				filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/student.txt";
+				student_course_data(filename, p_student, n_student);
+				std::cout << "List of student in " << courseid << " of " << classname << std::endl;
+				for (int i = 0; i < n_student; ++i) {
+					std::cout << p_student[i].id << ": ";
+					read_student_name(p_student[i].id);
+				}
+				std::string studentid;
+				std::cout << "Enter student id you want to edit attendance" << std::endl;
+				std::cin >> studentid;
+				if (check_student(p_student, n_student, studentid)) {
+					attendance a[10];
+					filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/" + studentid + "/attendance.txt";
+					read_attendance(filename, a);
+					view_attendance(a);
+					dob b;
+					std::cout << "Enter date you want to edit attendance(year, month, day) " << std::endl;
+					std::cin >> b.year >> b.month >> b.day;
+					if (check_date(a, b)!=-1) {
+						std::cout << "Enter hour and minute " << std::endl;
+						std::cin >> a[check_date(a, b)].checkin.hour >> a[check_date(a, b)].checkin.minute;
+						write_attendance(filename, a);
+					}
+					else std::cout << "Date does not exist " << std::endl;
+				}
+				else std::cout << " Student does not exist " << std::endl;
+				delete[]p_student;
+			}
+			else std::cout << "Course does not exist " << std::endl;
+			delete[]p_course;
+		}
+		else std::cout << "Semester does not exist " << std::endl;
+	}
+	else std::cout << "Academic year does not exist " << std::endl;
+	delete[]p_year;
+}
