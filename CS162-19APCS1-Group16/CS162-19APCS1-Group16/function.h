@@ -133,6 +133,11 @@ void view_list_student_in_course();
 void view_list_course_current_semester();
 void view_all_lecturers();
 
+void read_course_info(std::string filename, course& cou);
+void print_course_current_semester_board(std::string tyear, std::string tseme, course* cou, int n);
+std::string current_sem(semester* p, int n);
+void view_list_course_current_semester();
+
 //SCOREBOARD
 void view_scoreboard();
 
