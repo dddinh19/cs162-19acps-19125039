@@ -10,7 +10,6 @@
 #include <ctime>
 
 
-
 // STRUCT
 //ALLROLE
 struct class_name {
@@ -42,7 +41,7 @@ struct lecturer {
 };
 //SCOREBOARD
 struct scoreboard {
-	double midterm, final, bonus, total;
+	float midterm, final, bonus, total;
 };
 //ATTENDANCE
 struct attendance {
@@ -141,6 +140,7 @@ void print_course_current_semester_board(std::string tyear, std::string tseme, c
 std::string current_sem(semester* p, int n);
 
 //SCOREBOARD
+void printScore(scoreboard a, std::string stuID, std::string stuName, int k);
 void view_scoreboard();
 
 //ATTENDANCE
@@ -163,7 +163,7 @@ void read_attendance(std::string filename, attendance a[]);
 void view_attendance(attendance a[]);
 void lecturer_view_list_attendance_course(lecturer* p, int k);
 
-void read_scoreboard(std::string filename, scoreboard a);
+void read_scoreboard(std::string filename, scoreboard& a);
 void view_scoreboard(scoreboard a);
 void lecturer_view_scoreboard(lecturer* p, int k);
 
