@@ -65,6 +65,9 @@ void printAttendance(attendance* a, std::string stuID, std::string stuName, int 
 		}
 		std::cout << std::setw(5) << " " << FormatDate(a[i].date) << std::setw(5) << " " << "|" << std::setw(5) << " " << FormatTime(a[i].start) << std::setw(5) << " " << "|" << std::setw(5) << " " << FormatTime(a[i].end) << std::setw(5) << " " << "|" << std::setw(5) << " " << FormatTime(a[i].checkin) << std::setw(5) << " " << "|" << std::endl;
 	}
+	std::cout << std::setfill('-');
+	std::cout << std::setw(130) << "-" << std::endl;
+	std::cout << std::setfill(' ');
 }
 void view_attendance() {
 	std::string tyears, tseme, tclassname, tcourseID;
@@ -158,9 +161,6 @@ void view_attendance() {
 					}
 					fin.close();
 					printAttendance(a, stu[i], stu[i + 1], i);
-					std::cout << std::setfill('-');
-					std::cout << std::setw(130) << "-" << std::endl;
-					std::cout << std::setfill(' ');
 				}
 			}
 			delete[]a;
