@@ -12,65 +12,13 @@ void lecturer_course_data(std::string filename, course*& p, int& n) {
 		for (int i = 0; i < n; ++i) {
 			fi >> p[i].courseID;
 			fi >> p[i].classname;
+			fi >> p[i].status;
+			if (p[i].status == 0)
+				--i;
 		}
 		fi.close();
 	}
 }
-/*void lecturer_view_list_course(lecturer* p, int k) {
-	time_t t = time(0);
-	struct tm* now = localtime(&t);
-	int y = now->tm_year + 1900;
-	int seme = current_semester(y);
-	std::string year, sem;
-	if (seme != -1 && seme != 0) {
-		year = std::to_string(y) + "-" + std::to_string(y + 1);
-		sem = "HK" + std::to_string(seme);
-		course* p_course;
-		int n_course = 0;
-		std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
-		lecturer_course_data(filename, p_course, n_course);
-		if (n_course != 0) {
-			system("CLS");
-			std::cout << std::setw(110) << "LIST OF COURSES FOR YOU IN " << year << " OF " << sem << std::endl;
-			std::cout << std::setfill('=');
-			std::cout << std::setw(207) << "=" << std::endl;
-			std::cout << std::setfill(' ');
-			// Width of board: No-8, Coruse ID-15, Course name-50, Course of class- 15,Lecturer username-17, Day of week-11, Date-20, Time-15, Room-10
-			std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
-			std::cout << std::setw(3) << " " << "Course ID" << std::setw(3) << " " << "|";
-			std::cout << std::setw(19) << " " << "Course name" << std::setw(20) << " " << "|";
-			std::cout << "Course of class" << "|";
-			std::cout << "Lecturer username" << "|";
-			std::cout << "Day of week" << "|";
-			std::cout << std::setw(5) << " " << "Start date" << std::setw(5) << " " << "|";
-			std::cout << std::setw(6) << " " << "End date" << std::setw(6) << " " << "|";
-			std::cout << std::setw(2) << " " << "Start time" << std::setw(3) << " " << "|";
-			std::cout << std::setw(3) << " " << "End time" << std::setw(4) << " " << "|";
-			std::cout << std::setw(3) << " " << "Room" << std::setw(3) << " " << "|" << std::endl;
-			std::cout << std::setfill('-');
-			std::cout << std::setw(207) << "-" << std::endl;
-			std::cout << std::setfill(' ');
-			for (int i = 0; i < n_course; ++i) {
-				course* a = new course;
-				filename = "Data/Courses/" + year + "/" + sem + "/" + p_course[i].courseID + "/" + p_course[i].classname + "/info.txt";
-				course_info_data(filename, a);
-				std::cout << center_align(std::to_string(i + 1), 8) << "|";
-				view_course_info_data(a);
-				std::cout << std::setfill('-');
-				std::cout << std::setw(207) << "-" << std::endl;
-				std::cout << std::setfill(' ');
-				delete a;
-			}
-			delete[]p_course;
-		}
-		else
-			std::cout << "It seems that you do not have any courses in " << year << " of " << sem << std::endl;
-	}
-	else if (seme == 0)
-		std::cout << "There is no semester in the academic years " << y - 1 << "-" << y << std::endl;
-	else
-		std::cout << "The academic years " << y - 1 << "-" << y << " does not exist." << std::endl;
-}*/
 void lecturer_view_list_course(lecturer* p, int k) {
 	semester* p_year = nullptr;
 	int n_year = 0;
@@ -130,6 +78,7 @@ void read_student_name(std::string id) {
 	}
 	delete[]p;
 }
+
 void lecturer_view_list_student_course(lecturer* p, int k) {
 	semester* p_year = nullptr;
 	int n_year = 0;
@@ -147,24 +96,28 @@ void lecturer_view_list_student_course(lecturer* p, int k) {
 			std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
 			lecturer_course_data(filename, p_course, n_course);
 			read_coursename(sem, year, p_course, n_course);
-			std::cout << "List of courses for you in " << year << " of " << sem << std::endl;
-			for (int i = 0; i < n_course; ++i) {
-				std::cout << p_course[i].courseID << ": " << p_course[i].courseName << std::endl;
-				std::cout << "Class: " << p_course[i].classname << std::endl;
-			}
-			std::string courseid, classname;
-			std::cout << "Enter course ID and class you want to view student " << std::endl;
-			std::cin >> courseid >> classname;
-			if (check_course(p_course, n_course, courseid, classname)) {
+			read_time_room_dow(sem, year, p_course, n_course);
+			system("CLS");
+			int choice;
+			std::cout << std::setw(72) << "YOUR COURSES IN " << year << " OF " << sem << std::endl;
+			print_scheduleboard(sem, year, p_course, n_course);
+			do {
+				std::cout << "Please enter an attached number of the course you want to view students list: ";
+				std::cin >> choice;
+				if (choice <= 0 && choice > n_course)
+					std::cout << "Invalid choice!!! Please choose again. " << std::endl;
+			} while (choice <= 0 && choice > n_course);
+			if (check_course(p_course, n_course, p_course[choice-1].courseID, p_course[choice - 1].classname)) {
 				student* p_student = nullptr;
 				int n_student = 0;
-				filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/student.txt";
+				filename = "Data/Courses/" + year + "/" + sem + "/" + p_course[choice - 1].courseID + "/" + p_course[choice - 1].classname + "/student.txt";
 				student_course_data(filename, p_student, n_student);
-				std::cout << "List of student in " << courseid << " of " << classname << std::endl;
-				for (int i = 0; i < n_student; ++i) {
-					std::cout << p_student[i].id << ": ";
-					read_student_name(p_student[i].id);
+				for (int i = 0; i < n_student; i++) {
+					read_class_of_student(p_student[i]);
+					read_student_info_in_class(p_student[i]);
 				}
+				system("CLS");
+				print_student_list_in_course(p_course[choice - 1].courseID, p_course[choice - 1].classname, p_student, n_student);
 				delete[]p_student;
 			}
 			else std::cout << "Course does not exist " << std::endl;
