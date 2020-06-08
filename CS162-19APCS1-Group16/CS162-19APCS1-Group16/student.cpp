@@ -161,7 +161,6 @@ void checkin(student stu) {
 }
 
 void print_checkinboard(attendance* att, course cou) {
-	std::cout << std::setw(36) << "YOUR ATTENDANCE LIST OF " << cou.courseID << " IN CLASS " << cou.classname << std::endl;
 	std::cout << std::setfill('=');
 	std::cout << std::setw(69) << "=" << std::endl;
 	std::cout << std::setfill(' ');
@@ -210,6 +209,7 @@ void view_checkin(student stu) {
 		else {
 			attendance* att = NULL;
 			read_studentattendance(tseme, tyear, sch[option - 1], stu.id, att);
+			std::cout << std::setw(36) << "YOUR ATTENDANCE LIST OF " << sch[option - 1].courseID << " IN CLASS " << sch[option - 1].classname << std::endl;
 			print_checkinboard(att, sch[option - 1]);
 			std::cout << "Print the checkin result successfully!" << std::endl;
 			delete[]att;
@@ -233,6 +233,7 @@ void read_time_room_dow(std::string tseme, std::string tyear, course*& sch, int 
 			getline(fin, trash);
 			getline(fin, trash);
 			getline(fin, trash);
+			getline(fin, trash);
 			getline(fin, sch[i].dayofweek);
 			fin >> sch[i].start_time.hour;
 			fin >> sch[i].start_time.minute;
@@ -246,32 +247,33 @@ void read_time_room_dow(std::string tseme, std::string tyear, course*& sch, int 
 }
 
 void print_scheduleboard(std::string tseme, std::string tyear, course* sch, int n) {
-	std::cout << std::setw(65) << "YOUR SCHEDULE IN " << tyear << " OF " << tseme << std::endl;
 	std::cout << std::setfill('=');
-	std::cout << std::setw(135) << "=" << std::endl;
+	std::cout << std::setw(151) << "=" << std::endl;
 	std::cout << std::setfill(' ');
-	// Width of board: No-8, Course ID-15, Course name-50, Course of class- 15, Time-15, Room-10
+	// Width of board: No-8, Course ID-15, Course name-50, Course of class- 15, Day of week-15, Time-15, Room-10
 	std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
 	std::cout << std::setw(3) << " " << "Course ID" << std::setw(3) << " " << "|";
 	std::cout << std::setw(19) << " " << "Course name" << std::setw(20) << " " << "|";
 	std::cout << "Course of class" << "|";
+	std::cout << std::setw(2) << " " << "Day of week" << std::setw(2) << " " << "|";
 	std::cout << std::setw(2) << " " << "Start time" << std::setw(3) << " " << "|";
 	std::cout << std::setw(3) << " " << "End time" << std::setw(4) << " " << "|";
 	std::cout << std::setw(3) << " " << "Room" << std::setw(3) << " " << "|" << std::endl;
 	std::cout << std::setfill('-');
-	std::cout << std::setw(135) << "-" << std::endl;
+	std::cout << std::setw(151) << "-" << std::endl;
 	std::cout << std::setfill(' ');
 	for(int i=0; i<n; i++){
 		std::cout << center_align(std::to_string(i + 1), 8) << "|";
 		std::cout << center_align(sch[i].courseID, 15) << "|";
 		std::cout << center_align(sch[i].courseName, 50) << "|";
 		std::cout << center_align(sch[i].classname, 15) << "|";
+		std::cout << center_align(sch[i].dayofweek, 15) << "|";
 		std::cout << std::setw(5) << " " << FormatTime(sch[i].start_time) << std::setw(5) << " " << "|";
 		std::cout << std::setw(5) << " " << FormatTime(sch[i].end_time) << std::setw(5) << " " << "|";
 		std::cout << center_align(sch[i].room, 10) << "|" << std::endl;
 	}
 	std::cout << std::setfill('-');
-	std::cout << std::setw(135) << "-" << std::endl;
+	std::cout << std::setw(151) << "-" << std::endl;
 	std::cout << std::setfill(' ');
 }
 
@@ -291,6 +293,7 @@ void view_schedule(student stu) {
 		read_courses_student(stu.id, stu.classname, tseme, tyear, sch, n);
 		read_coursename(tseme, tyear, sch, n);
 		read_time_room_dow(tseme, tyear, sch, n);
+		std::cout << std::setw(65) << "YOUR SCHEDULE IN " << tyear << " OF " << tseme << std::endl;
 		print_scheduleboard(tseme, tyear, sch, n);
 		std::cout << "Print schedule successfully. " << std::endl;
 		delete[]sch;
