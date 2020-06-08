@@ -473,6 +473,7 @@ void semester_data(semester*& p, int& n) {
 	if (!fi.is_open()) std::cout << "Can not open semester data file " << std::endl;
 	else {
 		fi >> n;
+		p = new semester[n];
 		for (int i = 0; i < n; ++i) {
 			fi >> p[i].year;
 			fi >> p[i].status;
