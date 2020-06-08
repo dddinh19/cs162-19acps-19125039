@@ -4,7 +4,8 @@
 
 void lecturer_course_data(std::string filename, course*& p, int& n) {
 	std::ifstream fi(filename);
-	if (!fi.is_open()) std::cout << "Data do not exist" << std::endl;
+	if (!fi.is_open()) 
+		std::cout << "Can not open the file or this path doesn't exist." << std::endl;
 	else {
 		fi >> n;
 		p = new course[n];
@@ -16,35 +17,59 @@ void lecturer_course_data(std::string filename, course*& p, int& n) {
 	}
 }
 void lecturer_view_list_course(lecturer* p, int k) {
-	semester* p_year = nullptr;
-	int n_year = 0;
+	time_t t = time(0);
+	struct tm* now = localtime(&t);
+	int y = now->tm_year + 1900;
+	int seme = current_semester(y);
 	std::string year, sem;
-	semester_data(p_year, n_year);
-	view_academic_year(p_year, n_year);
-	std::cout << "Enter academic year " << std::endl;
-	std::cin >> year;
-	if (view_semester(p_year, n_year, year) != -1) {
-		std::cout << "Enter semester " << std::endl;
-		std::cin >> sem;
-		if (check_semester(p_year, n_year, year, sem)) {
-			course* p_course;
-			int n_course = 0;
-			std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
-			lecturer_course_data(filename, p_course, n_course);
-			std::cout << "List of courses for you in " << year << " of " << sem << std::endl;
+	if (seme != -1 && seme != 0) {
+		year = std::to_string(y) + "-" + std::to_string(y + 1);
+		sem = "HK" + std::to_string(seme);
+		course* p_course;
+		int n_course = 0;
+		std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
+		lecturer_course_data(filename, p_course, n_course);
+		if (n_course != 0) {
+			system("CLS");
+			std::cout << std::setw(110) << "LIST OF COURSES FOR YOU IN " << year << " OF " << sem << std::endl;
+			std::cout << std::setfill('=');
+			std::cout << std::setw(207) << "=" << std::endl;
+			std::cout << std::setfill(' ');
+			// Width of board: No-8, Coruse ID-15, Course name-50, Course of class- 15,Lecturer username-17, Day of week-11, Date-20, Time-15, Room-10
+			std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
+			std::cout << std::setw(3) << " " << "Course ID" << std::setw(3) << " " << "|";
+			std::cout << std::setw(19) << " " << "Course name" << std::setw(20) << " " << "|";
+			std::cout << "Course of class" << "|";
+			std::cout << "Lecturer username" << "|";
+			std::cout << "Day of week" << "|";
+			std::cout << std::setw(5) << " " << "Start date" << std::setw(5) << " " << "|";
+			std::cout << std::setw(6) << " " << "End date" << std::setw(6) << " " << "|";
+			std::cout << std::setw(2) << " " << "Start time" << std::setw(3) << " " << "|";
+			std::cout << std::setw(3) << " " << "End time" << std::setw(4) << " " << "|";
+			std::cout << std::setw(3) << " " << "Room" << std::setw(3) << " " << "|" << std::endl;
+			std::cout << std::setfill('-');
+			std::cout << std::setw(207) << "-" << std::endl;
+			std::cout << std::setfill(' ');
 			for (int i = 0; i < n_course; ++i) {
 				course* a = new course;
 				filename = "Data/Courses/" + year + "/" + sem + "/" + p_course[i].courseID + "/" + p_course[i].classname + "/info.txt";
-				course_info_data(filename,a);
+				course_info_data(filename, a);
+				std::cout << center_align(std::to_string(i + 1), 8) << "|";
 				view_course_info_data(a);
+				std::cout << std::setfill('-');
+				std::cout << std::setw(207) << "-" << std::endl;
+				std::cout << std::setfill(' ');
 				delete a;
 			}
 			delete[]p_course;
 		}
-		else std::cout << "Semester does not exist " << std::endl;
+		else
+			std::cout << "It seems that you do not have any courses in " << year << " of " << sem << std::endl;
 	}
-	else std::cout << "Academic year does not exist " << std::endl;
-	delete[]p_year;
+	else if (seme == 0)
+		std::cout << "There is no semester in the academic years " << y - 1 << "-" << y << std::endl;
+	else
+		std::cout << "The academic years " << y - 1 << "-" << y << " does not exist." << std::endl;
 }
 
 //VIEW_LIST_STUDENT_COURSE

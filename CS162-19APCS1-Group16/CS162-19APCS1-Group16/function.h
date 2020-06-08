@@ -42,7 +42,7 @@ struct lecturer {
 };
 //SCOREBOARD
 struct scoreboard {
-	double midterm, lab, final, bonus;
+	double midterm, final, bonus, total;
 };
 //ATTENDANCE
 struct attendance {
@@ -76,6 +76,7 @@ struct student {
 	std::string classname;
 	attendance list_attend[10];
 	scoreboard score;
+	int gender;
 	int status;
 };
 
@@ -98,6 +99,8 @@ void write_staff_data(staff* p, int n);
 void change_staff_password(staff*& p, int n, int k);
 void write_lecturer_data(lecturer* p, int n);
 void change_lecturer_password(lecturer*& p, int n, int k);
+
+int current_semester(int& year);
 //CLASS
 void student_class_data(std::string filename, student*& p, int& n);
 void write_student_class_data(std::string filename, student* p, int n);
@@ -126,6 +129,9 @@ bool check_semester(semester* p_year, int n_year, std::string year, std::string 
 void read_coursename(std::string tseme, std::string tyear, course*& sch, int n);
 void course_info_data(std::string filename, course*& a);
 void view_course_info_data(course* a);
+void view_list_student_in_course();
+void view_list_course_current_semester();
+void view_all_lecturers();
 
 //SCOREBOARD
 void view_scoreboard();
