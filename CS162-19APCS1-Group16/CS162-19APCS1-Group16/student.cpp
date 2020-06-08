@@ -287,7 +287,7 @@ void view_schedule(student stu) {
 	int n_year = 0;
 	if (check_semester(p_year, n_year, tyear, tseme)) {
 		course* sch = NULL;
-		int n;
+		int n = 0;
 		read_courses_student(stu.id, stu.classname, tseme, tyear, sch, n);
 		read_coursename(tseme, tyear, sch, n);
 		read_time_room_dow(tseme, tyear, sch, n);
@@ -305,7 +305,7 @@ void read_scoreboard(std::string tseme, std::string tyear, course cou, std::stri
 	if (!fin.is_open())
 		std::cout << "Can not open file." << std::endl;
 	else {
-		fin >> sco.lab;
+		fin >> sco.total;
 		fin >> sco.midterm;
 		fin >> sco.final;
 		fin >> sco.bonus;
@@ -341,7 +341,7 @@ void view_score(student stu){
 			scoreboard sco;
 			read_scoreboard(tseme, tyear, sch[option - 1], stu.id, sco);
 			std::cout << "All your scores of the course " << sch[option - 1].courseID << " are: " << std::endl;
-			std::cout << "Lab score: " << sco.lab << std::endl;
+			std::cout << "Total score: " << sco.total << std::endl;
 			std::cout << "Midterm score: " << sco.midterm << std::endl;
 			std::cout << "Finalterm score: " << sco.final << std::endl;
 			std::cout << "Bonus score: " << sco.bonus << std::endl;
