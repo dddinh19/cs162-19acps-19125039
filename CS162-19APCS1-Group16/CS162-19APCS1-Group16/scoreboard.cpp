@@ -1,5 +1,18 @@
-#include "function.h"
-
+#include "function.h" 
+void printScore(scoreboard a, std::string stuID, std::string stuName, int k) {
+	std::cout << center_align(std::to_string(k), 8) << "|";
+	std::cout << center_align(stuID, 20) << "|";
+	std::cout << center_align(stuName, 30) << "|";
+	std::cout.setf(std::ios::fixed);
+	std::cout.precision(2);
+	std::cout << "  "<<a.midterm<<"  " << "|";
+	std::cout << "  " << a.final << "  " << "|";
+	std::cout << "  " << a.bonus << "  " << "|";
+	std::cout << "  " << a.total << "  " << "|" << std::endl;
+	std::cout << std::setfill('-');
+	std::cout << std::setw(97) << "-" << std::endl;
+	std::cout << std::setfill(' ');
+}
 void view_scoreboard(){
 	std::string tyears, tseme, tclassname, tcourseID;
 	semester* p_year = NULL;
@@ -78,25 +91,16 @@ void view_scoreboard(){
 					fin.close();
 				}
 			}
-			int tto, tmid, tfin, tbon;
+			scoreboard a;
 			for (int i = 0; i < 2 * n; i = i + 2) {
 				fin.open("Data/Courses/" + tyears + "/" + tseme + "/" + tcourseID + "/" + tclassname + "/" + stu[i] + "/scoreboard.txt");
 				if (!fin.is_open())
 					std::cout << "Can not open the file." << std::endl;
 				else {
-					fin >> tmid >> tfin >> tbon >> tto;
+					fin >> a.midterm >> a.final >> a.bonus >> a.total;
 					fin.close();
 				}
-				std::cout << center_align(std::to_string((i + 1) / 2 + 1), 8) << "|";
-				std::cout << center_align(stu[i], 20) << "|";
-				std::cout << center_align(stu[i + 1], 30) << "|";
-				std::cout << center_align(std::to_string(tmid), 8) << "|";
-				std::cout << center_align(std::to_string(tfin), 8) << "|";
-				std::cout << center_align(std::to_string(tbon), 8) << "|";
-				std::cout << center_align(std::to_string(tto), 8) << "|" << std::endl;
-				std::cout << std::setfill('-');
-				std::cout << std::setw(97) << "-" << std::endl;
-				std::cout << std::setfill(' ');
+				printScore(a, stu[i], stu[i + 1], (i + 1) / 2 + 1);
 			}
 		}
 		delete[]stu;
