@@ -79,6 +79,17 @@ void read_student_name(std::string id) {
 	delete[]p;
 }
 
+void read_student_name1(student& stu) {
+	std::ifstream fi("Data/Class/" + stu.classname + "/" + stu.id + "/info.txt");
+	if (!fi.is_open())
+		std::cout << "Can not open student in course data file " << std::endl;
+	else {
+		getline(fi, stu.id);
+		getline(fi, stu.name);
+	}
+	fi.close();
+}
+
 void lecturer_view_list_student_course(lecturer* p, int k) {
 	semester* p_year = nullptr;
 	int n_year = 0;
@@ -141,6 +152,8 @@ void read_attendance(std::string filename, attendance a[]) {
 			fi >> a[i].date.day;
 			fi >> a[i].start.hour;
 			fi >> a[i].start.minute;
+			fi >> a[i].end.hour;
+			fi >> a[i].end.minute;
 			fi >> a[i].checkin.hour;
 			fi >> a[i].checkin.minute;
 		}
@@ -176,26 +189,47 @@ void lecturer_view_list_attendance_course(lecturer* p, int k) {
 			std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
 			lecturer_course_data(filename, p_course, n_course);
 			read_coursename(sem, year, p_course, n_course);
-			std::cout << "List of courses for you in " << year << " of " << sem << std::endl;
-			for (int i = 0; i < n_course; ++i) {
-				std::cout << p_course[i].courseID << ": " << p_course[i].courseName << std::endl;
-				std::cout << "Class: " << p_course[i].classname << std::endl;
-			}
-			std::string courseid, classname;
-			std::cout << "Enter course ID and class you want to view attendance list " << std::endl;
-			std::cin >> courseid >> classname;
-			if (check_course(p_course, n_course, courseid, classname)) {
+			read_time_room_dow(sem, year, p_course, n_course);
+			system("CLS");
+			int choice;
+			std::cout << std::setw(72) << "YOUR COURSES IN " << year << " OF " << sem << std::endl;
+			print_scheduleboard(sem, year, p_course, n_course);
+			do {
+				std::cout << "Please enter an attached number of the course you want to view students list: ";
+				std::cin >> choice;
+				if (choice <= 0 && choice > n_course)
+					std::cout << "Invalid choice!!! Please choose again. " << std::endl;
+			} while (choice <= 0 && choice > n_course);
+			if (check_course(p_course, n_course, p_course[choice - 1].courseID, p_course[choice - 1].classname)) {
 				student* p_student = nullptr;
 				int n_student = 0;
-				filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/student.txt";
+				filename = "Data/Courses/" + year + "/" + sem + "/" + p_course[choice - 1].courseID + "/" + p_course[choice - 1].classname + "/student.txt";
 				student_course_data(filename, p_student, n_student);
-				std::cout << "List of attendance in " << courseid << " of " << classname << std::endl;
-				for (int i = 0; i < n_student; ++i) {
-					std::cout << p_student[i].id << ": ";
-					read_student_name(p_student[i].id);
-					filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/" + p_student[i].id + "/attendance.txt";
+				system("CLS");
+				std::cout << std::setw(65) << "ATTENDANCE LIST OF " << p_course[choice - 1].courseID << " IN CLASS " << p_course[choice - 1].classname << std::endl;
+				std::cout << std::setfill('=');
+				std::cout << std::setw(130) << "=" << std::endl;
+				std::cout << std::setfill(' ');
+				// Width of board: No-8, Student ID-20, Student name-30, Date-20, Time-15
+				std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
+				std::cout << std::setw(5) << " " << "Student ID" << std::setw(5) << " " << "|";
+				std::cout << std::setw(9) << " " << "Student name" << std::setw(9) << " " << "|";
+				std::cout << std::setw(8) << " " << "Date" << std::setw(8) << " " << "|";
+				std::cout << std::setw(2) << " " << "Start time" << std::setw(3) << " " << "|";
+				std::cout << std::setw(3) << " " << "End time" << std::setw(4) << " " << "|";
+				std::cout << " Checkin time  " << "|" << std::endl;
+				std::cout << std::setfill('-');
+				std::cout << std::setw(130) << "-" << std::endl;
+				std::cout << std::setfill(' ');
+				for (int i = 0; i < n_student; i++) {
+					read_class_of_student(p_student[i]);
+					read_student_name1(p_student[i]);
+					filename = "Data/Courses/" + year + "/" + sem + "/" + p_course[choice - 1].courseID + "/" + p_course[choice - 1].classname + "/" + p_student[i].id + "/attendance.txt";
 					read_attendance(filename, p_student[i].list_attend);
-					view_attendance(p_student[i].list_attend);
+					printAttendance(p_student[i].list_attend, p_student[i].id, p_student[i].name, i);
+					std::cout << std::setfill('-');
+					std::cout << std::setw(130) << "-" << std::endl;
+					std::cout << std::setfill(' ');
 				}
 				delete[]p_student;
 			}
