@@ -841,7 +841,7 @@ void print_course_current_semester_board(std::string tyear, std::string tseme, c
 	std::cout << std::setfill(' ');
 }
 
-void view_list_course_current_semester() {
+/*void view_list_course_current_semester() {
 	time_t t = time(0);
 	struct tm* now = localtime(&t);
 	std::string tyear, tseme;
@@ -864,6 +864,27 @@ void view_list_course_current_semester() {
 		std::cout << "There is no semester in the academic years " << y - 1 << "-" << y << std::endl;
 	else
 		std::cout << "The academic years " << y - 1 << "-" << y << " does not exist." << std::endl;
+}*/
+std::string current_sem(semester* p, int n) {
+	if (p[n - 1].status3 == 1) return p[n - 1].sem3;
+	if (p[n - 1].status2 == 1) return p[n - 1].sem2;
+	if (p[n - 1].status1 == 1) return p[n - 1].sem1;
+}
+void view_list_course_current_semester() {
+	semester* p = nullptr;
+	int n = 0;
+	semester_data(p, n);
+	std::string filename = "Data/Courses/" + p[n - 1].year + "/" + current_sem(p, n) + "/course.txt";
+	course* p_course = nullptr;
+	int n_course = 0;
+	read_course_in_semester(filename, p_course, n_course);
+	for (int i = 0; i < n_course; i++) {
+		filename = "Data/Courses/" + p[n - 1].year + "/" + current_sem(p, n) + "/" + p_course[i].courseID + "/" + p_course[i].classname + "/info.txt";
+		read_course_info(filename, p_course[i]);
+	}
+	print_course_current_semester_board(p[n - 1].year, current_sem(p, n), p_course, n_course);
+	delete[]p;
+	delete[]p_course;
 }
 
 void read_lecturer_info(lecturer*& lec, int& n) {
