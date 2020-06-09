@@ -157,6 +157,7 @@ void lecturer_view_list_course(lecturer* p, int k);
 bool check_course(course* p_course, int n_course, std::string courseid, std::string classname);
 void student_course_data(std::string filename, student*& p, int& n);
 void read_student_name(std::string id);
+void read_student_name1(student& stu);
 void lecturer_view_list_student_course(lecturer* p, int k);
 
 void read_attendance(std::string filename, attendance a[]);
