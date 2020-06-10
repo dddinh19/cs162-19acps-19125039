@@ -70,10 +70,12 @@ void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 			std::cout << "-----------------------------------------------" << std::endl;
 			fi.close();
 			std::cin.get();
+			delete[] avai_semester;
 			create_year_semester(fi, fo);
 		}
 		else
 		{
+			delete[] avai_semester;
 			fi.close();
 			return;
 		}
@@ -146,9 +148,141 @@ void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 			fo.open(str);
 			fo.close();
 		}
+		delete[] avai_semester;
 		std::cout << "Create successfully!!";
 	}
 }
+
+void update_year_semester(std::ifstream& fi, std::ofstream& fo)
+{
+	std::string academic_year, year_alt;
+	std::cout << "Please input the academic year you want to update: ";
+	getline(std::cin, academic_year);
+	std::cout << "Please input the alternative for that academic year: ";
+	getline(std::cin, year_alt);
+	std::string seme, seme_alt;
+	std::cout << "Please input the semester you want to update: ";
+	getline(std::cin, seme);
+	std::cout << "Please input the alternative for that semester: ";
+	getline(std::cin, seme_alt);
+	fi.open("Data/Course/semester.txt");
+	if (!fi)
+	{
+		std::cout << "Can't open this file! Please enter it again! " << std::endl;
+		std::cout << "--------------------------" << std::endl;
+	}
+	int capacity = 10;
+	semester* avai_semester = new semester[capacity];
+	int num, check_1 = 0, i = 0, check_2 = 0, check_3 = 0;
+	fi >> num;
+	while (!fi.eof())
+	{
+		getline(fi, avai_semester[i].year);
+		getline(fi, avai_semester[i].year);
+		fi >> avai_semester[i].status;
+		getline(fi, avai_semester[i].sem1);
+		getline(fi, avai_semester[i].sem1);
+		fi >> avai_semester[i].status1;
+		getline(fi, avai_semester[i].sem2);
+		getline(fi, avai_semester[i].sem2);
+		fi >> avai_semester[i].status2;
+		getline(fi, avai_semester[i].sem3);
+		getline(fi, avai_semester[i].sem3);
+		fi >> avai_semester[i].status3;
+		if (i == capacity - 1)
+		{
+			semester* tmp = new semester[capacity + 10];
+			for (int j = 0; j <= i; j++)
+			{
+				tmp[j] = avai_semester[j];
+			}
+			delete[] avai_semester;
+			avai_semester = tmp;
+			capacity = capacity + 10;
+		}
+		i++;
+	}
+	fi.close();
+	fo.open("Data/Course/semester.txt");
+	fo << num;
+	for (int j = 0; j < i; j++)
+	{
+		fo << std::endl;
+		if (avai_semester[j].year == academic_year)
+		{
+			fo << year_alt << std::endl;
+			check_1 = 1;
+			check_2 = 1;
+		}
+		else fo << avai_semester[j].year << std::endl;
+		fo << avai_semester[j].status << std::endl;
+		if ((avai_semester[j].sem1 == seme) && (check_1 == 1) && (avai_semester[j].status1 == 1))
+		{
+			fo << seme_alt << std::endl;
+			check_3 = 1;
+		}
+		else fo << avai_semester[j].sem1 << std::endl;
+		fo << avai_semester[j].status1 << std::endl;
+		if ((avai_semester[j].sem2 == seme) && (check_1 == 1) && (avai_semester[j].status2 == 1))
+		{
+			fo << seme_alt << std::endl;
+			check_3 = 1;
+		}
+		else fo << avai_semester[j].sem2 << std::endl;
+		fo << avai_semester[j].status2 << std::endl;
+		if ((avai_semester[j].sem2 == seme) && (check_1 == 1) && (avai_semester[j].status3 == 1))
+		{
+			fo << seme_alt << std::endl;
+			check_3 = 1;
+		}
+		else fo << avai_semester[j].sem3 << std::endl;
+		fo << avai_semester[j].status3;
+		check_1 = 0;
+	}
+	char check_4;
+	fo.close();
+	if ((check_2 == 0) || (check_3 == 0))
+	{
+		fo.open("Data/Course/semester.txt");
+		fo << num;
+		for (int j = 0; j < i; j++)
+		{
+			fo << std::endl;
+			fo << avai_semester[j].year << std::endl;
+			fo << avai_semester[j].status << std::endl;
+			fo << avai_semester[j].sem1 << std::endl;
+			fo << avai_semester[j].status1 << std::endl;
+			fo << avai_semester[j].sem2 << std::endl;
+			fo << avai_semester[j].status2 << std::endl;
+			fo << avai_semester[j].sem3 << std::endl;
+			fo << avai_semester[j].status3;
+		}
+		std::cout << "The academic year and the semester you want to update haven't existed!!!" << std::endl;
+		std::cout << "Do you want to update again (y for yes and n for no): ";
+		std::cin >> check_4;
+		if (check_4 == 'y')
+		{
+			std::cout << "-----------------------------------------------" << std::endl;
+			fo.close();
+			std::cin.get();
+			delete[] avai_semester;
+			update_year_semester(fi, fo);
+		}
+		else
+		{
+			fo.close();
+			delete[] avai_semester;
+			return;
+		}
+	}
+	else
+	{
+		delete[] avai_semester;
+		std::cout << "Update successfully!!!" << std::endl;
+	}
+}
+
+
 /*void loadLecturerfile(ifstream& fin, lecturer*& all, int& n) {
 	char temp1[50];
 	fin >> n;
@@ -359,8 +493,8 @@ void addacourse() {
 	string courseID;
 	string classofcourse;
 	string checkCourseId, checkClass;
-	cout << "Please enter the infomation" << endl;
-	cout << "(Format: < beginning year> <semester> <courseID> <Class>) : " << endl;
+	cout << "Please enter the infomation" << std::endl;
+	cout << "(Format: < beginning year> <semester> <courseID> <Class>) : " << std::endl;
 	cin >> beginningyear >> semester >> courseID >> classofcourse;
 	ifstream fin;
 	fin.open("Data/Courses/" + to_string(beginningyear) + "-" + to_string(beginningyear + 1)+"/"+ to_string(beginningyear) + "-" + to_string(beginningyear + 1) + "-" + semester + ".txt");
@@ -370,12 +504,12 @@ void addacourse() {
 			getline(fin, checkCourseId);
 			getline(fin, checkClass);
 			if (checkClass == classofcourse) {
-				cout << "Invalid. Course is exist " << endl;
+				cout << "Invalid. Course is exist " << std::endl;
 				return;
 			}
 		}
 	}
-	cout << "This course is available to add. " << endl;
+	cout << "This course is available to add. " << std::endl;
 
 
 }
