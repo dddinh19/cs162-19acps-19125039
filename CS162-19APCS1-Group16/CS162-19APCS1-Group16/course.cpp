@@ -230,7 +230,7 @@ void update_year_semester(std::ifstream& fi, std::ofstream& fo)
 		}
 		else fo << avai_semester[j].sem2 << std::endl;
 		fo << avai_semester[j].status2 << std::endl;
-		if ((avai_semester[j].sem2 == seme) && (check_1 == 1) && (avai_semester[j].status3 == 1))
+		if ((avai_semester[j].sem3 == seme) && (check_1 == 1) && (avai_semester[j].status3 == 1))
 		{
 			fo << seme_alt << std::endl;
 			check_3 = 1;
@@ -282,7 +282,196 @@ void update_year_semester(std::ifstream& fi, std::ofstream& fo)
 	}
 }
 
-
+void delete_year_semester(std::ifstream& fi, std::ofstream& fo)
+{
+	std::string academic_year, seme;
+	std::cout << "Please input the academic year: ";
+	getline(std::cin, academic_year);
+	int check_1;
+	std::cout << "You want to delete the whole academic year(press 1) or just one semester in that academic year(press 2)? ";
+	std::cin >> check_1;
+	fi.open("Data/Course/semester.txt");
+	if (!fi)
+	{
+		std::cout << "Can't open this file! Please enter it again! " << std::endl;
+		std::cout << "--------------------------" << std::endl;
+	}
+	int capacity = 10;
+	semester* avai_semester = new semester[capacity];
+	int num, i = 0, check_2 = 0, check_3 = 0;
+	fi >> num;
+	while (!fi.eof())
+	{
+		getline(fi, avai_semester[i].year);
+		getline(fi, avai_semester[i].year);
+		fi >> avai_semester[i].status;
+		getline(fi, avai_semester[i].sem1);
+		getline(fi, avai_semester[i].sem1);
+		fi >> avai_semester[i].status1;
+		getline(fi, avai_semester[i].sem2);
+		getline(fi, avai_semester[i].sem2);
+		fi >> avai_semester[i].status2;
+		getline(fi, avai_semester[i].sem3);
+		getline(fi, avai_semester[i].sem3);
+		fi >> avai_semester[i].status3;
+		if (i == capacity - 1)
+		{
+			semester* tmp = new semester[capacity + 10];
+			for (int j = 0; j <= i; j++)
+			{
+				tmp[j] = avai_semester[j];
+			}
+			delete[] avai_semester;
+			avai_semester = tmp;
+			capacity = capacity + 10;
+		}
+		i++;
+	}
+	char check_4;
+	fi.close();
+	fo.open("Data/Course/semester.txt");
+	if (check_1 == 1)
+	{
+		num = num - 1;
+		fo << num;
+		for (int j = 0; j < i; j++)
+		{
+			fo << std::endl;
+			fo << avai_semester[j].year << std::endl;
+			if (compare(avai_semester[j].year, academic_year))
+			{
+				fo << 0 << std::endl;
+				check_2 = 1;
+			}
+			else fo << avai_semester[j].status << std::endl;
+			fo << avai_semester[j].sem1 << std::endl;
+			fo << avai_semester[j].status1 << std::endl;
+			fo << avai_semester[j].sem2 << std::endl;
+			fo << avai_semester[j].status2 << std::endl;
+			fo << avai_semester[j].sem3 << std::endl;
+			fo << avai_semester[j].status3;
+		}
+		if (check_2 == 0)
+		{
+			fo.close();
+			fo.open("Data/Course/semester.txt");
+			std::cout << "The academic year you want to delete haven't existed yet!!" << std::endl;
+			num = num + 1;
+			fo << num;
+			for (int j = 0; j < i; j++)
+			{
+				fo << std::endl;
+				fo << avai_semester[j].year << std::endl;
+				fo << avai_semester[j].status << std::endl;
+				fo << avai_semester[j].sem1 << std::endl;
+				fo << avai_semester[j].status1 << std::endl;
+				fo << avai_semester[j].sem2 << std::endl;
+				fo << avai_semester[j].status2 << std::endl;
+				fo << avai_semester[j].sem3 << std::endl;
+				fo << avai_semester[j].status3;
+			}
+			fo.close();
+			std::cout << "Do you want to delete again (y for yes and n for no): ";
+			std::cin >> check_4;
+			if (check_4 == 'y')
+			{
+				std::cout << "-----------------------------------------------" << std::endl;
+				fo.close();
+				std::cin.get();
+				delete[] avai_semester;
+				delete_year_semester(fi, fo);
+			}
+			else
+			{
+				fo.close();
+				delete[] avai_semester;
+				return;
+			}
+		}
+		else
+		{
+			delete[] avai_semester;
+			std::cout << "Delete successfully!!!" << std::endl;
+		}
+	}
+	if (check_1 == 2)
+	{
+		std::cout << "The semester you want to delete in that academic year: ";
+		std::cin >> seme;
+		fo << num;
+		for (int j = 0; j < i; j++)
+		{
+			fo << std::endl;
+			fo << avai_semester[j].year << std::endl;
+			if ((avai_semester[j].year == academic_year) && (avai_semester[j].status == 1))
+			{
+				check_2 = 1;
+			}
+			fo << avai_semester[j].status << std::endl;
+			fo << avai_semester[j].sem1 << std::endl;
+			if ((avai_semester[j].sem1 == seme) && (check_2 == 1) && (avai_semester[j].status1 == 1))
+			{
+				check_3 = 1;
+				fo << 0 << std::endl;
+			}
+			else fo << avai_semester[j].status1 << std::endl;
+			fo << avai_semester[j].sem2 << std::endl;
+			if ((avai_semester[j].sem2 == seme) && (check_2 == 1) && (avai_semester[j].status2 == 1))
+			{
+				check_3 = 1;
+				fo << 0 << std::endl;
+			}
+			else fo << avai_semester[j].status2 << std::endl;
+			fo << avai_semester[j].sem3 << std::endl;
+			if ((avai_semester[j].sem3 == seme) && (check_2 == 1) && (avai_semester[j].status3 == 1))
+			{
+				check_3 = 1;
+				fo << 0;
+			}
+			else fo << avai_semester[j].status3;
+		}
+		fo.close();
+		if ((check_2 == 0) || (check_3 == 0))
+		{
+			fo.open("Data/Course/semester.txt");
+			fo << num;
+			for (int j = 0; j < i; j++)
+			{
+				fo << std::endl;
+				fo << avai_semester[j].year << std::endl;
+				fo << avai_semester[j].status << std::endl;
+				fo << avai_semester[j].sem1 << std::endl;
+				fo << avai_semester[j].status1 << std::endl;
+				fo << avai_semester[j].sem2 << std::endl;
+				fo << avai_semester[j].status2 << std::endl;
+				fo << avai_semester[j].sem3 << std::endl;
+				fo << avai_semester[j].status3;
+			}
+			std::cout << "The academic year and the semester you want to delete haven't existed!!!" << std::endl;
+			std::cout << "Do you want to update again (y for yes and n for no): ";
+			std::cin >> check_4;
+			if (check_4 == 'y')
+			{
+				std::cout << "-----------------------------------------------" << std::endl;
+				fo.close();
+				std::cin.get();
+				delete[] avai_semester;
+				delete_year_semester(fi, fo);
+			}
+			else
+			{
+				fo.close();
+				delete[] avai_semester;
+				return;
+			}
+		}
+		else
+		{
+			delete[] avai_semester;
+			std::cout << "Delete successfully!!!" << std::endl;
+		}
+	}
+}
 /*void loadLecturerfile(ifstream& fin, lecturer*& all, int& n) {
 	char temp1[50];
 	fin >> n;
