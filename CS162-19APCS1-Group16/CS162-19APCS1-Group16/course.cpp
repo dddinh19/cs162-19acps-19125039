@@ -510,14 +510,13 @@ int covert_number(std::string str)
 	return n;
 }
 
-void enterinfo(std::ifstream& fi)
+void enterinfo(std::ifstream& fi, std::string& academicyear, std::string& seme)
 {
-	std::string academicyear, semester, classname;
 	char filename[100];
 	std::cout << "Please enter academic year: ";
 	std::cin >> academicyear;
 	std::cout << "Please enter semester: ";
-	std::cin >> semester;
+	std::cin >> seme;
 	int check;
 	do
 	{
@@ -592,7 +591,158 @@ void load_data_course(std::ifstream& fi, course*& cou, int& num)
 	fi.close();
 }
 
-
+void create_allfile_course(std::ifstream fi, std::ofstream fo, course*& cou, int num, std::string& academicyear, std::string& seme)
+{
+	std::string str, str1;
+	str = "Data/Course/" + academicyear;
+	if (!check_openfile(fi, str))
+	{
+		const char* str1 = str.c_str();
+		_mkdir(str1);
+	}
+	str = str + "/" + seme;
+	if (!check_openfile(fi, str))
+	{
+		const char* str1 = str.c_str();
+		_mkdir(str1);
+	}
+	fi.open("Data/Course/semester.txt");
+	if (!fi)
+	{
+		std::cout << "Can't open this file! Please enter it again! " << std::endl;
+		std::cout << "--------------------------" << std::endl;
+	}
+	int capacity = 10;
+	semester* avai_semester = new semester[capacity];
+	int num = 0, check_1 = 0, i = 0;
+	std::string str;
+	fi >> num;
+	while (!fi.eof())
+	{
+		getline(fi, avai_semester[i].year);
+		getline(fi, avai_semester[i].year);
+		fi >> avai_semester[i].status;
+		getline(fi, avai_semester[i].sem1);
+		getline(fi, avai_semester[i].sem1);
+		fi >> avai_semester[i].status1;
+		getline(fi, avai_semester[i].sem2);
+		getline(fi, avai_semester[i].sem2);
+		fi >> avai_semester[i].status2;
+		getline(fi, avai_semester[i].sem3);
+		getline(fi, avai_semester[i].sem3);
+		fi >> avai_semester[i].status3;
+		if (compare(avai_semester[i].year, academicyear) && avai_semester[i].status == 1)
+		{
+			check_1 = 1;
+		}
+		if (i == capacity - 1)
+		{
+			semester* tmp = new semester[capacity + 10];
+			for (int j = 0; j <= i; j++)
+			{
+				tmp[j] = avai_semester[j];
+			}
+			delete[] avai_semester;
+			avai_semester = tmp;
+			capacity = capacity + 10;
+		}
+		i++;
+	}
+	fi.close();
+	fo.open("Data/Course/semester.txt");
+	if (check_1 == 0) num = num + 1;
+	fo << num;
+	for (int j = 0; j < i; j++)
+	{
+		fo << std::endl;
+		fo << avai_semester[j].year << std::endl;
+		if (compare(avai_semester[j].year, academicyear))
+		{
+			fo << 1 << std::endl;
+		}
+		else fo << avai_semester[j].status << std::endl;
+		fo << avai_semester[j].sem1 << std::endl;
+		if (compare(avai_semester[j].sem1, seme) && compare(avai_semester[j].year, academicyear))
+		{
+			fo << 1 << std::endl;
+		}
+		else fo << avai_semester[j].status1 << std::endl;
+		fo << avai_semester[j].sem2 << std::endl;
+		if (compare(avai_semester[j].sem2, seme) && compare(avai_semester[j].year, academicyear))
+		{
+			fo << 1 << std::endl;
+		}
+		else fo << avai_semester[j].status2 << std::endl;
+		fo << avai_semester[j].sem3 << std::endl;
+		if (compare(avai_semester[j].sem3, seme) && compare(avai_semester[j].year, academicyear))
+		{
+			fo << 1;
+		}
+		else fo << avai_semester[j].status3;
+	}
+	if (check_1 == 0)
+	{
+		fo << std::endl;
+		fo << academicyear << std::endl;
+		fo << 1 << std::endl;
+		fo << "HK1" << std::endl;
+		if (compare("HK1", seme)) fo << 1 << std::endl; else fo << 0 << std::endl;
+		fo << "HK2" << std::endl;
+		if (compare("HK2", seme)) fo << 1 << std::endl; else fo << 0 << std::endl;
+		fo << "HK3" << std::endl;
+		if (compare("HK3", seme)) fo << 1; else fo << 0;
+	}
+	fo.close();
+	str = "Data/Course/" + academicyear + "/" + seme + "/course.txt";
+	fo.open(str);
+	fo.close();
+	for (int j = 0; j < num; j++)
+	{
+		str = "Data/Course/" + academicyear + "/" + seme + "/" + cou[j].courseID;
+		if (!check_openfile(fi, str))
+		{
+			const char* str1 = str.c_str();
+			_mkdir(str1);
+		}
+		str = str + "/" + cou[j].classname;
+		if (!check_openfile(fi, str))
+		{
+			const char* str1 = str.c_str();
+			_mkdir(str1);
+		}
+		fo.open(str + "/student.txt");
+		fo.close();
+		fo.open(str + "/info.txt");
+		fo.close();
+		str = "Data/Class/" + cou[j].classname + "/" + cou[j].classname + ".txt";
+		fi.open(str);
+		int n;
+		fi >> n;
+		for (int k = 0; k < n; k++)
+		{
+			student stu;
+			std::string ch;
+			getline(fi, stu.id);
+			getline(fi, ch);
+			stu.status = covert_number(ch);
+			if (stu.status == 1)
+			{
+				str = "Data/Course/" + academicyear + "/" + seme + "/" + cou[j].courseID + "/" + cou[j].classname + "/" + stu.id;
+				if (!check_openfile(fi, str))
+				{
+					const char* str1 = str.c_str();
+					_mkdir(str1);
+				}
+				fo.open(str + "/scoreboard.txt");
+				fo.close();
+				fo.open(str + "/attendance.txt");
+				fo.close();
+			}
+			else k = k - 1;
+		}
+		fi.close();
+	}
+}
 /*void loadLecturerfile(ifstream& fin, lecturer*& all, int& n) {
 	char temp1[50];
 	fin >> n;
