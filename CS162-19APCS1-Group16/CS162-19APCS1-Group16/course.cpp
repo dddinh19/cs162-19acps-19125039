@@ -5,6 +5,17 @@ bool compare(std::string str1, std::string str2)
 	if (str1.compare(str2) == 0) return true;
 	return false;
 }
+
+bool check_openfile(std::ifstream& fi, std::string filename)
+{
+	fi.open(filename);
+	if (!fi) return false; else
+	{
+		fi.close();
+		return true;
+	}
+}
+
 void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 {
 	std::string academic_year;
@@ -96,8 +107,11 @@ void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 				if (avai_semester[j].status == 0)
 				{
 					str = "Data/Course/" + avai_semester[j].year;
-					const char* str1 = str.c_str();
-					_mkdir(str1);
+					if (!check_openfile(fi, str))
+					{
+						const char* str1 = str.c_str();
+						_mkdir(str1);
+					}
 				}
 			}
 			else fo << avai_semester[j].status << std::endl;
@@ -105,21 +119,36 @@ void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 			if (compare(avai_semester[j].sem1, seme) && compare(avai_semester[j].year, academic_year))
 			{
 				fo << 1 << std::endl;
-				str = "Data/Course/" + avai_semester[j].year + "/" + seme + ".txt";
+				str = "Data/Course/" + avai_semester[j].year + "/" + seme;
+				if (!check_openfile(fi, str))
+				{
+					const char* str1 = str.c_str();
+					_mkdir(str1);
+				}
 			}
 			else fo << avai_semester[j].status1 << std::endl;
 			fo << avai_semester[j].sem2 << std::endl;
 			if (compare(avai_semester[j].sem2, seme) && compare(avai_semester[j].year, academic_year))
 			{
 				fo << 1 << std::endl;
-				str = "Data/Course/" + avai_semester[j].year + "/" + seme + ".txt";
+				str = "Data/Course/" + avai_semester[j].year + "/" + seme;
+				if (!check_openfile(fi, str))
+				{
+					const char* str1 = str.c_str();
+					_mkdir(str1);
+				}
 			}
 			else fo << avai_semester[j].status2 << std::endl;
 			fo << avai_semester[j].sem3 << std::endl;
 			if (compare(avai_semester[j].sem3, seme) && compare(avai_semester[j].year, academic_year))
 			{
 				fo << 1;
-				str = "Data/Course/" + avai_semester[j].year + "/" + seme + ".txt";
+				str = "Data/Course/" + avai_semester[j].year + "/" + seme;
+				if (!check_openfile(fi, str))
+				{
+					const char* str1 = str.c_str();
+					_mkdir(str1);
+				}
 			}
 			else fo << avai_semester[j].status3;
 		}
@@ -135,19 +164,19 @@ void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 			fo << "HK3" << std::endl;
 			if (compare("HK3", seme)) fo << 1; else fo << 0;
 			str = "Data/Course/" + academic_year;
-			const char* str1 = str.c_str();
-			_mkdir(str1);
+			if (!check_openfile(fi, str))
+			{
+				const char* str1 = str.c_str();
+				_mkdir(str1);
+			}
 			str = str + "/" + seme;
-			fo.close();
-			fo.open(str);
-			fo.close();
+			if (!check_openfile(fi, str))
+			{
+				const char* str1 = str.c_str();
+				_mkdir(str1);
+			}
 		}
-		else
-		{
-			fo.close();
-			fo.open(str);
-			fo.close();
-		}
+		fo.close();
 		delete[] avai_semester;
 		std::cout << "Create successfully!!";
 	}
@@ -472,6 +501,98 @@ void delete_year_semester(std::ifstream& fi, std::ofstream& fo)
 		}
 	}
 }
+
+int covert_number(std::string str)
+{
+	int n = 0;
+	for (int i = 0; i < str.length(); i++)
+		n = (str[i] - '0') + n * 10;
+	return n;
+}
+
+void enterinfo(std::ifstream& fi)
+{
+	std::string academicyear, semester, classname;
+	char filename[100];
+	std::cout << "Please enter academic year: ";
+	std::cin >> academicyear;
+	std::cout << "Please enter semester: ";
+	std::cin >> semester;
+	int check;
+	do
+	{
+		std::cout << "Please enter filename: ";
+		std::cin >> filename;
+		std::cin.get();
+		fi.open(filename);
+		if (!fi)
+		{
+			std::cout << "Can't open this file! Please enter it again! " << std::endl;
+			std::cout << "--------------------------" << std::endl;
+			check = 0;
+		}
+		else check = 1;
+	} while (check == 0);
+}
+
+void load_data_course(std::ifstream& fi, course*& cou, int& num)
+{
+	std::string ch;
+	getline(fi, ch);
+	int capacity = 10;
+	cou = new course[capacity];
+	while (!fi.eof())
+	{
+		getline(fi, ch, ',');
+		if (size(ch) == 0) break;
+		num = covert_number(ch);
+		getline(fi, cou[num - 1].courseID, ',');
+		getline(fi, cou[num - 1].courseName, ',');
+		getline(fi, cou[num - 1].classname, ',');
+		getline(fi, cou[num - 1].lecturer_couse.username, ',');
+		getline(fi, cou[num - 1].lecturer_couse.name, ',');
+		getline(fi, cou[num - 1].lecturer_couse.degree, ',');
+		getline(fi, ch, ',');
+		if (ch == "Male") cou[num - 1].lecturer_couse.gender = 0;
+		else cou[num - 1].lecturer_couse.gender = 1;
+		getline(fi, ch, '-');
+		cou[num - 1].start_day.year = covert_number(ch);
+		getline(fi, ch, '-');
+		cou[num - 1].start_day.month = covert_number(ch);
+		getline(fi, ch, ',');
+		cou[num - 1].start_day.day = covert_number(ch);
+		getline(fi, ch, '-');
+		cou[num - 1].end_day.year = covert_number(ch);
+		getline(fi, ch, '-');
+		cou[num - 1].end_day.month = covert_number(ch);
+		getline(fi, ch, ',');
+		cou[num - 1].end_day.day = covert_number(ch);
+		getline(fi, cou[num - 1].dayofweek, ',');
+		getline(fi, ch, ',');
+		cou[num - 1].start_time.hour = covert_number(ch);
+		getline(fi, ch, ',');
+		cou[num - 1].start_time.minute = covert_number(ch);
+		getline(fi, ch, ',');
+		cou[num - 1].end_time.hour = covert_number(ch);
+		getline(fi, ch, ',');
+		cou[num - 1].end_time.minute = covert_number(ch);
+		getline(fi, cou[num - 1].room);
+		if (num == capacity)
+		{
+			course* tmpcou = new course[capacity + 10];
+			for (int i = 0; i <= num; i++)
+			{
+				tmpcou[i] = cou[i];
+			}
+			delete[] cou;
+			cou = tmpcou;
+			capacity = capacity + 10;
+		}
+	}
+	fi.close();
+}
+
+
 /*void loadLecturerfile(ifstream& fin, lecturer*& all, int& n) {
 	char temp1[50];
 	fin >> n;
