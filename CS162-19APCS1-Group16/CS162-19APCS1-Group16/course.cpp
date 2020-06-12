@@ -591,7 +591,7 @@ void load_data_course(std::ifstream& fi, course*& cou, int& num)
 	fi.close();
 }
 
-void create_allfile_course(std::ifstream fi, std::ofstream fo, course*& cou, int num, std::string& academicyear, std::string& seme)
+/*void create_allfile_course(std::ifstream fi, std::ofstream fo, course*& cou, int num, std::string& academicyear, std::string& seme)
 {
 	std::string str, str1;
 	str = "Data/Course/" + academicyear;
@@ -742,7 +742,7 @@ void create_allfile_course(std::ifstream fi, std::ofstream fo, course*& cou, int
 		}
 		fi.close();
 	}
-}
+}*/
 /*void loadLecturerfile(ifstream& fin, lecturer*& all, int& n) {
 	char temp1[50];
 	fin >> n;
@@ -1585,31 +1585,29 @@ void read_lecturer_info(lecturer*& lec, int& n) {
 }
 
 void print_lecturers(lecturer* lec, int n) {
-	std::cout << std::setw(63) << "LIST OF LECTURERS " << std::endl;
+	std::cout << std::setw(52) << "LIST OF LECTURERS " << std::endl;
 	std::cout << std::setfill('=');
-	std::cout << std::setw(102) << "=" << std::endl;
+	std::cout << std::setw(81) << "=" << std::endl;
 	std::cout << std::setfill(' ');
-	// Width of board: No-8, Lecturer name-30, Lecturer username-20, Lecturer password- 20, Degree-10, Gender-8
+	// Width of board: No-8, Lecturer name-30, Lecturer username-20, Degree-10, Gender-8
 	std::cout << std::setw(3) << " " << "No" << std::setw(3) << " " << "|";
 	std::cout << std::setw(8) << " " << "Lecturer name" << std::setw(9) << " " << "|";
 	std::cout << std::setw(1) << " " << "Lecturer username" << std::setw(2) << " " << "|";
-	std::cout << std::setw(1) << " " << "Lecturer password" << std::setw(2) << " " << "|";
 	std::cout << std::setw(2) << " " << "Degree" << std::setw(2) << " " << "|";
 	std::cout << " Gender " << "|" << std::endl;
 	std::cout << std::setfill('-');
-	std::cout << std::setw(102) << "-" << std::endl;
+	std::cout << std::setw(81) << "-" << std::endl;
 	std::cout << std::setfill(' ');
 	for (int i = 0; i < n; i++) {
 		std::cout << center_align(std::to_string(i + 1), 8) << "|";
 		std::cout << center_align(lec[i].name, 30) << "|";
 		std::cout << center_align(lec[i].username, 20) << "|";
-		std::cout << center_align(lec[i].password, 20) << "|";
 		std::cout << center_align(lec[i].degree, 10) << "|";
 		if (lec[i].gender == 0) std::cout << "  Male  " << "|";
 		else std::cout << " Female " << "|";
 		std::cout << std::endl;
 		std::cout << std::setfill('-');
-		std::cout << std::setw(102) << "-" << std::endl;
+		std::cout << std::setw(81) << "-" << std::endl;
 		std::cout << std::setfill(' ');
 	}
 }
