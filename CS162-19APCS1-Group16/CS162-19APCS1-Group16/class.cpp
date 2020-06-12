@@ -35,8 +35,8 @@ void input_new_student(student*& a) {
 	std::cout << "Enter student's name " << std::endl;
 	getline(std::cin, a->name);
 	getline(std::cin, a->name);
-	//std::cout << "Enter student's gender(0: Male, 1: Female) " << std::endl;
-	//std::cin >> a->gender;
+	std::cout << "Enter student's gender(0: Male, 1: Female) " << std::endl;
+	std::cin >> a->gender;
 	std::cout << "Enter student's date of birth(year, month, day) " << std::endl;
 	std::cin >> a->date.year >> a->date.month >> a->date.year;
 	a->pass = std::to_string(a->date.year);
@@ -54,7 +54,7 @@ void write_student_info(std::string filename, student* a) {
 	else {
 		fo << a->id << std::endl;
 		fo << a->name << std::endl;
-		//fo << a->gender << std::endl;
+		fo << a->gender << std::endl;
 		fo << a->date.year << " " << a->date.month << " " << a->date.day << std::endl;
 		fo << a->classname << std::endl;
 		fo.close();
@@ -299,7 +299,16 @@ void change_class(student*& p, int n) {
 				break;
 			}
 		}
-		write_student_class_data(filename, p_student, n_student);
+		std::ofstream fo(filename);
+		if (!fo.is_open()) std::cout << "Can not open student in class data file " << std::endl;
+		else {
+			fo << n_student << std::endl;
+			for (int i = 0; i < n_student + 1; ++i) {
+				fo << p_student[i].id << std::endl;
+				fo << p_student[i].status << std::endl;
+			}
+		fo.close();
+		}
 		delete[]p_student;
 		std::cout << "Current class: " << std::endl;
 		std::cout << p[k].classname << std::endl;
@@ -342,11 +351,31 @@ void remove_student(student*& p, int& n) {
 				break;
 			}
 		}
-		write_student_class_data(filename, p_student, n_student);
+		std::ofstream fo(filename);
+		if (!fo.is_open()) std::cout << "Can not open student in class data file " << std::endl;
+		else {
+			fo << n_student << std::endl;
+			for (int i = 0; i < n_student + 1; ++i) {
+				fo << p_student[i].id << std::endl;
+				fo << p_student[i].status << std::endl;
+				}
+			fo.close();
+		}
 		delete[]p_student;
 		p[k].status = 0;
 		--n;
-		write_student_data(p, n);
+		std::ofstream fo("Data/Login/student.txt");
+		if (!fo.is_open()) std::cout << "Can not open student data file " << std::endl;
+		else {
+			fo << n << std::endl;
+			for (int i = 0; i < n + 1; ++i) {
+				fo << p[i].id << std::endl;
+				fo << p[i].pass << std::endl;
+				fo << p[i].classname << std::endl;
+				fo << p[i].status << std::endl;
+			}
+			fo.close();
+		}
 		std::cout << "Student has been removed successfully !!!" << std::endl;
 	}
 }
@@ -365,5 +394,32 @@ void edit_student(student*& p, int& n) {
 		else if (choice == 4) remove_student(p, n);
 		else if (choice == 0) break;
 		std::cin >> choice;
+	}
+}
+
+//IMPORT STUDENT
+
+bool check_class(std::string classname) {
+	class_name* p_class = nullptr;
+	int n_class = 0;
+	class_data(p_class, n_class);
+	for (int i = 0; i < n_class; ++i) {
+		if (p_class[i].classname == classname && p_class[i].status == 1) {
+			delete[]p_class;
+			return true;
+		}	
+	}
+	delete[]p_class;
+	return false;
+}
+void read_student_csv(std::string filename, std::string& classname, student*& p, int& n) {
+	std::ifstream fi(filename);
+	if (!fi.is_open()) std::cout << "Can not open this file " << std::endl;
+	else {
+		std::cout << "Enter classname: " << std::endl;
+		std::cin >> classname;
+		if (!check_class(classname)) {
+
+		}
 	}
 }
