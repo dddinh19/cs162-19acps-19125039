@@ -240,7 +240,6 @@ void lecturer_view_list_attendance_course(lecturer* p, int k) {
 }
 
 //VIEW SCOREBOARD
-
 void read_scoreboard(std::string filename, scoreboard& a) {
 	std::ifstream fi(filename);
 	if (!fi.is_open()) std::cout << "Can not open scoreboard data file " << std::endl;
@@ -253,7 +252,10 @@ void read_scoreboard(std::string filename, scoreboard& a) {
 	}
 }
 void view_scoreboard(scoreboard a) {
-	std::cout << " Midterm: " << a.midterm << " Final: " << a.final << " Bonus: " << a.bonus << "Total: " << a.total << std::endl;
+	std::cout << "Midterm: " << a.midterm << std::endl;
+	std::cout << "Final: " << a.final << std::endl;
+	std::cout << "Bonus: " << a.bonus << std::endl;
+	std::cout << "Total: " << a.total << std::endl;
 }
 void lecturer_view_scoreboard(lecturer* p, int k) {
 	semester* p_year = nullptr;
@@ -417,22 +419,9 @@ void edit_attendance(lecturer* p, int k) {
 }
 
 //EDIT SCOREBOARD
-void read_scoreboard(std::string filename, scoreboard a) {
-	std::ifstream fi(filename);
-	if (!fi.is_open()) std::cout << "Can not open scoreboard data file " << std::endl;
-	else {
-		fi >> a.midterm >> a.final >> a.bonus >> a.total;
-		fi.close();
-	}
-}
-void view_scoreboard(scoreboard a) {
-	std::cout << "Midterm: " << a.midterm << std::endl;
-	std::cout << "Final: " << a.final << std::endl;
-	std::cout << "Bonus: " << a.bonus << std::endl;
-	std::cout << "Total: " << a.total << std::endl;
-}
+
 void write_scoreboard(std::string filename, scoreboard a) {
-	std::ifstream fo(filename);
+	std::ofstream fo(filename);
 	if (!fo.is_open()) std::cout << "Can not open file " << std::endl;
 	else {
 		fo << a.midterm << " " << a.final << " " << a.bonus << " " << a.total << std::endl;
