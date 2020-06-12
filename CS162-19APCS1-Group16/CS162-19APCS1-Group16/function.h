@@ -124,20 +124,23 @@ int view_semester(semester* p, int n, std::string year);
 void write_semester_data(semester* p, int n);
 bool check_semester(semester* p_year, int n_year, std::string year, std::string sem);
 
+void course_info_data(std::string filename, course*& a);
+void view_course_info_data(course* a);
+
 void read_class_of_student(student& stu);
 void read_student_info_in_class(student& stu);
 void print_student_list_in_course(std::string tcourseID, std::string tclassname, student* stu, int n);
-
-void read_coursename(std::string tseme, std::string tyear, course*& sch, int n);
-void course_info_data(std::string filename, course*& a);
-void view_course_info_data(course* a);
 void view_list_student_in_course();
-void view_list_course_current_semester();
-void view_all_lecturers();
 
+void read_course_in_semester(std::string filename, course*& cou, int& n);
 void read_course_info(std::string filename, course& cou);
 void print_course_current_semester_board(std::string tyear, std::string tseme, course* cou, int n);
 std::string current_sem(semester* p, int n);
+void view_list_course_current_semester();
+
+void read_lecturer_info(lecturer*& lec, int& n);
+void print_lecturers(lecturer* lec, int n);
+void view_all_lecturers();
 
 //SCOREBOARD
 void printScore(scoreboard a, std::string stuID, std::string stuName, int k);
@@ -168,13 +171,21 @@ void read_scoreboard(std::string filename, scoreboard& a);
 void view_scoreboard(scoreboard a);
 void lecturer_view_scoreboard(lecturer* p, int k);
 
+bool check_student(student* p, int n, std::string student);
+int check_date(attendance a[], dob b);
+void write_attendance(std::string filename, attendance a[]);
+void edit_attendance(lecturer* p, int k);
+
 //STUDENT
 void read_courses_student(std::string tID, std::string tclass, std::string tseme, std::string tyear, course*& sch, int& n);
+void read_coursename(std::string tseme, std::string tyear, course*& sch, int n);;
 void read_studentattendance(std::string tseme, std::string tyear, course cou, std::string tID, attendance*& att);
 void write_studentattendance(std::string tseme, std::string tyear, course cou, std::string tID, attendance* att);
+
 void checkin(student stu);
 void print_checkinboard(attendance* att, course cou);
 void view_checkin(student stu);
+
 void read_time_room_dow(std::string tseme, std::string tyear, course*& sch, int n);
 void print_scheduleboard(std::string tseme, std::string tyear, course* sch, int n);
 void view_schedule(student stu);
