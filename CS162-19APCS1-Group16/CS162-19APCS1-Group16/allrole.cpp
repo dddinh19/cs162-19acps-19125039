@@ -61,7 +61,7 @@ void login(student*& p_student, int& n_student, staff*& p_staff, int& n_staff, l
 		}
 	}
 	for (int i = 0; i < n_student; ++i) {
-		if ((username == p_student[i].id) && (pass == p_student[i].pass) && (p_student[i].status == 1)) {
+		if ((username == p_student[i].id) && (pass == p_student[i].pass)) {
 
 			return;
 		}
@@ -92,8 +92,8 @@ void view_student_profile(student* p, int k) {
 	student_info_data(filename, a);
 	std::cout << "Id: " << a->id << std::endl;
 	std::cout << "Name: " << a->name << std::endl;
-	//if (a->gender == 1) std::cout << "Gender: Female" << std::endl;
-	//else std::cout << "Gender: Male " << std::endl;
+	if (a->gender == 1) std::cout << "Gender: Female" << std::endl;
+	else std::cout << "Gender: Male " << std::endl;
 	std::cout << "Date of birth(year/month/day): " << a->date.year << "/";
 	if (a->date.month < 10) std::cout << "0" << a->date.month << "/";
 	else std::cout << a->date.month << "/";
