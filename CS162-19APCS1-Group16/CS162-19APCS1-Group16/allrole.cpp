@@ -222,3 +222,291 @@ void change_lecturer_password(lecturer*& p, int n, int k) {
 	write_lecturer_data(p, n);
 }
 
+//MENU
+
+void staff_menu() {
+	int choice;
+	do {
+		std::cout << "Menu for staff:" << std::endl;
+		std::cout << "1.Class" << std::endl;
+		std::cout << "2.Course" << std::endl;
+		std::cout << "3.Score board" << std::endl;
+		std::cout << "4.Attendance list" << std::endl;
+		std::cout << "5.View profile info:" << std::endl;
+		std::cout << "6.Change password" << std::endl;
+		std::cout << "7.Log out" << std::endl;
+		std::cout << "Please choose a section(1-7): " << std::endl;
+		std::cin >> choice;
+		switch (choice) {
+		case 1: {
+
+			break;
+		}
+		case 2: {
+
+			break;
+		}
+		case 3: {
+
+			break;
+		}
+		case 4: {
+
+			break;
+		}
+		case 5: {
+
+			break;
+		}
+		case 6: {
+
+			break;
+		}
+		}
+	} while (choice != 7);
+}
+void staff_class() {
+	int choice;
+	do {
+		std::cout << "Academic staff- class menu: " << std::endl;
+		std::cout << "1. Import students of a class such as 18CLC6 from a csv file. " << std::endl;
+		std::cout << "2.Manually add a new student to a class. " << std::endl;
+		std::cout << "3.Edit an existing student." << std::endl;
+		std::cout << "4.Remove a student." << std::endl;
+		std::cout << "5.Change students from class A to class B" << std::endl;
+		std::cout << "6.View list of classes." << std::endl;
+		std::cout << "7.View list of students in a class." << std::endl;
+		std::cout << "8.Exit." << std::endl;
+		std::cout << "Please choose a task(1-7): " << std::endl;
+		std::cin >> choice;
+		switch (choice) {
+		case 1: {
+
+		}
+		case 2: {
+
+		}
+		case 3: {
+
+		}
+		case 4: {
+
+		}
+		case 5: {
+
+		}
+		case 6: {
+
+		}
+		case 7: {
+
+		}
+		}
+	} while (choice != 8);
+}
+void staff_course() {
+	int choice;
+	do {
+		std::cout << "Academic staff- course menu: " << std::endl;
+		std::cout << "1.Create / update / delete / view academic years (2018-2019), and semesters (Fall)." << std::endl;
+		std::cout << "2.From a semester, import courses such as CTT008, CTT010 from a csv file." << std::endl;
+		std::cout << "3.Manually add a new course." << std::endl;
+		std::cout << "4.Edit an existing course." << std::endl;
+		std::cout << "5.Remove a course." << std::endl;
+		std::cout << "6.Remove a specific student from a course." << std::endl;
+		std::cout << "7.Add a specific student to a course." << std::endl;
+		std::cout << "8.View list of courses in the current semester." << std::endl;
+		std::cout << "9.View list of students of a course." << std::endl;
+		std::cout << "10.View attendance list of a course." << std::endl;
+		std::cout << "11.Create / update / delete / view all lecturers." << std::endl;
+		std::cout << "12.Exit " << std::endl;
+		std::cout << "Please choose a task(1-11): " << std::endl;
+		std::cin >> choice;
+		switch (choice) {
+		case 1: {
+
+			break;
+		}
+		case 2: {
+
+			break;
+		}
+		case 3: {
+
+			break;
+		}
+		case 4: {
+
+			break;
+		}
+		case 5: {
+
+			break;
+		}
+		case 6: {
+
+			break;
+		}
+		case 7: {
+
+			break;
+		}
+		case 8: {
+
+			break;
+		}
+		case 9: {
+
+			break;
+		}
+		case 10: {
+
+			break;
+		}
+		case 11: {
+
+			break;
+		}
+		}
+	} while (choice != 12);
+}
+void staff_scoreboard() {
+	int choice;
+	do {
+		std::cout << "Academic staff- scoreboard menu: " << std::endl;
+		std::cout << "1.Search and view the scoreboard of a course." << std::endl;
+		std::cout << "2.Export a scoreboard to a csv file." << std::endl;
+		std::cout << "3.Exit " << std::endl;
+		std::cout << "Please choose a task(1-2): " << std::endl;
+		std::cin >> choice;
+		switch (choice) {
+		case 1: {
+
+			break;
+		}
+		case 2: {
+
+			break;
+		}
+		}
+	} while (choice != 3);
+}
+void staff_attendance() {
+	int choice;
+	do {
+		std::cout << "Academic staff- attendance list menu: " << std::endl;
+		std::cout << "1.Search and view attendance list of a course." << std::endl;
+		std::cout << "2.Export a attendance list to a csv file." << std::endl;
+		std::cout << "3. Exit." << std::endl;
+		std::cout << "Please choose a task(1-2): " << std::endl;
+		std::cin >> choice;
+		switch (choice) {
+		case 1: {
+
+			break;
+		}
+		case 2: {
+
+			break;
+		}
+		}
+	} while (choice != 3);
+}
+void lecturer_menu() {
+	int choice;
+	do {
+		std::cout << "Menu for lecturer:" << std::endl;
+		std::cout << "1.View list of courses in the current semester." << std::endl;
+		std::cout << "2.View list of students of a course." << std::endl;
+		std::cout << "3.View attendance list of a course." << std::endl;
+		std::cout << "4.Edit an attendance." << std::endl;
+		std::cout << "5.Import scoreboard of a course (midterm, final, lab, bonus) from a csv file." << std::endl;
+		std::cout << "6.Edit grade of a student" << std::endl;
+		std::cout << "7.View a scoreboard" << std::endl;
+		std::cout << "8.View profile info:" << std::endl;
+		std::cout << "9.Change password" << std::endl;
+		std::cout << "10.Log out" << std::endl;
+		std::cout << "Please choose a task (1-10): " << std::endl;
+		std::cin >> choice;
+		switch (choice) {
+		case 1: {
+
+			break;
+		}
+		case 2: {
+			
+			break;
+		}
+		case 3: {
+			
+			break;
+		}
+		case 4: {
+
+			break;
+		}
+		case 5: {
+			
+			break;
+		}
+		case 6: {
+			
+			break;
+		}
+		case 7: {
+
+			break;
+		}
+		case 8: {
+
+			break;
+		}
+		case 9: {
+			
+			break;
+		}
+		}
+	} while (choice != 10);
+}
+void student_menu() {
+	int choice;
+	do {
+		std::cout << "Menu for student:" << std::endl;
+		std::cout << "1.Check-in (1 check-in/week) in 11 weeks" << std::endl;
+		std::cout << "2.View check-in result." << std::endl;
+		std::cout << "3.View schedules." << std::endl;
+		std::cout << "4.View his/her scores of a course." << std::endl;
+		std::cout << "5.View profile info:" << std::endl;
+		std::cout << "6.Change password" << std::endl;
+		std::cout << "7.Log out" << std::endl;
+		std::cout << "Please choose a task (1-7): " << std::endl;
+		std::cin >> choice;
+		switch (choice) {
+		case 1: {
+
+		}
+		case 2: {
+
+			break;
+		}
+		case 3: {
+
+			break;
+		}
+		case 4: {
+			
+			break;
+		}
+		case 5: {
+			
+			break;
+		}
+		case 6: {
+			
+			break;
+		}
+		}
+	} while (choice != 7);
+	
+}
+
