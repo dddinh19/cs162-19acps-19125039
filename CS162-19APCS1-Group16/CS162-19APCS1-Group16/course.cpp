@@ -1761,6 +1761,7 @@ void read_student_info_in_class(student& stu) {
 		fin >> stu.date.day;
 		fin.ignore(1);
 		getline(fin, stu.classname);
+		fin.close();
 	}
 }
 
@@ -1929,17 +1930,19 @@ void view_list_course_current_semester() {
 	semester* p = nullptr;
 	int n = 0;
 	semester_data(p, n);
-	std::string filename = "Data/Courses/" + p[n - 1].year + "/" + current_sem(p, n) + "/course.txt";
-	course* p_course = nullptr;
-	int n_course = 0;
-	read_course_in_semester(filename, p_course, n_course);
-	for (int i = 0; i < n_course; i++) {
-		filename = "Data/Courses/" + p[n - 1].year + "/" + current_sem(p, n) + "/" + p_course[i].courseID + "/" + p_course[i].classname + "/info.txt";
-		read_course_info(filename, p_course[i]);
+	if (p[n - 1].status1 != 0 || p[n - 1].status2 != 0 || p[n - 1].status3 != 0) {
+		std::string filename = "Data/Courses/" + p[n - 1].year + "/" + current_sem(p, n) + "/course.txt";
+		course* p_course = nullptr;
+		int n_course = 0;
+		read_course_in_semester(filename, p_course, n_course);
+		for (int i = 0; i < n_course; i++) {
+			filename = "Data/Courses/" + p[n - 1].year + "/" + current_sem(p, n) + "/" + p_course[i].courseID + "/" + p_course[i].classname + "/info.txt";
+			read_course_info(filename, p_course[i]);
+		}
+		print_course_current_semester_board(p[n - 1].year, current_sem(p, n), p_course, n_course);
+		delete[]p_course;
 	}
-	print_course_current_semester_board(p[n - 1].year, current_sem(p, n), p_course, n_course);
 	delete[]p;
-	delete[]p_course;
 }
 
 void read_lecturer_info(lecturer*& lec, int& n) {
