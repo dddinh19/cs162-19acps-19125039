@@ -1364,6 +1364,264 @@ void remove_a_student()
 	else std::cout << "Academic year does not exist " << std::endl;
 	delete[] p_year;
 }
+
+void edit_course()
+{
+	std::ofstream fo;
+	semester* p_year = nullptr;
+	int n_year = 0;
+	std::string year, sem;
+	semester_data(p_year, n_year);
+	view_academic_year(p_year, n_year);
+	std::cout << "Enter academic year " << std::endl;
+	std::cin >> year;
+	if (view_semester(p_year, n_year, year) != -1) {
+		std::cout << "Enter semester " << std::endl;
+		std::cin >> sem;
+		if (check_semester(p_year, n_year, year, sem))
+		{
+			std::string p_class;
+			std::cout << "Enter the class to add this course: ";
+			std::cin >> p_class;
+			if (check_class(p_class))
+			{
+				course c; int n;
+				std::ifstream fi;
+				int num_course = 0;
+				fi.open("Data/Courses/" + year + "/" + sem + "/course.txt");
+				fi >> num_course;
+				course* cou_2 = new course[num_course];
+				for (int i = 0; i < num_course; i++)
+				{
+					fi >> cou_2[i].courseID;
+					fi >> cou_2[i].classname;
+					fi >> cou_2[i].status;
+					if (cou_2[i].status == 0)
+						i--;
+				}
+				fi.close();
+				std::cout << "Course ID: ";
+				std::cin >> c.courseID;
+				if (check_course(cou_2, num_course, c.courseID, p_class))
+				{
+					delete[] cou_2;
+					fi.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/info.txt");
+					course cou;
+					std::string newname;
+					fi >> cou.courseID;
+					getline(fi, cou.courseName);
+					getline(fi, cou.courseName);
+					fi >> cou.classname;
+					fi >> cou.lecturer_couse.username;
+					fi >> cou.start_day.year >> cou.start_day.month >> cou.start_day.day;
+					fi >> cou.end_day.year >> cou.end_day.month >> cou.end_day.day;
+					fi >> cou.dayofweek;
+					fi >> cou.start_time.hour >> cou.start_time.minute >> cou.end_time.hour >> cou.end_time.minute;
+					fi.close();
+					int k;
+					do
+					{
+						std::cout << "---------------------------------------------------------------------------------------------------------------" << std::endl;
+						std::cout << "Press 1 to change the course's name." << std::endl;
+						std::cout << "Press 2 to change the lecturer." << std::endl;
+						std::cout << "Press 3 to change the start date and end date." << std::endl;
+						std::cout << "Press 4 to change the day of week." << std::endl;
+						std::cout << "Press 5 to change the room." << std::endl;
+						std::cout << "Press 0 to stop the program." << std::endl;
+						std::cout << "Choose the opion you want to (0-5): ";
+						std::cin >> k;
+						switch (k)
+						{
+						case 0:
+							break;
+						case 1:
+						{
+							std::cout << "The new course's name: ";
+							getline(std::cin, newname);
+							fo.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/info.txt");
+							fo << cou.room << std::endl;
+							fo << cou.courseID << std::endl;
+							fo << newname << std::endl;
+							fo << cou.classname << std::endl;
+							fo << cou.lecturer_couse.username << std::endl;
+							fo << cou.start_day.year << " ";
+							if (cou.start_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.start_day.month << " ";
+							if (cou.start_day.day < 10)
+								fo << "0" << cou.start_day.day << " " << std::endl;
+							else
+								fo << cou.start_day.day << std::endl;
+							fo << cou.end_day.year << " ";
+							if (cou.end_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.end_day.month << " ";
+							if (cou.end_day.day < 10)
+								fo << "0" << cou.end_day.day << " " << std::endl;
+							else
+								fo << cou.end_day.day << std::endl;
+							fo << cou.dayofweek << std::endl;
+							fo << cou.start_time.hour << " " << cou.start_time.minute << " " << cou.end_time.hour << " " << cou.end_time.minute << std::endl;
+							fo << cou.room << std::endl;
+							fo.close();
+							break;
+						}
+						case 2:
+						{
+							std::cout << "The new lecturer's username: ";
+							newname;
+							fo.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/info.txt");
+							fo << cou.room << std::endl;
+							fo << cou.courseID << std::endl;
+							fo << cou.courseName << std::endl;
+							fo << cou.classname << std::endl;
+							fo << newname << std::endl;
+							fo << cou.start_day.year << " ";
+							if (cou.start_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.start_day.month << " ";
+							if (cou.start_day.day < 10)
+								fo << "0" << cou.start_day.day << " " << std::endl;
+							else
+								fo << cou.start_day.day << std::endl;
+							fo << cou.end_day.year << " ";
+							if (cou.end_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.end_day.month << " ";
+							if (cou.end_day.day < 10)
+								fo << "0" << cou.end_day.day << " " << std::endl;
+							else
+								fo << cou.end_day.day << std::endl;
+							fo << cou.dayofweek << std::endl;
+							fo << cou.start_time.hour << " " << cou.start_time.minute << " " << cou.end_time.hour << " " << cou.end_time.minute << std::endl;
+							fo << cou.room << std::endl;
+							fo.close();
+							break;
+						}
+						case 3:
+						{
+							std::cout << "The new start day's year: ";
+							int styear, symo, syda, enyear, enmo, enda;
+							std::cin >> styear;
+							std::cout << "The new start day's month: ";
+							std::cin >> symo;
+							std::cout << "The new start day's day: ";
+							std::cin >> syda;
+							std::cout << "The new end day's year: ";
+							std::cin >> enyear;
+							std::cout << "The new end day's month: ";
+							std::cin >> enmo;
+							std::cout << "The new end day's day: ";
+							std::cin >> enda;
+							fo.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/info.txt");
+							fo << cou.room << std::endl;
+							fo << cou.courseID << std::endl;
+							fo << cou.courseName << std::endl;
+							fo << cou.classname << std::endl;
+							fo << newname << std::endl;
+							fo << styear << " ";
+							if (symo < 10)
+								fo << "0" << symo << " ";
+							else
+								fo << symo << " ";
+							if (syda < 10)
+								fo << "0" << syda << " " << std::endl;
+							else
+								fo << syda << std::endl;
+							fo << enyear << " ";
+							if (enmo < 10)
+								fo << "0" << enmo << " ";
+							else
+								fo << enmo << " ";
+							if (enda < 10)
+								fo << "0" << enda << " " << std::endl;
+							else
+								fo << enda << std::endl;
+							fo << cou.dayofweek << std::endl;
+							fo << cou.start_time.hour << " " << cou.start_time.minute << " " << cou.end_time.hour << " " << cou.end_time.minute << std::endl;
+							fo << cou.room << std::endl;
+							fo.close();
+							break;
+						}
+						case 4:
+						{
+							std::cout << "The new day of week: ";
+							newname;
+							fo.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/info.txt");
+							fo << cou.room << std::endl;
+							fo << cou.courseID << std::endl;
+							fo << cou.courseName << std::endl;
+							fo << cou.classname << std::endl;
+							fo << cou.lecturer_couse.username << std::endl;
+							fo << cou.start_day.year << " ";
+							if (cou.start_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.start_day.month << " ";
+							if (cou.start_day.day < 10)
+								fo << "0" << cou.start_day.day << " " << std::endl;
+							else
+								fo << cou.start_day.day << std::endl;
+							fo << cou.end_day.year << " ";
+							if (cou.end_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.end_day.month << " ";
+							if (cou.end_day.day < 10)
+								fo << "0" << cou.end_day.day << " " << std::endl;
+							else
+								fo << cou.end_day.day << std::endl;
+							fo << newname << std::endl;
+							fo << cou.start_time.hour << " " << cou.start_time.minute << " " << cou.end_time.hour << " " << cou.end_time.minute << std::endl;
+							fo << cou.room << std::endl;
+							fo.close();
+							break;
+						}
+						case 5:
+						{
+							std::cout << "The new room: ";
+							newname;
+							fo.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/info.txt");
+							fo << cou.room << std::endl;
+							fo << cou.courseID << std::endl;
+							fo << cou.courseName << std::endl;
+							fo << cou.classname << std::endl;
+							fo << cou.lecturer_couse.username << std::endl;
+							fo << cou.start_day.year << " ";
+							if (cou.start_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.start_day.month << " ";
+							if (cou.start_day.day < 10)
+								fo << "0" << cou.start_day.day << " " << std::endl;
+							else
+								fo << cou.start_day.day << std::endl;
+							fo << cou.end_day.year << " ";
+							if (cou.end_day.month < 10)
+								fo << "0" << cou.start_day.month << " ";
+							else
+								fo << cou.end_day.month << " ";
+							if (cou.end_day.day < 10)
+								fo << "0" << cou.end_day.day << " " << std::endl;
+							else
+								fo << cou.end_day.day << std::endl;
+							fo << cou.dayofweek << std::endl;
+							fo << cou.start_time.hour << " " << cou.start_time.minute << " " << cou.end_time.hour << " " << cou.end_time.minute << std::endl;
+							fo << newname << std::endl;
+							fo.close();
+							break;
+						}
+						}
+					} while (k != 0);
+				}
+			}
+		}
+	}
+}
 /*void create_allfile_course(std::ifstream fi, std::ofstream fo, course*& cou, int num, std::string& academicyear, std::string& seme)
 {
 	std::string str, str1;
