@@ -1193,6 +1193,7 @@ void removeacourse()
 				fi.close();
 				std::cout << "Course ID: ";
 				std::cin >> c.courseID;
+				c.classname = p_class;
 				if (check_course(cou_2, num_course, c.courseID, p_class))
 				{
 					std::ofstream fo;
