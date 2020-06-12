@@ -364,7 +364,7 @@ void remove_student(student*& p, int& n) {
 		delete[]p_student;
 		p[k].status = 0;
 		--n;
-		std::ofstream fo("Data/Login/student.txt");
+		fo.open("Data/Login/student.txt");
 		if (!fo.is_open()) std::cout << "Can not open student data file " << std::endl;
 		else {
 			fo << n << std::endl;
