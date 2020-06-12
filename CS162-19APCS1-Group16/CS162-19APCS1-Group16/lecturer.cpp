@@ -348,7 +348,7 @@ void write_attendance(std::string filename, attendance a[]) {
 			else fo << a[i].date.month << " ";
 			if (a[i].date.day < 10) fo << " 0" << a[i].date.day << std::endl;
 			else fo << a[i].date.day << std::endl;
-			fo << a[i].start.hour << " " << a[i].start.minute << " " << a[i].end.hour << a[i].end.minute << " " << a[i].checkin.hour << a[i].checkin.minute << std::endl;
+			fo << a[i].start.hour << " " << a[i].start.minute << " " << a[i].end.hour << " " << a[i].end.minute << " " << a[i].checkin.hour << " " << a[i].checkin.minute << std::endl;
 		}
 		fo.close();
 	}
@@ -467,20 +467,8 @@ void edit_scoreboard(lecturer* p, int k) {
 				std::cout << "Enter student id you want to edit scoreboard" << std::endl;
 				std::cin >> studentid;
 				if (check_student(p_student, n_student, studentid)) {
-					//attendance a[10];
 					scoreboard a;
 					filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/" + studentid + "/scoreboard.txt";
-					/*read_attendance(filename, a);
-					view_attendance(a);
-					dob b;
-					std::cout << "Enter date you want to edit attendance(year, month, day) " << std::endl;
-					std::cin >> b.year >> b.month >> b.day;
-					if (check_date(a, b) != -1) {
-						std::cout << "Enter hour and minute " << std::endl;
-						std::cin >> a[check_date(a, b)].checkin.hour >> a[check_date(a, b)].checkin.minute;
-						write_attendance(filename, a);
-					}
-					else std::cout << "Date does not exist " << std::endl;*/
 					read_scoreboard(filename, a);
 					view_scoreboard(a);
 					int choice;
@@ -495,24 +483,28 @@ void edit_scoreboard(lecturer* p, int k) {
 						{
 							std::cout << "Enter new score " << std::endl;
 							std::cin >> a.midterm;
+							std::cout << "Midterm score has been changed successfully !!!" << std::endl;
 							break;
 						}
 						case 2:
 						{
 							std::cout << "Enter new score " << std::endl;
 							std::cin >> a.final;
+							std::cout << "Final score has been changed successfully !!!" << std::endl;
 							break;
 						}
 						case 3:
 						{
 							std::cout << "Enter new score " << std::endl;
 							std::cin >> a.bonus;
+							std::cout << "Bonus score has been changed successfully !!!" << std::endl;
 							break;
 						}
 						case 4:
 						{
 							std::cout << "Enter new score " << std::endl;
 							std::cin >> a.total;
+							std::cout << "Total score has been changed successfully !!!" << std::endl;
 							break;
 						}
 						}
@@ -533,7 +525,7 @@ void edit_scoreboard(lecturer* p, int k) {
 
 //IMPORT SCOREBOARD
 
-void read_scoreboard_csv(std::string filename, lecturer* p, int k, std::string& year, std::string& sem, std::string& courseid, std::string& classname, student*& p_student, int& n_student) {
+void read_scoreboard_csv(char filename[], lecturer* p, int k, std::string& year, std::string& sem, std::string& courseid, std::string& classname, student*& p_student, int& n_student) {
 	std::ifstream fi(filename);
 	if (!fi.is_open()) std::cout << "Can not open file " << std::endl;
 	else {
@@ -547,7 +539,7 @@ void read_scoreboard_csv(std::string filename, lecturer* p, int k, std::string& 
 			std::cout << "Enter semester " << std::endl;
 			std::cin >> sem;
 			if (check_semester(p_year, n_year, year, sem)) {
-				course* p_course;
+				course* p_course = nullptr;
 				int n_course = 0;
 				std::string filename1 = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
 				lecturer_course_data(filename1, p_course, n_course);
@@ -557,28 +549,27 @@ void read_scoreboard_csv(std::string filename, lecturer* p, int k, std::string& 
 					std::cout << p_course[i].courseID << ": " << p_course[i].courseName << std::endl;
 					std::cout << "Class: " << p_course[i].classname << std::endl;
 				}
-				std::string courseid, classname;
 				std::cout << "Enter course ID and class you want to import scoreboard " << std::endl;
 				std::cin >> courseid >> classname;
 				if (check_course(p_course, n_course, courseid, classname)) {
-					int n_student = 0;
 					int i = 0;
 					int num = 10;
-					student* p_student = new student[num];
+					p_student = new student[num];
 					std::string tempt;
+					std::string::size_type sz;
 					getline(fi, tempt);
 					while (!fi.eof()) {
 						getline(fi, tempt, ',');
 						getline(fi, p_student[i].id, ',');
 						getline(fi, p_student[i].name, ',');
 						getline(fi, tempt, ',');
-						
+						p_student[i].score.midterm = std::stof(tempt, &sz);
 						getline(fi, tempt, ',');
-
+						p_student[i].score.final = std::stof(tempt, &sz);
 						getline(fi, tempt, ',');
-
-						getline(fi, tempt, ',');
-
+						p_student[i].score.bonus = std::stof(tempt, &sz);
+						getline(fi, tempt);
+						p_student[i].score.total = std::stof(tempt, &sz);
 						++n_student;
 						if (i == num - 1) {
 							student* tmp = new student[num + 10];
@@ -602,9 +593,9 @@ void read_scoreboard_csv(std::string filename, lecturer* p, int k, std::string& 
 		delete[]p_year;
 	}
 }
-void import_scoreboard_csv(std::string year, std::string sem, std::string courseid, std::string classname, student*& p_student, int& n_student) {
+void import_scoreboard_csv(std::string year, std::string sem, std::string courseid, std::string classname, student* p_student, int n_student) {
 	for (int i = 0; i < n_student; ++i) {
-		std::string filename = "Data/Courses/" + year + "/" + sem + "/" + classname + "/" + courseid + "/" + p_student[i].id + "/scoreboard.txt";
+		std::string filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/" + p_student[i].id + "/scoreboard.txt";
 		write_scoreboard(filename, p_student[i].score);
 	}
 }
