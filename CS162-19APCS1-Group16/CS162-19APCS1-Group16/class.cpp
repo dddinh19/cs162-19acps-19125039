@@ -429,6 +429,18 @@ bool check_class(std::string classname) {
 	delete[]p_class;
 	return false;
 }
+void write_class_data(class_name* p, int n) {
+	std::ofstream fo("Data/Class/class.txt");
+	if (!fo.is_open()) std::cout << "Can not open class data file " << std::endl;
+	else{
+		fo << n << std::endl;
+		for (int i = 0; i < n; ++i) {
+			fo << p[i].classname << std::endl;
+			fo << p[i].status << std::endl;
+		}
+		fo.close();
+	}
+}
 void read_student_csv(std::string filename, std::string& classname, student*& p, int& n) {
 	std::ifstream fi(filename);
 	if (!fi.is_open()) std::cout << "Can not open this file " << std::endl;
@@ -436,7 +448,78 @@ void read_student_csv(std::string filename, std::string& classname, student*& p,
 		std::cout << "Enter classname: " << std::endl;
 		std::cin >> classname;
 		if (!check_class(classname)) {
-
+			class_name* p_class = nullptr;
+			int n_class = 0;
+			class_data(p_class, n_class);
+			++n_class;
+			class_name* p_tempt = new class_name[n_class];
+			for (int i = 0; i < n_class; ++i) {
+				if (i == n_class - 1) {
+					p_tempt[i].classname = classname;
+					p_tempt[i].status = 1;
+				}
+				else p_tempt[i] = p_class[i];
+			}
+			delete[]p_class;
+			p_class = p_tempt;
+			write_class_data(p_class, n_class);
+			std::string filename1 = "Data/Class/" + classname;
+			_mkdir(filename1.c_str());
+			delete[]p_class;
+		}
+		int i = 0;
+		int num = 10;
+		p = new student[num];
+		std::string tempt;
+		std::string::size_type sz;
+		getline(fi, tempt);
+		while (!fi.eof()) {
+			getline(fi, tempt, ',');
+			getline(fi, p[i].id, ',');
+			getline(fi, p[i].name, ',');
+			getline(fi, tempt, ',');
+			if (tempt == "Female") p[i].gender = 1;
+			else p[i].gender = 0;
+			getline(fi, tempt, '-');
+			p[i].date.year = std::stof(tempt, &sz);
+			getline(fi, tempt, '-');
+			p[i].date.month = std::stof(tempt, &sz);
+			getline(fi, tempt);
+			p[i].date.day = std::stof(tempt, &sz);
+			++n;
+			if (i == num - 1) {
+				student* tmp = new student[num + 10];
+				for (int j = 0; j < num; ++j) {
+					tmp[j] = p[j];
+				}
+				delete[]p;
+				p = tmp;
+				num += 10;
+			}
+			++i;
 		}
 	}
+}
+void import_student_csv(student*& p_student, int& n_student, std::string classname, student* p, int n) {
+	int s = 0;
+	for (int i = 0; i < n; ++i) {
+		student* a = new student;
+		a->id = p[i].id;
+		a->classname = classname;
+		a->name = p[i].name;
+		a->gender = p[i].gender;
+		a->date.year = p[i].date.year;
+		a->date.month = p[i].date.month;
+		a->date.day = p[i].date.day;
+		a->pass = std::to_string(p[i].date.year);
+		if (p[i].date.month < 10) a->pass += "0" + std::to_string(p[i].date.month);
+		else a->pass += std::to_string(p[i].date.month);
+		if (p[i].date.day < 10) a->pass += "0" + std::to_string(p[i].date.day);
+		else a->pass += std::to_string(p[i].date.day);
+		a->status = 1;
+		s += add_a_student(p_student, n_student, a);
+		delete a;
+	}
+	std::cout << "Import successfully " << s << " student in class " << classname << std::endl;
+	std::cout << "Import fail " << n - s << " student" << std::endl;
 }
