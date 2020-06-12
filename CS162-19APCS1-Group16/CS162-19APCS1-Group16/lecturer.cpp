@@ -415,3 +415,208 @@ void edit_attendance(lecturer* p, int k) {
 	else std::cout << "Academic year does not exist " << std::endl;
 	delete[]p_year;
 }
+
+//EDIT SCOREBOARD
+void read_scoreboard(std::string filename, scoreboard a) {
+	std::ifstream fi(filename);
+	if (!fi.is_open()) std::cout << "Can not open scoreboard data file " << std::endl;
+	else {
+		fi >> a.midterm >> a.final >> a.bonus >> a.total;
+		fi.close();
+	}
+}
+void view_scoreboard(scoreboard a) {
+	std::cout << "Midterm: " << a.midterm << std::endl;
+	std::cout << "Final: " << a.final << std::endl;
+	std::cout << "Bonus: " << a.bonus << std::endl;
+	std::cout << "Total: " << a.total << std::endl;
+}
+void write_scoreboard(std::string filename, scoreboard a) {
+	std::ifstream fo(filename);
+	if (!fo.is_open()) std::cout << "Can not open file " << std::endl;
+	else {
+		fo << a.midterm << " " << a.final << " " << a.bonus << " " << a.total << std::endl;
+		fo.close();
+	}
+}
+void edit_scoreboard(lecturer* p, int k) {
+	semester* p_year = nullptr;
+	int n_year = 0;
+	std::string year, sem;
+	semester_data(p_year, n_year);
+	view_academic_year(p_year, n_year);
+	std::cout << "Enter academic year " << std::endl;
+	std::cin >> year;
+	if (view_semester(p_year, n_year, year) != -1) {
+		std::cout << "Enter semester " << std::endl;
+		std::cin >> sem;
+		if (check_semester(p_year, n_year, year, sem)) {
+			course* p_course;
+			int n_course = 0;
+			std::string filename = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
+			lecturer_course_data(filename, p_course, n_course);
+			read_coursename(sem, year, p_course, n_course);
+			std::cout << "List of courses for you in " << year << " of " << sem << std::endl;
+			for (int i = 0; i < n_course; ++i) {
+				std::cout << p_course[i].courseID << ": " << p_course[i].courseName << std::endl;
+				std::cout << "Class: " << p_course[i].classname << std::endl;
+			}
+			std::string courseid, classname;
+			std::cout << "Enter course ID and class you want to edit attendance " << std::endl;
+			std::cin >> courseid >> classname;
+			if (check_course(p_course, n_course, courseid, classname)) {
+				student* p_student = nullptr;
+				int n_student = 0;
+				filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/student.txt";
+				student_course_data(filename, p_student, n_student);
+				std::cout << "List of student in " << courseid << " of " << classname << std::endl;
+				for (int i = 0; i < n_student; ++i) {
+					std::cout << p_student[i].id << ": ";
+					read_student_name(p_student[i].id);
+				}
+				std::string studentid;
+				std::cout << "Enter student id you want to edit scoreboard" << std::endl;
+				std::cin >> studentid;
+				if (check_student(p_student, n_student, studentid)) {
+					//attendance a[10];
+					scoreboard a;
+					filename = "Data/Courses/" + year + "/" + sem + "/" + courseid + "/" + classname + "/" + studentid + "/scoreboard.txt";
+					/*read_attendance(filename, a);
+					view_attendance(a);
+					dob b;
+					std::cout << "Enter date you want to edit attendance(year, month, day) " << std::endl;
+					std::cin >> b.year >> b.month >> b.day;
+					if (check_date(a, b) != -1) {
+						std::cout << "Enter hour and minute " << std::endl;
+						std::cin >> a[check_date(a, b)].checkin.hour >> a[check_date(a, b)].checkin.minute;
+						write_attendance(filename, a);
+					}
+					else std::cout << "Date does not exist " << std::endl;*/
+					read_scoreboard(filename, a);
+					view_scoreboard(a);
+					int choice;
+					do {
+						std::cout << "Enter 1: Edit midterm score " << std::endl;
+						std::cout << "Enter 2: Edit final score " << std::endl;
+						std::cout << "Enter 3: Edit bonus score " << std::endl;
+						std::cout << "Enter 4: Edit total score " << std::endl;
+						std::cin >> choice;
+						switch (choice) {
+						case 1:
+						{
+							std::cout << "Enter new score " << std::endl;
+							std::cin >> a.midterm;
+							break;
+						}
+						case 2:
+						{
+							std::cout << "Enter new score " << std::endl;
+							std::cin >> a.final;
+							break;
+						}
+						case 3:
+						{
+							std::cout << "Enter new score " << std::endl;
+							std::cin >> a.bonus;
+							break;
+						}
+						case 4:
+						{
+							std::cout << "Enter new score " << std::endl;
+							std::cin >> a.total;
+							break;
+						}
+						}
+					} while (choice < 1 || choice >4);
+					write_scoreboard(filename, a);
+				}
+				else std::cout << " Student does not exist " << std::endl;
+				delete[]p_student;
+			}
+			else std::cout << "Course does not exist " << std::endl;
+			delete[]p_course;
+		}
+		else std::cout << "Semester does not exist " << std::endl;
+	}
+	else std::cout << "Academic year does not exist " << std::endl;
+	delete[]p_year;
+}
+
+//IMPORT SCOREBOARD
+
+void read_scoreboard_csv(std::string filename, lecturer* p, int k, std::string& year, std::string& sem, std::string& courseid, std::string& classname, student*& p_student, int& n_student) {
+	std::ifstream fi(filename);
+	if (!fi.is_open()) std::cout << "Can not open file " << std::endl;
+	else {
+		semester* p_year = nullptr;
+		int n_year = 0;
+		semester_data(p_year, n_year);
+		view_academic_year(p_year, n_year);
+		std::cout << "Enter academic year " << std::endl;
+		std::cin >> year;
+		if (view_semester(p_year, n_year, year) != -1) {
+			std::cout << "Enter semester " << std::endl;
+			std::cin >> sem;
+			if (check_semester(p_year, n_year, year, sem)) {
+				course* p_course;
+				int n_course = 0;
+				std::string filename1 = "Data/Login/lecturer/" + p[k].username + "/" + year + "/" + sem + "/course.txt";
+				lecturer_course_data(filename1, p_course, n_course);
+				read_coursename(sem, year, p_course, n_course);
+				std::cout << "List of courses for you in " << year << " of " << sem << std::endl;
+				for (int i = 0; i < n_course; ++i) {
+					std::cout << p_course[i].courseID << ": " << p_course[i].courseName << std::endl;
+					std::cout << "Class: " << p_course[i].classname << std::endl;
+				}
+				std::string courseid, classname;
+				std::cout << "Enter course ID and class you want to import scoreboard " << std::endl;
+				std::cin >> courseid >> classname;
+				if (check_course(p_course, n_course, courseid, classname)) {
+					int n_student = 0;
+					int i = 0;
+					int num = 10;
+					student* p_student = new student[num];
+					std::string tempt;
+					getline(fi, tempt);
+					while (!fi.eof()) {
+						getline(fi, tempt, ',');
+						getline(fi, p_student[i].id, ',');
+						getline(fi, p_student[i].name, ',');
+						getline(fi, tempt, ',');
+						
+						getline(fi, tempt, ',');
+
+						getline(fi, tempt, ',');
+
+						getline(fi, tempt, ',');
+
+						++n_student;
+						if (i == num - 1) {
+							student* tmp = new student[num + 10];
+							for (int j = 0; j < num; ++j) {
+								tmp[j] = p_student[j];
+							}
+							delete[]p_student;
+							p_student = tmp;
+							num += 10;
+						}
+						++i;
+					}
+					fi.close();
+				}
+				else std::cout << "Course does not exist " << std::endl;
+				delete[]p_course;
+			}
+			else std::cout << "Semester does not exist " << std::endl;
+		}
+		else std::cout << "Academic year does not exist " << std::endl;
+		delete[]p_year;
+	}
+}
+void import_scoreboard_csv(std::string year, std::string sem, std::string courseid, std::string classname, student*& p_student, int& n_student) {
+	for (int i = 0; i < n_student; ++i) {
+		std::string filename = "Data/Courses/" + year + "/" + sem + "/" + classname + "/" + courseid + "/" + p_student[i].id + "/scoreboard.txt";
+		write_scoreboard(filename, p_student[i].score);
+	}
+}
+
