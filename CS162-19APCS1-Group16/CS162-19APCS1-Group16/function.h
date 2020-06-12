@@ -125,6 +125,12 @@ int view_semester(semester* p, int n, std::string year);
 void write_semester_data(semester* p, int n);
 bool check_semester(semester* p_year, int n_year, std::string year, std::string sem);
 
+void create_year_semester(std::ifstream& fi, std::ofstream& fo);
+void update_year_semester(std::ifstream& fi, std::ofstream& fo);
+void delete_year_semester(std::ifstream& fi, std::ofstream& fo);
+void create_allfile_course(std::ifstream& fi, std::ofstream& fo, course*& cou, int& num, std::string& academicyear, std::string& seme);
+void add_a_course();
+
 void course_info_data(std::string filename, course*& a);
 void view_course_info_data(course* a);
 
