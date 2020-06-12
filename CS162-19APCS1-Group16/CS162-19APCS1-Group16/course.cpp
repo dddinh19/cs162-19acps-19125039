@@ -2293,7 +2293,7 @@ void add_a_student()
 							fo << stu1[i].status << std::endl;
 						}
 						fo << stu.id << std::endl;
-						fo << stu.status << std::endl;
+						fo << 1 << std::endl;
 						fo.close();
 						std::string str = "Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/" + stu.id;
 						const char* str1 = str.c_str();
