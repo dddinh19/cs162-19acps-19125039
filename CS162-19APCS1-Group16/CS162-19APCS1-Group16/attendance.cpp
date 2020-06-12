@@ -135,3 +135,100 @@ void view_attendance() {
 	else std::cout << "Academic year does not exist " << std::endl;
 	delete[]p_year;
 }
+
+void export_attendancelist()
+{
+	std::ofstream fo;
+	semester* p_year = nullptr;
+	int n_year = 0;
+	std::string year, sem;
+	semester_data(p_year, n_year);
+	view_academic_year(p_year, n_year);
+	std::cout << "Enter academic year " << std::endl;
+	std::cin >> year;
+	if (view_semester(p_year, n_year, year) != -1) {
+		std::cout << "Enter semester " << std::endl;
+		std::cin >> sem;
+		if (check_semester(p_year, n_year, year, sem))
+		{
+			std::string p_class;
+			std::cout << "Enter the class to add this course: ";
+			std::cin >> p_class;
+			if (check_class(p_class))
+			{
+				course c; int n;
+				std::ifstream fi;
+				int num_course = 0;
+				fi.open("Data/Courses/" + year + "/" + sem + "/course.txt");
+				fi >> num_course;
+				course* cou_2 = new course[num_course];
+				for (int i = 0; i < num_course; i++)
+				{
+					fi >> cou_2[i].courseID;
+					fi >> cou_2[i].classname;
+					fi >> cou_2[i].status;
+					if (cou_2[i].status == 0)
+						i--;
+				}
+				fi.close();
+				std::cout << "Course ID: ";
+				std::cin >> c.courseID;
+				if (check_course(cou_2, num_course, c.courseID, p_class)) {
+					std::ofstream fo("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/attendance.csv");
+					fo << "No,Student ID,Student name,Start hour,Start minute,End hour,End minute";
+					fi.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/student.txt");
+					fi >> n;
+					student* stu = new student[n];
+					for (int i = 0; i < n; i++)
+					{
+						getline(fi, stu[i].id);
+						getline(fi, stu[i].id);
+						fi >> stu[i].status;
+						if (stu[i].status == 0) i--;
+					}
+					fi.close();
+					attendance* att = new attendance[10];
+					int check = 0;
+					for (int i = 0; i < n; i++)
+					{
+						read_class_of_student(stu[i]);
+						read_student_name1(stu[i]);
+						fi.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/" + stu[i].id + "/attendance.txt");
+						if (check == 0)
+						{
+							for (int j = 0; j < 10; j++)
+							{
+								fi >> att[j].date.year >> att[j].date.month >> att[j].date.day;
+								fi >> att[j].start.hour >> att[j].start.minute;
+								fi >> att[j].end.hour >> att[j].end.minute;
+								fi >> att[j].checkin.hour >> att[j].checkin.minute;
+								fo << ",";
+								fo << att[j].date.year << "-" << att[j].date.month << "-" << att[j].date.day;
+							}
+							fo << std::endl;
+						}
+						fo << i + 1 << "," << stu[i].id << "," << stu[i].name << "," << att[0].start.hour << "," << att[0].start.minute << "," << att[0].end.hour << "," << att[0].end.minute;
+						for (int j = 0; j < 10; j++)
+						{
+							fo << ",";
+							fo << FormatTime(att[j].checkin);
+						}
+						fo << std::endl;
+						fi.close();
+						check = 1;
+					}
+					delete[]att;
+				}
+				else
+					std::cout << "This course doesn't exist." << std::endl;
+				delete[]cou_2;
+			}
+			else
+				std::cout << "This class doesn't exist." << std::endl;
+		}
+		else std::cout << "Semester does not exist " << std::endl;
+	}
+	else std::cout << "Academic year does not exist " << std::endl;
+	delete[] p_year;
+}
+

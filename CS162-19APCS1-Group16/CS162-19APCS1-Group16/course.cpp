@@ -735,6 +735,58 @@ void create_data_file(std::ifstream& fi, std::ofstream& fo, course*& cou, int nu
 		fi.close();
 		fo.close();
 	}
+	std::string str; const char* str1;
+	for (int i = 0; i < n; i++)
+	{
+		str = "Data/Class/" + cou[0].classname + "/" + stu[i].id + "/" + academicyear;
+		str1 = str.c_str();
+		_mkdir(str1);
+		str = str + "/" + seme;
+		str1 = str.c_str();
+		_mkdir(str1);
+		fi.open(str + "/course.txt");
+		if (!fi.is_open())
+		{
+			fo.open(str + "/course.txt");
+			fo << num << std::endl;
+			for (int i = 0; i < num; i++) {
+				fo << cou[i].courseID << std::endl;
+				fo << cou[i].classname << std::endl;
+				fo << 1 << std::endl;
+			}
+			fo.close();
+		}
+		else {
+			int num1;
+			fi >> num1;
+			course* cou1 = new course[num1];
+			for (int i = 0; i < num1; i++) {
+				fi >> cou1[i].courseID;
+				fi >> cou1[i].classname;
+				fi >> cou1[i].status;
+				if (cou1[i].status == 0)
+					i--;
+			}
+			fi.close();
+			fo.open(str + "/course.txt");
+			fo << num + num1 << std::endl;
+			for (int i = 0; i < num+num1; i++) {
+				if (i < num) {
+					fo << cou[i].courseID << std::endl;
+					fo << cou[i].classname << std::endl;
+					fo << 1 << std::endl;
+				}
+				else
+				{
+					fo << cou1[i-num].courseID << std::endl;
+					fo << cou1[i-num].classname << std::endl;
+					fo << 1 << std::endl;
+				}
+			}
+			fo.close();
+		}
+	}
+
 	for (int i = 0; i < num; i++)
 	{
 		for (int j = 0; j < n; j++)
@@ -1041,6 +1093,57 @@ void add_a_course()
 					fo << c.start_time.hour << " " << c.start_time.minute << " " << c.end_time.hour << " " << c.end_time.minute << std::endl;
 					fo << c.room << std::endl;
 					fo.close();
+					for (int i = 0; i < n; i++)
+					{
+						str = "Data/Class/" + c.classname + "/" + stu[i].id + "/" + year;
+						str1 = str.c_str();
+						_mkdir(str1);
+						str = str + "/" + sem;
+						str1 = str.c_str();
+						_mkdir(str1);
+						fi.open(str + "/course.txt");
+						if (!fi.is_open())
+						{
+							fo.open(str + "/course.txt");
+							fo << 1 << std::endl;
+							for (int i = 0; i < 1; i++) {
+								fo << c.courseID << std::endl;
+								fo << c.classname << std::endl;
+								fo << 1 << std::endl;
+							}
+							fo.close();
+						}
+						else
+						{
+							int num1;
+							fi >> num1;
+							course* cou1 = new course[num1];
+							for (int i = 0; i < num1; i++) {
+								fi >> cou1[i].courseID;
+								fi >> cou1[i].classname;
+								fi >> cou1[i].status;
+								if (cou1[i].status == 0)
+									i--;
+							}
+							fi.close();
+							fo.open(str + "/course.txt");
+							fo << 1 + num1 << std::endl;
+							for (int i = 0; i < 1 + num1; i++) {
+								if (i < 1) {
+									fo << c.courseID << std::endl;
+									fo << c.classname << std::endl;
+									fo << 1 << std::endl;
+								}
+								else
+								{
+									fo << cou1[i - num1].courseID << std::endl;
+									fo << cou1[i - num1].classname << std::endl;
+									fo << 1 << std::endl;
+								}
+							}
+							fo.close();
+						}
+					}
 				}
 				else
 					std::cout << "This course in " << p_class << " is aldready available." << std::endl;
@@ -1056,8 +1159,108 @@ void add_a_course()
 
 void removeacourse()
 {
-	
+	semester* p_year = nullptr;
+	int n_year = 0;
+	std::string year, sem;
+	semester_data(p_year, n_year);
+	view_academic_year(p_year, n_year);
+	std::cout << "Enter academic year " << std::endl;
+	std::cin >> year;
+	if (view_semester(p_year, n_year, year) != -1) {
+		std::cout << "Enter semester " << std::endl;
+		std::cin >> sem;
+		if (check_semester(p_year, n_year, year, sem))
+		{
+			std::string p_class;
+			std::cout << "Enter the class to add this course: ";
+			std::cin >> p_class;
+			if (check_class(p_class))
+			{
+				course c;
+				std::ifstream fi;
+				int num_course = 0;
+				fi.open("Data/Courses/" + year + "/" + sem + "/course.txt");
+				fi >> num_course;
+				course* cou_2 = new course[num_course];
+				for (int i = 0; i < num_course; i++)
+				{
+					fi >> cou_2[i].courseID;
+					fi >> cou_2[i].classname;
+					fi >> cou_2[i].status;
+					if (cou_2[i].status == 0)
+						i--;
+				}
+				fi.close();
+				std::cout << "Course ID: ";
+				std::cin >> c.courseID;
+				if (check_course(cou_2, num_course, c.courseID, p_class))
+				{
+					std::ofstream fo;
+					fo.open("Data/Courses/" + year + "/" + sem + "/course.txt");
+					fo << num_course - 1 << std::endl;
+					for (int i = 0; i < num_course; i++)
+					{
+						fo << cou_2[i].courseID << std::endl;
+						fo << cou_2[i].classname << std::endl;
+						if (cou_2[i].courseID == c.courseID && cou_2[i].classname == c.classname)
+							fo << 0 << std::endl;
+						else fo << 1 << std::endl;
+					}
+					fo.close();
+					int n;
+					fi.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + c.classname + "/student.txt");
+					fi >> n;
+					student* stu = new student[n];
+					for (int i = 0; i < n; i++)
+					{
+						getline(fi, stu[i].id);
+						getline(fi, stu[i].id);
+						fi >> stu[i].status;
+						if (stu[i].status == 0) i--;
+						read_class_of_student(stu[i]);
+					}
+					fi.close();
+					course* cou3 = nullptr;
+					int n3;
+					for (int i = 0; i < n; i++) {
+						fi.open("Data/Class/" + stu[i].classname + "/" + stu[i].id + "/" + year + "/" + sem + "/course.txt");
+						fi >> n3;
+						cou3 = new course[n3];
+						for (int j = 0; j < n3; j++) {
+							fi >> cou3[j].courseID;
+							fi >> cou3[j].classname;
+							fi >> cou3[j].status;
+							if (cou3[j].status == 0)
+								j--;
+						}
+						fi.close();
+						fo.open("Data/Class/" + stu[i].classname + "/" + stu[i].id + "/" + year + "/" + sem + "/course.txt");
+						fo << n3 - 1 << std::endl;
+						for (int j = 0; j < n3; j++) {
+							fo << cou3[j].courseID << std::endl;
+							fo << cou3[j].classname << std::endl;
+							if (cou3[j].courseID == c.courseID && cou3[j].classname == c.classname)
+								fo << 0 << std::endl;
+							else fo << 1 << std::endl;
+						}
+						fo.close();
+					}
+					delete[]cou3;
+				}
+				else
+					std::cout << "This course doesn't exist." << std::endl;
+				delete[]cou_2;
+			}
+			else
+				std::cout << "This class doesn't exist." << std::endl;
+		}
+		else std::cout << "Semester does not exist " << std::endl;
+	}
+	else std::cout << "Academic year does not exist " << std::endl;
+	delete[]p_year;
 }
+
+
 /*void create_allfile_course(std::ifstream fi, std::ofstream fo, course*& cou, int num, std::string& academicyear, std::string& seme)
 {
 	std::string str, str1;

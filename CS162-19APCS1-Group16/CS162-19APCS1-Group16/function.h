@@ -152,6 +152,7 @@ void view_all_lecturers();
 //SCOREBOARD
 void printScore(scoreboard a, std::string stuID, std::string stuName, int k);
 void staff_view_scoreboard();
+void export_scoreboard();
 
 //ATTENDANCE
 std::string center_align(std::string str, int width);
@@ -159,6 +160,7 @@ std::string FormatDate(dob date);
 std::string FormatTime(ttime t);
 void printAttendance(attendance* a, std::string stuID, std::string stuName, int k);
 void view_attendance();
+void export_attendancelist();
 
 //LECTURER
 void lecturer_course_data(std::string filename, course*& p, int& n);
