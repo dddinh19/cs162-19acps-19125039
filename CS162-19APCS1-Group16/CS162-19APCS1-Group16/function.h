@@ -112,6 +112,7 @@ void view_list_student_in_class(std::string tempt);
 
 int check_student(student* p, int n);
 void edit_student_name(student* p, int n);
+bool check_class(std::string classname);
 void edit_student_dob(student* p, int n);
 void change_class(student*& p, int n);
 void remove_student(student*& p, int& n);
@@ -144,7 +145,7 @@ void view_all_lecturers();
 
 //SCOREBOARD
 void printScore(scoreboard a, std::string stuID, std::string stuName, int k);
-void view_scoreboard();
+void staff_view_scoreboard();
 
 //ATTENDANCE
 std::string center_align(std::string str, int width);
