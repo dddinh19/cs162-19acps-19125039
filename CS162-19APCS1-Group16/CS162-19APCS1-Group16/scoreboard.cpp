@@ -97,7 +97,7 @@ void export_scoreboard()
 		if (check_semester(p_year, n_year, year, sem))
 		{
 			std::string p_class;
-			std::cout << "Enter the class to expore the scoreboard of the course: ";
+			std::cout << "Enter the class to export the scoreboard of the course: ";
 			std::cin >> p_class;
 			if (check_class(p_class))
 			{
