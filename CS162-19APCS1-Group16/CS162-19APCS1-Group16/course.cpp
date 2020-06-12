@@ -1023,22 +1023,22 @@ void add_a_course()
 						fo << cou_2[i].status << std::endl;
 					}
 					fo << c.courseID << std::endl;
-					fo << c.classname << std::endl;
+					fo << p_class << std::endl;
 					fo << c.status << std::endl;
 					fo.close();
 					std::string str = "Data/Courses/" + year + "/" + sem + "/" + c.courseID;
 					const char* str1 = str.c_str();
 					_mkdir(str1);
 					student* stu; int n;
-					fi.open("Data/Class/" + c.classname + "/" + c.classname + ".txt");
+					fi.open("Data/Class/" + p_class + "/" + p_class + ".txt");
 					fi >> n;
 					fi.close();
 					stu = new student[n];
-					str = "Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + c.classname;
+					str = "Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class;
 					str1 = str.c_str();
 					_mkdir(str1);
-					fo.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + c.classname + "/student.txt");
-					fi.open("Data/Class/" + c.classname + "/" + c.classname + ".txt");
+					fo.open("Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/student.txt");
+					fi.open("Data/Class/" + p_class + "/" + p_class + ".txt");
 					fo << n << std::endl;
 					for (int i = 0; i < n; i++)
 					{
@@ -1049,7 +1049,7 @@ void add_a_course()
 						{
 							fo << stu[i].id << std::endl;
 							fo << 1 << std::endl;
-							str = "Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + c.classname + "/" + stu[i].id;
+							str = "Data/Courses/" + year + "/" + sem + "/" + c.courseID + "/" + p_class + "/" + stu[i].id;
 							const char* str1 = str.c_str();
 							_mkdir(str1);
 						}
@@ -1136,8 +1136,8 @@ void add_a_course()
 								}
 								else
 								{
-									fo << cou1[i - num1].courseID << std::endl;
-									fo << cou1[i - num1].classname << std::endl;
+									fo << cou1[i - 1].courseID << std::endl;
+									fo << cou1[i - 1].classname << std::endl;
 									fo << 1 << std::endl;
 								}
 							}
@@ -2229,6 +2229,7 @@ void print_lecturers(lecturer* lec, int n) {
 		std::cout << std::setfill(' ');
 	}
 }
+
 
 void view_all_lecturers() {
 	lecturer* lec = NULL;
