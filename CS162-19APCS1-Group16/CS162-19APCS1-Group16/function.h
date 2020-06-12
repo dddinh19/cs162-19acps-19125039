@@ -113,10 +113,16 @@ void view_list_student_in_class(std::string tempt);
 int check_student(student* p, int n);
 void edit_student_name(student* p, int n);
 bool check_class(std::string classname);
-void edit_student_dob(student* p, int n);
+void edit_student_dob(student*&p, int n);
 void change_class(student*& p, int n);
 void remove_student(student*& p, int& n);
 void edit_student(student*& p, int& n);
+
+bool check_class(std::string classname);
+void write_class_data(class_name* p, int n);
+void read_student_csv(std::string filename, std::string& classname, student*& p, int& n);
+void import_student_csv(student*& p_student, int& n_student, std::string classname, student* p, int n);
+
 //COURSE
 void semester_data(semester*& p, int& n);
 void view_academic_year(semester* p, int n);
@@ -130,7 +136,7 @@ void update_year_semester(std::ifstream& fi, std::ofstream& fo);
 void delete_year_semester(std::ifstream& fi, std::ofstream& fo);
 void create_allfile_course(std::ifstream& fi, std::ofstream& fo, course*& cou, int& num, std::string& academicyear, std::string& seme);
 void add_a_course();
-void add_a_student();
+void add_student();
 
 void course_info_data(std::string filename, course*& a);
 void view_course_info_data(course* a);
@@ -185,6 +191,12 @@ bool check_student(student* p, int n, std::string student);
 int check_date(attendance a[], dob b);
 void write_attendance(std::string filename, attendance a[]);
 void edit_attendance(lecturer* p, int k);
+
+void write_scoreboard(std::string filename, scoreboard a);
+void edit_scoreboard(lecturer* p, int k);
+
+void read_scoreboard_csv(char filename[], lecturer* p, int k, std::string& year, std::string& sem, std::string& courseid, std::string& classname, student*& p_student, int& n_student);
+void import_scoreboard_csv(std::string year, std::string sem, std::string courseid, std::string classname, student* p_student, int n_student);
 
 //STUDENT
 void read_courses_student(std::string tID, std::string tclass, std::string tseme, std::string tyear, course*& sch, int& n);
