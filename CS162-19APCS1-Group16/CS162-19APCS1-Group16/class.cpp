@@ -38,7 +38,7 @@ void input_new_student(student*& a) {
 	std::cout << "Enter student's gender(0: Male, 1: Female) " << std::endl;
 	std::cin >> a->gender;
 	std::cout << "Enter student's date of birth(year, month, day) " << std::endl;
-	std::cin >> a->date.year >> a->date.month >> a->date.year;
+	std::cin >> a->date.year >> a->date.month >> a->date.day;
 	a->pass = std::to_string(a->date.year);
 	if (a->date.month < 10) a->pass += "0" + std::to_string(a->date.month);
 	else a->pass += std::to_string(a->date.month);
@@ -85,7 +85,7 @@ int add_a_student(student*& p, int& n, student* a) {
 	write_student_data(p, n);
 	student* p_class = nullptr;
 	int n_class = 0;
-	std::string filename = "Data/Class/" + a->classname + ".txt";
+	std::string filename = "Data/Class/" + a->classname + "/" + a->classname + ".txt";
 	student_class_data(filename, p_class, n_class);
 	++n_class;
 	p_tempt = new student[n_class];
@@ -159,7 +159,7 @@ void class_data(class_name*& p, int& n) {
 	}
 }
 void view_list_student_in_class(std::string tempt) {
-	view_list_class();
+	//view_list_class();
 	class_name* p_class = nullptr;
 	int num_class = 0;
 	class_data(p_class, num_class);
@@ -259,7 +259,7 @@ void edit_student_name(student* p, int n) {
 		delete a;
 	}
 }
-void edit_student_dob(student* p, int n) {
+void edit_student_dob(student*& p, int n) {
 	int k = check_student(p, n);
 	if (k == -1) return;
 	else {
@@ -270,12 +270,13 @@ void edit_student_dob(student* p, int n) {
 		std::cout << a->date.year << "/" << a->date.month << "/" << a->date.day << std::endl;
 		std::cout << "Enter new date of birth(year, month, day): " << std::endl;
 		std::cin >> a->date.year >> a->date.month >> a->date.day;
-		a->pass = std::to_string(a->date.year);
-		if (a->date.month < 10) a->pass += "0" + std::to_string(a->date.month);
-		else a->pass += std::to_string(a->date.month);
-		if (a->date.day < 10) a->pass += "0" + std::to_string(a->date.day);
-		else a->pass += std::to_string(a->date.day);
+		p[k].pass = std::to_string(a->date.year);
+		if (a->date.month < 10) p[k].pass += "0" + std::to_string(a->date.month);
+		else p[k].pass += std::to_string(a->date.month);
+		if (a->date.day < 10) p[k].pass += "0" + std::to_string(a->date.day);
+		else p[k].pass += std::to_string(a->date.day);
 		write_student_info(filename, a);
+		write_student_data(p, n);
 		std::cout << "Date of birth has been changed successfully !!!" << std::endl;
 		std::cout << "Password has been reset !!!" << std::endl;
 		delete a;
@@ -290,7 +291,7 @@ void change_class(student*& p, int n) {
 		student_info_data(filename, a);
 		student* p_student = nullptr;
 		int n_student = 0;
-		filename = "Data/Class/" + p[k].classname + "/" + p[k].classname + "/.txt";
+		filename = "Data/Class/" + p[k].classname + "/" + p[k].classname + ".txt";
 		student_class_data(filename, p_student, n_student);
 		for (int i = 0; i < n_student; ++i) {
 			if (p_student[i].id == p[k].id) {
@@ -307,7 +308,7 @@ void change_class(student*& p, int n) {
 				fo << p_student[i].id << std::endl;
 				fo << p_student[i].status << std::endl;
 			}
-		fo.close();
+			fo.close();
 		}
 		delete[]p_student;
 		std::cout << "Current class: " << std::endl;
@@ -330,6 +331,23 @@ void change_class(student*& p, int n) {
 			write_student_info(filename, a);
 			p[k].classname = a->classname;
 			write_student_data(p, n);
+			filename = "Data/Class/" + p[k].classname + "/" + p[k].classname + ".txt";
+			student_class_data(filename, p_student, n_student);
+			++n_student;
+			student* tempt = new student[n_student];
+			for (int i = 0; i < n_student; ++i) {
+				if (i == n_student - 1) {
+					tempt[i].id = a->id;
+					tempt[i].status = 1;
+				}
+				else {
+					tempt[i] = p_student[i];
+				}
+			}
+			delete[]p_student;
+			p_student = tempt;
+			write_student_class_data(filename, p_student, n_student);
+			delete[]p_student;
 			std::cout << "Student's class has been changed successfully !!!" << std::endl;
 		}
 		delete[]p_class;
@@ -381,20 +399,19 @@ void remove_student(student*& p, int& n) {
 }
 void edit_student(student*& p, int& n) {
 	int choice;
-	std::cout << "1. Edit student's name " << std::endl;
-	std::cout << "2. Edit student's date of birth " << std::endl;
-	std::cout << "3. Change student's class " << std::endl;
-	std::cout << "4. Remove a student " << std::endl;
-	std::cout << "Enter 0 to exit " << std::endl;
-	std::cin >> choice;
-	while (choice != 0) {
+	do {
+		std::cout << "1. Edit student's name " << std::endl;
+		std::cout << "2. Edit student's date of birth " << std::endl;
+		std::cout << "3. Change student's class " << std::endl;
+		std::cout << "4. Remove a student " << std::endl;
+		std::cout << "Enter 0 to exit " << std::endl;
+		std::cin >> choice;
 		if (choice == 1) edit_student_name(p, n);
 		else if (choice == 2) edit_student_dob(p, n);
 		else if (choice == 3) change_class(p, n);
 		else if (choice == 4) remove_student(p, n);
 		else if (choice == 0) break;
-		std::cin >> choice;
-	}
+	} while (choice != 0);
 }
 
 //IMPORT STUDENT
