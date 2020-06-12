@@ -13,7 +13,7 @@ void printScore(scoreboard a, std::string stuID, std::string stuName, int k) {
 	std::cout << std::setw(97) << "-" << std::endl;
 	std::cout << std::setfill(' ');
 }
-void view_scoreboard(){
+void staff_view_scoreboard(){
 	semester* p_year = nullptr;
 	int n_year = 0;
 	std::string tyears, tseme;
