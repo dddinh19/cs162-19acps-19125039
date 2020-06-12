@@ -510,87 +510,6 @@ int covert_number(std::string str)
 	return n;
 }
 
-void enterinfo(std::ifstream& fi, std::string& academicyear, std::string& seme)
-{
-	char filename[100];
-	std::cout << "Please enter academic year: ";
-	std::cin >> academicyear;
-	std::cout << "Please enter semester: ";
-	std::cin >> seme;
-	int check;
-	do
-	{
-		std::cout << "Please enter filename: ";
-		std::cin >> filename;
-		std::cin.get();
-		fi.open(filename);
-		if (!fi)
-		{
-			std::cout << "Can't open this file! Please enter it again! " << std::endl;
-			std::cout << "--------------------------" << std::endl;
-			check = 0;
-		}
-		else check = 1;
-	} while (check == 0);
-}
-
-void load_data_course(std::ifstream& fi, course*& cou, int& num)
-{
-	std::string ch;
-	getline(fi, ch);
-	int capacity = 10;
-	cou = new course[capacity];
-	while (!fi.eof())
-	{
-		getline(fi, ch, ',');
-		if (size(ch) == 0) break;
-		num = covert_number(ch);
-		getline(fi, cou[num - 1].courseID, ',');
-		getline(fi, cou[num - 1].courseName, ',');
-		getline(fi, cou[num - 1].classname, ',');
-		getline(fi, cou[num - 1].lecturer_couse.username, ',');
-		getline(fi, cou[num - 1].lecturer_couse.name, ',');
-		getline(fi, cou[num - 1].lecturer_couse.degree, ',');
-		getline(fi, ch, ',');
-		if (ch == "Male") cou[num - 1].lecturer_couse.gender = 0;
-		else cou[num - 1].lecturer_couse.gender = 1;
-		getline(fi, ch, '-');
-		cou[num - 1].start_day.year = covert_number(ch);
-		getline(fi, ch, '-');
-		cou[num - 1].start_day.month = covert_number(ch);
-		getline(fi, ch, ',');
-		cou[num - 1].start_day.day = covert_number(ch);
-		getline(fi, ch, '-');
-		cou[num - 1].end_day.year = covert_number(ch);
-		getline(fi, ch, '-');
-		cou[num - 1].end_day.month = covert_number(ch);
-		getline(fi, ch, ',');
-		cou[num - 1].end_day.day = covert_number(ch);
-		getline(fi, cou[num - 1].dayofweek, ',');
-		getline(fi, ch, ',');
-		cou[num - 1].start_time.hour = covert_number(ch);
-		getline(fi, ch, ',');
-		cou[num - 1].start_time.minute = covert_number(ch);
-		getline(fi, ch, ',');
-		cou[num - 1].end_time.hour = covert_number(ch);
-		getline(fi, ch, ',');
-		cou[num - 1].end_time.minute = covert_number(ch);
-		getline(fi, cou[num - 1].room);
-		if (num == capacity)
-		{
-			course* tmpcou = new course[capacity + 10];
-			for (int i = 0; i <= num; i++)
-			{
-				tmpcou[i] = cou[i];
-			}
-			delete[] cou;
-			cou = tmpcou;
-			capacity = capacity + 10;
-		}
-	}
-	fi.close();
-}
-
 int dayofmonth(dob date) {
 	if (date.month == 1 || date.month == 3 || date.month == 5 || date.month == 7 || date.month == 8 || date.month == 10 || date.month == 12)
 		return 31;
@@ -647,6 +566,7 @@ void DateAttendance(std::ofstream& fo, course c) {
 		}
 	}
 }
+
 void enterinfo(std::ifstream& fi, std::string& academicyear, std::string& seme)
 {
 	char filename[100];
@@ -974,6 +894,27 @@ void create_data_file(std::ifstream& fi, std::ofstream& fo, course*& cou, int nu
 		}
 	}
 	delete[]stu;
+}
+
+void add_a_course()
+{
+	semester* p_year = nullptr;
+	int n_year = 0;
+	std::string year, sem;
+	semester_data(p_year, n_year);
+	view_academic_year(p_year, n_year);
+	std::cout << "Enter academic year " << std::endl;
+	std::cin >> year;
+	if (view_semester(p_year, n_year, year) != -1) {
+		std::cout << "Enter semester " << std::endl;
+		std::cin >> sem;
+		if (check_semester(p_year, n_year, year, sem)) {
+			
+		}
+		else std::cout << "Semester does not exist " << std::endl;
+	}
+	else std::cout << "Academic year does not exist " << std::endl;
+	delete[]p_year;
 }
 
 /*void create_allfile_course(std::ifstream fi, std::ofstream fo, course*& cou, int num, std::string& academicyear, std::string& seme)
@@ -1535,62 +1476,7 @@ void createNewCourse(course x, std::string academicyear, std::string semester) {
 	delete[]Student;
 }
 
-int dayofmonth(dob date) {
-	if (date.month == 1 || date.month == 3 || date.month == 5 || date.month == 7 || date.month == 8 || date.month == 10 || date.month == 12)
-		return 31;
-	else if (date.month == 2) {
-		if (date.year % 4 == 0)
-		{
-			if (date.year % 100 == 0)
-			{
-				if (date.year % 400 == 0)
-					return 29;
-				else
-					return 28;
-			}
-			else
-				return 29;
-		}
-		else
-			return 28;
-	}
-	else
-		return 30;
-}
 
-void saveaDateAttendance(std::ofstream& fout, dob date, course c){
-	if (date.day < 10)
-		fout << "0" << date.day << " ";
-	else
-		fout << date.day << " ";
-	if (date.month < 10)
-		fout << "0" << date.month << " ";
-	else
-		fout << date.month << " ";
-	fout << date.year << std::endl;
-
-}
-
-void DateAttendance(std::ofstream& fout, course c){
-	saveaDateAttendance(fout, c.start_day, c);
-	dob tdate = c.start_day;
-	for (int i = 0; i < 9; i++) {
-		tdate.day += 7;
-		if (tdate.day <= dayofmonth(tdate))
-			saveaDateAttendance(fout, tdate, c);
-		else {
-			tdate.day -= dayofmonth(tdate);
-			++tdate.month;
-			if (tdate.month > 12)
-			{
-				tdate.month = 1;
-				++tdate.year;
-				saveaDateAttendance(fout, tdate, c);
-			}
-			saveaDateAttendance(fout, tdate, c);
-		}
-	}
-}
 
 //VIEW ACADEMIC YEAR, SEMESTER
 
