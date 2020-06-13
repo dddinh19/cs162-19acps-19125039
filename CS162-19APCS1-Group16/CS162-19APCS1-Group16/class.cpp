@@ -407,7 +407,7 @@ void edit_student(student*& p, int& n) {
 		std::cout << "Enter 0 to exit " << std::endl;
 		std::cin >> choice;
 		if (choice == 1) edit_student_name(p, n);
-		//else if (choice == 2) edit_student_dob(p, n);
+		else if (choice == 2) edit_student_dob(p, n);
 		else if (choice == 3) change_class(p, n);
 		else if (choice == 4) remove_student(p, n);
 		else if (choice == 0) break;
