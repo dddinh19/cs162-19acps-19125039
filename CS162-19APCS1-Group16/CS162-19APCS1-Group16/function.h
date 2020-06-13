@@ -137,6 +137,9 @@ void delete_year_semester(std::ifstream& fi, std::ofstream& fo);
 void create_allfile_course(std::ifstream& fi, std::ofstream& fo, course*& cou, int& num, std::string& academicyear, std::string& seme);
 void add_a_course();
 void add_student();
+void edit_course();
+void remove_a_student();
+void removeacourse();
 
 void course_info_data(std::string filename, course*& a);
 void view_course_info_data(course* a);
@@ -214,6 +217,15 @@ void view_schedule(student stu);
 void read_scoreboard(std::string tseme, std::string tyear, course cou, std::string tID, scoreboard& sco);
 void view_score(student stu);
 
+//MENU
+void task13();
+void staff_class(student*& p_student, int& n_student);
+void staff_course();
+void staff_scoreboard();
+void staff_attendance();
+void lecturer_menu(lecturer* p_lecturer, int n_lecturer, int k);
+void student_menu(student*& p_student, int n_student, int k);
+void staff_menu(student*& p_student, int& n_student, staff*& p_staff, int n_staff, int k);
 #endif
 
 
