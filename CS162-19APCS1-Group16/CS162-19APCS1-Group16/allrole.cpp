@@ -48,21 +48,22 @@ void lecturer_data(lecturer*& p, int& n) {
 	}
 }
 void login(student*& p_student, int& n_student, staff*& p_staff, int& n_staff, lecturer*& p_lecturer, int& n_lecturer, std::string username, std::string pass) {
+	system("CLS");
 	for (int i = 0; i < n_lecturer; ++i) {
 		if ((username == p_lecturer[i].username) && (pass == p_lecturer[i].password)) {
-
+			lecturer_menu(p_lecturer, n_lecturer, i);
 			return;
 		}
 	}
 	for (int i = 0; i < n_staff; ++i) {
 		if ((username == p_staff[i].username) && (pass == p_staff[i].pass)) {
-
+			staff_menu(p_student, n_student, p_staff, n_staff, i);
 			return;
 		}
 	}
 	for (int i = 0; i < n_student; ++i) {
 		if ((username == p_student[i].id) && (pass == p_student[i].pass)) {
-
+			student_menu(p_student, n_student, i);
 			return;
 		}
 	}
@@ -224,7 +225,7 @@ void change_lecturer_password(lecturer*& p, int n, int k) {
 
 //MENU
 
-void staff_menu() {
+void staff_menu(student*& p_student, int& n_student, staff*& p_staff, int n_staff, int k) {
 	int choice;
 	do {
 		std::cout << "Menu for staff:" << std::endl;
@@ -239,70 +240,138 @@ void staff_menu() {
 		std::cin >> choice;
 		switch (choice) {
 		case 1: {
-
+			system("CLS");
+			staff_class(p_student, n_student);
 			break;
 		}
 		case 2: {
-
+			system("CLS");
+			staff_course();
 			break;
 		}
 		case 3: {
-
+			system("CLS");
+			staff_scoreboard();
 			break;
 		}
 		case 4: {
-
+			system("CLS");
+			staff_attendance();
 			break;
 		}
 		case 5: {
-
+			system("CLS");
+			view_staff_profile(p_staff, k);
 			break;
 		}
 		case 6: {
-
+			system("CLS");
+			change_staff_password(p_staff, n_staff, k);
 			break;
 		}
 		}
 	} while (choice != 7);
 }
-void staff_class() {
+void staff_class(student*& p_student, int& n_student) {
 	int choice;
 	do {
 		std::cout << "Academic staff- class menu: " << std::endl;
 		std::cout << "1. Import students of a class such as 18CLC6 from a csv file. " << std::endl;
 		std::cout << "2.Manually add a new student to a class. " << std::endl;
 		std::cout << "3.Edit an existing student." << std::endl;
-		std::cout << "4.Remove a student." << std::endl;
-		std::cout << "5.Change students from class A to class B" << std::endl;
-		std::cout << "6.View list of classes." << std::endl;
-		std::cout << "7.View list of students in a class." << std::endl;
-		std::cout << "8.Exit." << std::endl;
+		std::cout << "4.View list of classes." << std::endl;
+		std::cout << "5.View list of students in a class." << std::endl;
+		std::cout << "6.Exit." << std::endl;
 		std::cout << "Please choose a task(1-7): " << std::endl;
 		std::cin >> choice;
 		switch (choice) {
 		case 1: {
-
+			char filename[100];
+			std::cout << "Enter path to import csv file " << std::endl;
+			std::cin.get();
+			std::cin.get(filename, 100, '\n');
+			std::string classname;
+			student* p = nullptr;
+			int n = 0;
+			read_student_csv(filename, classname, p, n);
+			import_student_csv(p_student, n_student, classname, p, n);
+			delete[]p;
+			break;
 		}
 		case 2: {
-
+			student* a = nullptr;
+			input_new_student(a);
+			std::cout << "Import successfully " << add_a_student(p_student, n_student, a) << " " << std::endl;
+			delete a;
+			break;
 		}
 		case 3: {
-
+			edit_student(p_student, n_student);
+			break;
 		}
 		case 4: {
-
+			view_list_class();
+			break;
 		}
 		case 5: {
-
+			view_list_class();
+			std::string tempt;
+			std::cout << "Enter class you want to view student " << std::endl;
+			std::cin >> tempt;
+			view_list_student_in_class(tempt);
+			break;
 		}
-		case 6: {
-
 		}
-		case 7: {
-
-		}
-		}
-	} while (choice != 8);
+	} while (choice != 6);
+}
+void task13() {
+	int choice;
+	std::ifstream fi; std::ofstream fo;
+	std::cout << "1. Create academic years and semesters. " << std::endl;
+	std::cout << "2. Update academic years and semesters. " << std::endl;
+	std::cout << "3. Delete academic years and semesters. " << std::endl;
+	std::cout << "4. View academic year. " << std::endl;
+	std::cout << "5. View semester " << std::endl;
+	std::cin >> choice;
+	switch (choice) {
+	case 1:
+	{
+		create_year_semester(fi, fo);
+		break;
+	}
+	case 2:
+	{
+		update_year_semester(fi, fo);
+		break;
+	}
+	case 3:
+	{
+		delete_year_semester(fi, fo);
+		break;
+	}
+	case 4:
+	{
+		semester* p = nullptr;
+		int n = 0;
+		semester_data(p, n);
+		view_academic_year(p, n);
+		delete[]p;
+		break;
+	}
+	case 5:
+	{
+		semester* p = nullptr;
+		int n = 0;
+		semester_data(p, n);
+		view_academic_year(p, n);
+		std::string year;
+		std::cout << "Enter academic year you want to view semester " << std::endl;
+		std::cin >> year;
+		view_semester(p, n, year);
+		delete[]p;
+		break;
+	}
+	}
 }
 void staff_course() {
 	int choice;
@@ -324,47 +393,60 @@ void staff_course() {
 		std::cin >> choice;
 		switch (choice) {
 		case 1: {
-
+			system("CLS");
+			task13();
 			break;
 		}
 		case 2: {
-
+			system("CLS");
+			std::ifstream fi; std::ofstream fo; course* cou = nullptr; int num;
+			std::string academicyear, seme;
+			create_allfile_course(fi, fo, cou, num, academicyear, seme);
 			break;
 		}
 		case 3: {
-
+			system("CLS");
+			add_student();
 			break;
 		}
 		case 4: {
-
+			system("CLS");
+			edit_course();
 			break;
 		}
 		case 5: {
-
+			system("CLS");
+			removeacourse();
 			break;
 		}
 		case 6: {
-
+			system("CLS");
+			remove_a_student();
 			break;
 		}
 		case 7: {
-
+			system("CLS");
+			add_student();
 			break;
 		}
 		case 8: {
-
+			system("CLS");
+			view_list_course_current_semester();
 			break;
 		}
 		case 9: {
-
+			system("CLS");
+			view_list_student_in_course();
 			break;
 		}
 		case 10: {
-
+			system("CLS");
+			view_attendance();
 			break;
 		}
 		case 11: {
-
+			system("CLS");
+			view_all_lecturers();
 			break;
 		}
 		}
@@ -381,11 +463,13 @@ void staff_scoreboard() {
 		std::cin >> choice;
 		switch (choice) {
 		case 1: {
-
+			system("CLS");
+			staff_view_scoreboard();
 			break;
 		}
 		case 2: {
-
+			system("CLS");
+			export_scoreboard();
 			break;
 		}
 		}
@@ -402,17 +486,19 @@ void staff_attendance() {
 		std::cin >> choice;
 		switch (choice) {
 		case 1: {
-
+			system("CLS");
+			view_attendance();
 			break;
 		}
 		case 2: {
-
+			system("CLS");
+			export_attendancelist();
 			break;
 		}
 		}
 	} while (choice != 3);
 }
-void lecturer_menu() {
+void lecturer_menu(lecturer* p_lecturer,int n_lecturer, int k) {
 	int choice;
 	do {
 		std::cout << "Menu for lecturer:" << std::endl;
@@ -430,45 +516,63 @@ void lecturer_menu() {
 		std::cin >> choice;
 		switch (choice) {
 		case 1: {
-
+			system("CLS");
+			view_list_course_current_semester();
 			break;
 		}
 		case 2: {
-			
+			system("CLS");
+			lecturer_view_list_student_course(p_lecturer, k);
 			break;
 		}
 		case 3: {
-			
+			system("CLS");
+			lecturer_view_list_attendance_course(p_lecturer, k);
 			break;
 		}
 		case 4: {
-
+			system("CLS");
+			edit_attendance(p_lecturer, k);
 			break;
 		}
 		case 5: {
-			
+			system("CLS");
+			char filename[100];
+			std::cout << "Enter path to import csv file " << std::endl;
+			std::cin.get();
+			std::cin.get(filename, 100, '\n');
+			std::string year, sem, courseid, classname;
+			student* p;
+			int n = 0;
+			read_scoreboard_csv(filename, p_lecturer, k, year, sem, courseid, classname, p, n);
+			import_scoreboard_csv(year, sem, courseid, classname, p, n);
+			delete[]p;
 			break;
 		}
 		case 6: {
-			
+			system("CLS");
+			edit_scoreboard(p_lecturer, k);
 			break;
 		}
 		case 7: {
-
+			system("CLS");
+			lecturer_view_scoreboard(p_lecturer, k);
 			break;
 		}
 		case 8: {
-
+			system("CLS");
+			view_lecturer_profile(p_lecturer, k);
 			break;
 		}
 		case 9: {
-			
+			system("CLS");
+			change_lecturer_password(p_lecturer, n_lecturer, k);
 			break;
 		}
 		}
 	} while (choice != 10);
 }
-void student_menu() {
+void student_menu(student*& p_student,int n_student, int k) {
 	int choice;
 	do {
 		std::cout << "Menu for student:" << std::endl;
@@ -483,30 +587,36 @@ void student_menu() {
 		std::cin >> choice;
 		switch (choice) {
 		case 1: {
-
+			system("CLS");
+			checkin(p_student[k]);
+			break;
 		}
 		case 2: {
-
+			system("CLS");
+			view_checkin(p_student[k]);
 			break;
 		}
 		case 3: {
-
+			system("CLS");
+			view_schedule(p_student[k]);
 			break;
 		}
 		case 4: {
-			
+			system("CLS");
+			view_score(p_student[k]);
 			break;
 		}
 		case 5: {
-			
+			system("CLS");
+			view_student_profile(p_student, k);
 			break;
 		}
 		case 6: {
-			
+			system("CLS");
+			change_student_password(p_student, n_student, k);
 			break;
 		}
 		}
 	} while (choice != 7);
-	
 }
 
