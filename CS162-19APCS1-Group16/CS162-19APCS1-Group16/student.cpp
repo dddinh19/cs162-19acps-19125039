@@ -106,9 +106,9 @@ void checkin(student stu) {
 	std::string tseme;
 	std::string tyear;
 	std::cout << "Please enter the academic years: ";
-	getline(std::cin, tyear);
+	std::cin >> tyear;
 	std::cout << "Please enter the semester: ";
-	getline(std::cin, tseme);
+	std::cin >> tseme;
 	semester* p_year = NULL;
 	int n_year = 0;
 	if (check_semester(p_year, n_year, tyear, tseme))
@@ -186,9 +186,9 @@ void view_checkin(student stu) {
 	std::string tseme;
 	std::string tyear;
 	std::cout << "Please enter the academic years: ";
-	getline(std::cin, tyear);
+	std::cin >> tyear;
 	std::cout << "Please enter the semester: ";
-	getline(std::cin, tseme);
+	std::cin >> tseme;
 	semester* p_year = NULL;
 	int n_year = 0;
 	if (check_semester(p_year, n_year, tyear, tseme))
@@ -280,10 +280,8 @@ void print_scheduleboard(std::string tseme, std::string tyear, course* sch, int 
 void view_schedule(student stu) {
 	std::string tseme;
 	std::string tyear;
-	std::cout << "Please enter the academic years: ";
-	getline(std::cin, tyear);
-	std::cout << "Please enter the semester: ";
-	getline(std::cin, tseme);
+	std::cout << "Please enter the academic years, semester: ";
+	std::cin >> tyear >> tseme;
 	system("CLS");
 	semester* p_year = NULL;
 	int n_year = 0;
@@ -320,9 +318,9 @@ void view_score(student stu){
 	std::string tseme;
 	std::string tyear;
 	std::cout << "Please enter the academic years: ";
-	getline(std::cin, tyear);
+	std::cin >> tyear;
 	std::cout << "Please enter the semester: ";
-	getline(std::cin, tseme);
+	std::cin >> tseme;
 	system("CLS");
 	semester* p_year = NULL;
 	int n_year = 0;

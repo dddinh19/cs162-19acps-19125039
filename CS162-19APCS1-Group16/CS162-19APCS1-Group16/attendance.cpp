@@ -152,7 +152,7 @@ void export_attendancelist()
 		if (check_semester(p_year, n_year, year, sem))
 		{
 			std::string p_class;
-			std::cout << "Enter the class to add this course: ";
+			std::cout << "Enter the class to export the attendance list: ";
 			std::cin >> p_class;
 			if (check_class(p_class))
 			{

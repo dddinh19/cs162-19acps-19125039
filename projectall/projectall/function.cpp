@@ -12,7 +12,7 @@ void enterfilename(std::ifstream& fi)
 		fi.open(filename);
 		if (!fi)
 		{
-			std::cout << "Error! Please do it again! " << std::endl;
+			std::cout << "Can't open this file! Please enter it again! " << std::endl;
 			std::cout << "--------------------------" << std::endl;
 			check = 0;
 		}

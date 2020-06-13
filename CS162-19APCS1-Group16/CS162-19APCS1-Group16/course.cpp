@@ -20,10 +20,10 @@ void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 {
 	std::string academic_year;
 	std::cout << "Please input the academic year you want to create: ";
-	getline(std::cin, academic_year);
+	std::cin >> academic_year;
 	std::string seme;
 	std::cout << "Please input the semester you want to create: ";
-	getline(std::cin, seme);
+	std::cin >> seme;
 	fi.open("Data/Courses/semester.txt");
 	if (!fi)
 	{
@@ -178,7 +178,7 @@ void create_year_semester(std::ifstream& fi, std::ofstream& fo)
 		}
 		fo.close();
 		delete[] avai_semester;
-		std::cout << "Create successfully!!";
+		std::cout << "Create successfully!!" << std::endl;
 	}
 }
 
@@ -315,7 +315,7 @@ void delete_year_semester(std::ifstream& fi, std::ofstream& fo)
 {
 	std::string academic_year, seme;
 	std::cout << "Please input the academic year: ";
-	getline(std::cin, academic_year);
+	std::cin >> academic_year;
 	int check_1;
 	std::cout << "You want to delete the whole academic year(press 1) or just one semester in that academic year(press 2)? ";
 	std::cin >> check_1;
@@ -949,6 +949,7 @@ void create_allfile_course(std::ifstream& fi, std::ofstream& fo, course*& cou, i
 		fi.close();
 	}
 	create_data_file(fi, fo, cou, num, academicyear, seme);
+	std::cout << "Import successfully!!" << std::endl;
 }
 
 
@@ -1142,6 +1143,7 @@ void add_a_course()
 								}
 							}
 							fo.close();
+							std::cout << "Add successfully!!" << std::endl;
 						}
 					}
 				}
@@ -1172,7 +1174,7 @@ void removeacourse()
 		if (check_semester(p_year, n_year, year, sem))
 		{
 			std::string p_class;
-			std::cout << "Enter the class to add this course: ";
+			std::cout << "Enter the class that has the course you want to remove: ";
 			std::cin >> p_class;
 			if (check_class(p_class))
 			{
@@ -1277,7 +1279,7 @@ void remove_a_student()
 		if (check_semester(p_year, n_year, year, sem))
 		{
 			std::string p_class;
-			std::cout << "Enter the class to add this course: ";
+			std::cout << "Enter the class that has the course you want to remove a student: ";
 			std::cin >> p_class;
 			if (check_class(p_class))
 			{
@@ -2064,7 +2066,7 @@ void add_student()
 		if (check_semester(p_year, n_year, year, sem))
 		{
 			std::string p_class;
-			std::cout << "Enter the class to add this course: ";
+			std::cout << "Enter the class that has the course you want to add a student: ";
 			std::cin >> p_class;
 			if (check_class(p_class))
 			{
